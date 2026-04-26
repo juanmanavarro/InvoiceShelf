@@ -2,15 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Facades\Hashids;
 use App\Models\Company;
 use App\Models\CompanySetting;
 use App\Models\Customer;
 use App\Models\Setting;
 use App\Models\User;
-use App\Space\InstallUtils;
 use Illuminate\Database\Seeder;
 use Silber\Bouncer\BouncerFacade;
-use Vinkla\Hashids\Facades\Hashids;
 
 class DemoSeeder extends Seeder
 {
@@ -71,8 +70,5 @@ class DemoSeeder extends Seeder
 
         // Mark profile setup as complete
         Setting::setSetting('profile_complete', 'COMPLETED');
-
-        // Create installation marker
-        InstallUtils::createDbMarker();
     }
 }

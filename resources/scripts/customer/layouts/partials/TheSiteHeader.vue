@@ -2,7 +2,7 @@
   <Disclosure
     v-slot="{ open }"
     as="nav"
-    class="bg-white shadow-sm fixed top-0 left-0 z-20 w-full"
+    class="bg-white shadow-xs fixed top-0 left-0 z-20 w-full"
   >
     <div class="mx-auto px-8">
       <div class="flex justify-between h-16 w-full">
@@ -51,7 +51,7 @@
               rounded-full
               text-gray-400
               hover:text-gray-500
-              focus:outline-none
+              focus:outline-hidden
               focus:ring-2
               focus:ring-offset-2
               focus:ring-primary-500
@@ -69,7 +69,7 @@
                     flex
                     text-sm
                     rounded-full
-                    focus:outline-none
+                    focus:outline-hidden
                     focus:ring-2
                     focus:ring-offset-2
                     focus:ring-primary-500
@@ -93,7 +93,7 @@
               </router-link>
 
               <BaseDropdownItem @click="logout">
-                <LogoutIcon
+                <ArrowRightOnRectangleIcon
                   class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
                 />
@@ -114,15 +114,15 @@
               rounded-md
               text-gray-400
               hover:text-gray-500 hover:bg-gray-100
-              focus:outline-none
+              focus:outline-hidden
               focus:ring-2
               focus:ring-offset-2
               focus:ring-primary-500
             "
           >
             <span class="sr-only">Open main menu</span>
-            <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-            <XIcon v-else class="block h-6 w-6" aria-hidden="true" />
+            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+            <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
           </DisclosureButton>
         </div>
       </div>
@@ -167,7 +167,7 @@
               rounded-full
               text-gray-400
               hover:text-gray-500
-              focus:outline-none
+              focus:outline-hidden
               focus:ring-2
               focus:ring-offset-2
               focus:ring-primary-500
@@ -206,7 +206,7 @@ import {
   Menu,
   MenuButton,
 } from '@headlessui/vue'
-import { MenuIcon, XIcon, LogoutIcon, CogIcon } from '@heroicons/vue/outline'
+import { Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon, CogIcon } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

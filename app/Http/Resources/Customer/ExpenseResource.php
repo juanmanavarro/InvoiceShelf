@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Customer;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ExpenseResource extends JsonResource
@@ -9,13 +10,14 @@ class ExpenseResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      */
     public function toArray($request): array
     {
         return [
             'id' => $this->id,
             'expense_date' => $this->expense_date,
+            'expense_number' => $this->expense_number,
             'amount' => $this->amount,
             'notes' => $this->notes,
             'customer_id' => $this->customer_id,

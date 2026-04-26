@@ -1,4 +1,4 @@
-import axios from 'axios'
+import http from '@/scripts/http'
 import { defineStore } from 'pinia'
 import { useNotificationStore } from '@/scripts/stores/notification'
 import { handleError } from '@/scripts/helpers/error-handling'
@@ -7,9 +7,7 @@ export const useMailDriverStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
 
-  return defineStoreFunc({
-    id: 'mail-driver',
-
+  return defineStoreFunc('mail-driver', {
     state: () => ({
       mailConfigData: null,
       mail_driver: 'smtp',
@@ -37,7 +35,7 @@ export const useMailDriverStore = (useWindow = false) => {
         mail_port: null,
         mail_ses_key: '',
         mail_ses_secret: '',
-        mail_encryption: 'tls',
+        mail_ses_region: '',
         from_mail: '',
         from_name: '',
       },
@@ -48,7 +46,7 @@ export const useMailDriverStore = (useWindow = false) => {
         mail_port: null,
         mail_username: '',
         mail_password: '',
-        mail_encryption: 'tls',
+        mail_encryption: '',
         from_mail: '',
         from_name: '',
       },
@@ -57,7 +55,7 @@ export const useMailDriverStore = (useWindow = false) => {
     actions: {
       fetchMailDrivers() {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get('/api/v1/mail/drivers')
             .then((response) => {
               if (response.data) {
@@ -74,7 +72,7 @@ export const useMailDriverStore = (useWindow = false) => {
 
       fetchMailConfig() {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get('/api/v1/mail/config')
             .then((response) => {
               if (response.data) {
@@ -92,7 +90,7 @@ export const useMailDriverStore = (useWindow = false) => {
 
       updateMailConfig(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/v1/mail/config', data)
             .then((response) => {
               const notificationStore = useNotificationStore()
@@ -118,7 +116,7 @@ export const useMailDriverStore = (useWindow = false) => {
 
       sendTestMail(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/v1/mail/test', data)
             .then((response) => {
               const notificationStore = useNotificationStore()

@@ -11,13 +11,14 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CustomerStatsController extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function __invoke(Request $request, Customer $customer)
     {
@@ -61,7 +62,7 @@ class CustomerStatsController extends Controller
                 )
                     ->whereCompany()
                     ->whereCustomer($customer->id)
-                    ->sum('total') ?? 0
+                    ->sum('base_total') ?? 0
             );
             array_push(
                 $expenseTotals,
@@ -71,7 +72,7 @@ class CustomerStatsController extends Controller
                 )
                     ->whereCompany()
                     ->whereUser($customer->id)
-                    ->sum('amount') ?? 0
+                    ->sum('base_amount') ?? 0
             );
             array_push(
                 $receiptTotals,
@@ -81,7 +82,7 @@ class CustomerStatsController extends Controller
                 )
                     ->whereCompany()
                     ->whereCustomer($customer->id)
-                    ->sum('amount') ?? 0
+                    ->sum('base_amount') ?? 0
             );
             array_push(
                 $netProfits,
@@ -103,21 +104,21 @@ class CustomerStatsController extends Controller
         )
             ->whereCompany()
             ->whereCustomer($customer->id)
-            ->sum('total');
+            ->sum('base_total');
         $totalReceipts = Payment::whereBetween(
             'payment_date',
             [$startDate->format('Y-m-d'), $start->format('Y-m-d')]
         )
             ->whereCompany()
             ->whereCustomer($customer->id)
-            ->sum('amount');
+            ->sum('base_amount');
         $totalExpenses = Expense::whereBetween(
             'expense_date',
             [$startDate->format('Y-m-d'), $start->format('Y-m-d')]
         )
             ->whereCompany()
             ->whereUser($customer->id)
-            ->sum('amount');
+            ->sum('base_amount');
         $netProfit = (int) $totalReceipts - (int) $totalExpenses;
 
         $chartData = [

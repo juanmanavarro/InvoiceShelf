@@ -201,6 +201,7 @@
             color: #595959;
             font-size: 9px;
             line-height: 12px;
+            display: block;
         }
 
         /* -- Total Display Table -- */
@@ -383,7 +384,7 @@
             @endif
         </div>
 
-        <div class="shipping-address-container shipping-address" @if ($billing_address !== '</br>') style="float:left;" @else style="display:block; float:left: padding-left: 0px;" @endif>
+        <div class="shipping-address-container shipping-address" @if ($billing_address !== '<br />') style="float:left;" @else style="display:block; float:left: padding-left: 0px;" @endif>
             @if ($shipping_address)
                 <b>@lang('pdf_ship_to')</b> <br>
 

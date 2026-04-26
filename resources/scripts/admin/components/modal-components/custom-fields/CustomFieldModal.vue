@@ -5,7 +5,7 @@
         {{ modalStore.title }}
 
         <BaseIcon
-          name="XIcon"
+          name="XMarkIcon"
           class="w-6 h-6 text-gray-500 cursor-pointer"
           @click="closeCustomFieldModal"
         />
@@ -179,7 +179,7 @@
           flex
           justify-end
           p-4
-          border-t border-solid border-gray-light border-modal-bg
+          border-t border-solid border-gray-200
         "
       >
         <BaseButton
@@ -201,7 +201,7 @@
             <BaseIcon
               v-if="!isSaving"
               :class="slotProps.class"
-              name="SaveIcon"
+              name="ArrowDownOnSquareIcon"
             />
           </template>
           {{

@@ -5,7 +5,7 @@
         {{ modalStore.title }}
 
         <BaseIcon
-          name="XIcon"
+          name="XMarkIcon"
           class="w-6 h-6 text-gray-500 cursor-pointer"
           @click="closeRolesModal"
         />
@@ -122,7 +122,7 @@
           flex
           justify-end
           p-4
-          border-t border-solid border--200 border-modal-bg
+          border-t border-solid border-gray-200
         "
       >
         <BaseButton
@@ -140,7 +140,7 @@
           type="submit"
         >
           <template #left="slotProps">
-            <BaseIcon name="SaveIcon" :class="slotProps.class" />
+            <BaseIcon name="ArrowDownOnSquareIcon" :class="slotProps.class" />
           </template>
           {{ !roleStore.isEdit ? $t('general.save') : $t('general.update') }}
         </BaseButton>

@@ -1,14 +1,16 @@
 <template>
   <BasePage>
     <BasePageHeader :title="$t('payments.title')">
-      <BaseBreadcrumb slot="breadcrumbs">
-        <BaseBreadcrumbItem
-          :title="$t('general.home')"
-          :to="`/${globalStore.companySlug}/customer/dashboard`"
-        />
+      <template #breadcrumbs>
+        <BaseBreadcrumb>
+          <BaseBreadcrumbItem
+            :title="$t('general.home')"
+            :to="`/${globalStore.companySlug}/customer/dashboard`"
+          />
 
-        <BaseBreadcrumbItem :title="$t('payments.payment', 2)" to="#" active />
-      </BaseBreadcrumb>
+          <BaseBreadcrumbItem :title="$t('payments.payment', 2)" to="#" active />
+        </BaseBreadcrumb>
+      </template>
 
       <template #actions>
         <BaseButton
@@ -21,9 +23,9 @@
             <BaseIcon
               v-if="!showFilters"
               :class="slotProps.class"
-              name="FilterIcon"
+              name="FunnelIcon"
             />
-            <BaseIcon v-else :class="slotProps.class" name="XIcon" />
+            <BaseIcon v-else :class="slotProps.class" name="XMarkIcon" />
           </template>
         </BaseButton>
       </template>
@@ -111,7 +113,7 @@
         <template #cell-actions="{ row }">
           <BaseDropdown>
             <template #activator>
-              <BaseIcon name="DotsHorizontalIcon" class="w-5 text-gray-500" />
+              <BaseIcon name="EllipsisHorizontalIcon" class="w-5 text-gray-500" />
             </template>
             <router-link :to="`payments/${row.data.id}/view`">
               <BaseDropdownItem>

@@ -29,6 +29,8 @@
     "to_date": "Au",
     "from": "De",
     "to": "À",
+    "cc": "CC",
+    "bcc": "BCC",
     "ok": "OK",
     "yes": "Oui",
     "no": "Non",
@@ -77,7 +79,7 @@
     "list_is_empty": "La liste est vide.",
     "no_tax_found": "Aucune taxe trouvée !",
     "four_zero_four": "Page non trouvée",
-    "you_got_lost": "Oups! Vous vous êtes perdus!",
+    "you_got_lost": "Oups ! Vous vous êtes perdus !",
     "go_home": "Retour au tableau de bord",
     "test_mail_conf": "Envoyer un email de test",
     "send_mail_successfully": "Email envoyé",
@@ -161,7 +163,10 @@
     "name": "Nom",
     "description": "Description",
     "percent": "Pourcentage",
-    "compound_tax": "Taxe composée"
+    "compound_tax": "Taxe composée",
+    "percentage": "Pourcentage",
+    "fixed_amount": "Montant fixe",
+    "tax_type": "Type de taxe"
   },
   "global_search": {
     "search": "Rechercher",
@@ -303,6 +308,7 @@
     "total": "Total",
     "discount": "Remise",
     "sub_total": "Sous-total",
+    "net_total": "Net",
     "estimate_number": "N°",
     "ref_number": "Référence",
     "contact": "Contact",
@@ -646,9 +652,12 @@
     "currency": "Devise",
     "contact": "Contact",
     "category": "Catégorie",
+    "uncategorized": "Uncategorized",
     "from_date": "Du",
     "to_date": "Au",
     "expense_date": "Date",
+    "expense_number": "Numéro de dépense",
+    "expense_number_placeholder": "EXP-001",
     "description": "Description",
     "receipt": "Reçu",
     "amount": "Montant",
@@ -852,7 +861,8 @@
       "payment_modes": "Modes de paiement",
       "notes": "Notes de bas de page",
       "exchange_rate": "Taux de change",
-      "address_information": "Information d'adresse"
+      "address_information": "Information d'adresse",
+      "pdf_generation": "Génération de PDF"
     },
     "address_information": {
       "section_description": "  Vous pouvez mettre à jour vos informations d'adresse via le formulaire ci dessous."
@@ -893,6 +903,7 @@
       "mailgun_endpoint": "Mailgun Endpoint",
       "ses_secret": "SES Secret",
       "ses_key": "SES Key",
+      "ses_region": "Région AWS",
       "password": "Mot de passe",
       "username": "Nom d'utilisateur",
       "mail_config": "Envoi d'emails",
@@ -904,7 +915,15 @@
     "pdf": {
       "title": "Paramètre PDF",
       "footer_text": "Pied de page",
-      "pdf_layout": "Mise en page PDF"
+      "pdf_layout": "Mise en page PDF",
+      "pdf_configuration": "Réglages pour la génération des PDF",
+      "section_description": "Changer la méthode de génération des PDF",
+      "driver": "Pilote PDF à utiliser",
+      "papersize": "Format de papier",
+      "papersize_hint": "Format de papier en largeur et hauteur (ex. \"210 mm 297 mm\")",
+      "gotenberg_host": "Service du serveur Gotenberg",
+      "pdf_variables_save_successfully": "La configuration PDF a été sauvegardée",
+      "pdf_variables_save_error": "La configuration PDF n’a pas pu être enregistrée"
     },
     "company_info": {
       "company_info": "Coordonnées de la société",
@@ -1087,6 +1106,8 @@
         "description": "Créez des notes de bas de page réutilisable sur vos factures, devis et paiements.",
         "notes": "Note de bas de page",
         "type": "Type ",
+        "is_default": "Sélectionner par défaut",
+        "is_default_description": "Cette note sera sélectionnée par défaut dans les nouvelles factures.",
         "add_note": "Nouvelle note de bas de page",
         "add_new_note": "Ajouter une note de bas de page",
         "name": "Nom",
@@ -1193,14 +1214,23 @@
       "tax_per_item": "Taxe par article",
       "tax_name": "Nom",
       "compound_tax": "Taxe empilée",
+      "amount": "Montant",
       "percent": "Pourcentage",
+      "fixed_amount": "Montant fixe",
+      "calculation_type": "Type de calcul",
+      "percentage": "Pourcentage",
+      "fixed": "Fixe",
       "action": "action",
       "tax_setting_description": "Activez cette option si vous souhaitez ajouter des taxes à des postes de facture individuels. Par défaut, les taxes sont ajoutées directement à la facture.",
       "created_message": "Taxe créée",
       "updated_message": "Taxe mise à jour",
       "deleted_message": "Taxe supprimée",
       "confirm_delete": "Vous ne pourrez pas récupérer ce type de taxe",
-      "already_in_use": "La taxe est déjà utilisée"
+      "already_in_use": "La taxe est déjà utilisée",
+      "tax_included": "Taxes incluses",
+      "tax_included_description": "Activez cette option si vous souhaitez signaler que les taxes sont déjà incluses dans les articles de la facture ou le total de la facture.",
+      "tax_included_by_default": "Activer les taxes incluses par défaut",
+      "tax_included_by_default_description": "Activer cette option si vous voulez définir des taxes incluses par défaut"
     },
     "payment_modes": {
       "title": "Moyens de paiement",
@@ -1236,7 +1266,7 @@
       "time_zone": "Fuseau horaire",
       "fiscal_year": "Exercice fiscal",
       "date_format": "Format de date",
-      "time_format": "Format d'heure",
+      "time_format": "Format de l'heure",
       "discount_setting": "Réglage de remise",
       "discount_per_item": "Remise par article",
       "discount_setting_description": "Activez cette option si vous souhaitez détailler les remises par article. Par défaut, les remises sont ajoutées au sous-total.",
@@ -1297,7 +1327,8 @@
       "finishing_update": "Finalisation de la mise à jour",
       "update_failed": "Échec de la mise à jour",
       "update_failed_text": "Désolé ! Votre mise à jour a échoué à: {step} étape",
-      "update_warning": "Cet utilitaire va écraser tous les fichiers et templates de l'application. Veuillez faire une sauvegarde de vos templates et de la base de donnée avant de faire la mise à jour."
+      "update_warning": "Cet utilitaire va écraser tous les fichiers et templates de l'application. Veuillez faire une sauvegarde de vos templates et de la base de donnée avant de faire la mise à jour.",
+      "requirements_not_met": "La mise à jour ne peut pas continuer car certaines exigences système ne sont pas respectées (y compris la version PHP minimale). Veuillez corriger les exigences en échec puis réessayer."
     },
     "backup": {
       "title": "Sauvegarde | Sauvegardes",
@@ -1588,7 +1619,7 @@
   "pdf_invoice_label": "Facture",
   "pdf_invoice_number": "Numéro",
   "pdf_invoice_date": "Date",
-  "pdf_invoice_due_date": "Date d’échéance",
+  "pdf_invoice_due_date": "Date d'échéance",
   "pdf_notes": "Notes de bas de page",
   "pdf_items_label": "Articles",
   "pdf_quantity_label": "Quantité",
@@ -1596,6 +1627,7 @@
   "pdf_discount_label": "Remise",
   "pdf_amount_label": "Montant",
   "pdf_subtotal": "Sous-total",
+  "pdf_net_total": "Net",
   "pdf_total": "Total TTC",
   "pdf_payment_label": "Paiement",
   "pdf_payment_receipt_label": "Reçu de paiement",
@@ -1618,6 +1650,7 @@
   "pdf_total_tax_label": "TOTAL TAXES",
   "pdf_tax_types_label": "Taxe",
   "pdf_expenses_label": "Dépenses",
+  "pdf_expense_group_total_label": "Group total:",
   "pdf_bill_to": "Facturer à",
   "pdf_ship_to": "Expédier à",
   "pdf_received_from": "Reçu de :",

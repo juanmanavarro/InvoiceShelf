@@ -121,7 +121,7 @@ class User extends Authenticatable implements HasMedia
 
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class, 'creator_id');
+        return $this->belongsTo(User::class, 'creator_id');
     }
 
     public function companies(): BelongsToMany
@@ -211,6 +211,13 @@ class User extends Authenticatable implements HasMedia
     public function scopeWhereEmail($query, $email)
     {
         return $query->where('email', 'LIKE', '%'.$email.'%');
+    }
+
+    public function scopeWhereCompany($query)
+    {
+        return $query->whereHas('companies', function ($q) {
+            $q->where('company_id', request()->header('company'));
+        });
     }
 
     public function scopePaginateData($query, $limit)

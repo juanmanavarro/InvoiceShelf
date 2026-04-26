@@ -11,7 +11,7 @@
       rounded-md
       cursor-pointer
       avatar-upload
-      border-gray-200
+      border-gray-300
       transition-all
       duration-300
       ease-in-out
@@ -67,7 +67,7 @@
     <!-- Not Selected -->
     <div v-else-if="!localFiles.length" class="flex flex-col items-center">
       <BaseIcon
-        name="CloudUploadIcon"
+        name="CloudArrowUpIcon"
         class="h-6 mb-2 text-xl leading-6 text-gray-400"
       />
       <p class="text-xs leading-4 text-center text-gray-400">
@@ -171,7 +171,7 @@
         "
         @click.prevent.stop="onAvatarRemove(localFiles[0])"
       >
-        <BaseIcon name="XIcon" class="h-4 text-xl leading-6 text-black" />
+        <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black" />
       </a>
     </div>
 
@@ -272,7 +272,7 @@
           "
           @click.prevent.stop="onFileRemove(index)"
         >
-          <BaseIcon name="XIcon" class="h-4 text-xl leading-6 text-black" />
+          <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black" />
         </span>
       </a>
     </div>
@@ -370,7 +370,7 @@
           "
           @click.prevent.stop="onFileRemove(index)"
         >
-          <BaseIcon name="XIcon" class="h-4 text-xl leading-6 text-black" />
+          <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black" />
         </span>
       </a>
     </div>
@@ -379,7 +379,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import axios from 'axios'
+import http from '@/scripts/http'
 import utils from '@/scripts/helpers/utilities'
 
 const props = defineProps({
@@ -441,7 +441,7 @@ let currentStatus = ref(null)
 
 function reset() {
   // reset form to initial state
-  currentStatus = STATUS_INITIAL
+  currentStatus.value = STATUS_INITIAL
 
   uploadedFiles.value = []
 
@@ -451,12 +451,12 @@ function reset() {
     localFiles.value = []
   }
 
-  uploadError = null
+  uploadError.value = null
 }
 
 function upload(formData) {
   return (
-    axios
+    http
       .post(props.uploadUrl, formData)
       // get data
       .then((x) => x.data)
@@ -467,16 +467,16 @@ function upload(formData) {
 
 // upload data to the server
 function save(formData) {
-  currentStatus = STATUS_SAVING
+  currentStatus.value = STATUS_SAVING
 
   upload(formData)
     .then((x) => {
-      uploadedFiles = [].concat(x)
-      currentStatus = STATUS_SUCCESS
+      uploadedFiles.value = [].concat(x)
+      currentStatus.value = STATUS_SUCCESS
     })
     .catch((err) => {
-      uploadError = err.response
-      currentStatus = STATUS_FAILED
+      uploadError.value = err.response
+      currentStatus.value = STATUS_FAILED
     })
 }
 

@@ -143,7 +143,7 @@
               <BaseContentPlaceholders v-if="loading">
                 <BaseContentPlaceholdersText
                   :lines="1"
-                  class="w-24 h-8 border rounded-md"
+                  class="w-24 h-8 border border-gray-200 rounded-md"
                 />
               </BaseContentPlaceholders>
 
@@ -254,22 +254,12 @@ const quantity = computed({
 const price = computed({
   get: () => {
     const price = props.itemData.price
-
-    if (parseFloat(price) > 0) {
-      return price / 100
-    }
-
-    return price
+    return price / 100
   },
 
   set: (newValue) => {
-    if (parseFloat(newValue) > 0) {
-      let price = Math.round(newValue * 100)
-
-      updateItemAttribute('price', price)
-    } else {
-      updateItemAttribute('price', newValue)
-    }
+    let price = Math.round(newValue * 100)
+    updateItemAttribute('price', price)
     setDiscount()
   },
 })

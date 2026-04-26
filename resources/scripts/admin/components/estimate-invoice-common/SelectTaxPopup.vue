@@ -2,14 +2,14 @@
   <div class="w-full mt-4 tax-select">
     <Popover v-slot="{ isOpen }" class="relative">
       <PopoverButton
-        :class="isOpen ? '' : 'text-opacity-90'"
+        :class="isOpen ? '' : ''"
         class="
           flex
           items-center
           text-sm
           font-medium
           text-primary-400
-          focus:outline-none focus:border-none
+          focus:outline-hidden focus:border-none
         "
       >
         <BaseIcon
@@ -39,7 +39,7 @@
                 overflow-hidden
                 rounded-md
                 shadow-lg
-                ring-1 ring-black ring-opacity-5
+                ring-1 ring-black/5
               "
             >
               <!-- Tax Search Input  -->
@@ -110,7 +110,12 @@
                           cursor-pointer
                         "
                       >
-                        {{ taxType.percent }} %
+                        <template v-if="taxType.calculation_type === 'fixed'">
+                          <BaseFormatMoney :amount="taxType.fixed_amount" :currency="companyStore.selectedCompanyCurrency" />
+                        </template>
+                        <template v-else>
+                          {{ taxType.percent }} %
+                        </template>
                       </label>
                     </div>
                   </div>
@@ -137,7 +142,7 @@
                   py-3
                   bg-gray-200
                   border-none
-                  outline-none
+                  outline-hidden
                 "
                 @click="openTaxTypeModal"
               >
@@ -173,7 +178,9 @@ import { useInvoiceStore } from '@/scripts/admin/stores/invoice'
 import { useModalStore } from '@/scripts/stores/modal'
 import { useTaxTypeStore } from '@/scripts/admin/stores/tax-type'
 import { useUserStore } from '@/scripts/admin/stores/user'
+import { useCompanyStore } from '@/scripts/admin/stores/company'
 import abilities from '@/scripts/admin/stub/abilities'
+import BaseFormatMoney from '@/scripts/components/base/BaseFormatMoney.vue'
 
 const props = defineProps({
   type: {
@@ -195,9 +202,14 @@ const emit = defineEmits(['select:taxType'])
 const modalStore = useModalStore()
 const taxTypeStore = useTaxTypeStore()
 const userStore = useUserStore()
+const companyStore = useCompanyStore()
 
 const { t } = useI18n()
 const textSearch = ref(null)
+
+const formatMoney = (amount) => {
+  return companyStore.formatMoney(amount)
+}
 
 const filteredTaxType = computed(() => {
   if (textSearch.value) {

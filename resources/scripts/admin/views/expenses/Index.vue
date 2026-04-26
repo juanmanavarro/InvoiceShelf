@@ -1,5 +1,7 @@
 <template>
   <BasePage>
+    <DuplicateExpenseModal />
+
     <!-- Page Header -->
     <BasePageHeader :title="$t('expenses.title')">
       <BaseBreadcrumb>
@@ -17,10 +19,10 @@
           <template #right="slotProps">
             <BaseIcon
               v-if="!showFilters"
-              name="FilterIcon"
+              name="FunnelIcon"
               :class="slotProps.class"
             />
-            <BaseIcon v-else name="XIcon" :class="slotProps.class" />
+            <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
           </template>
         </BaseButton>
 
@@ -188,6 +190,10 @@
           {{ row.data.formatted_expense_date }}
         </template>
 
+        <template #cell-expense_number="{ row }">
+          {{ row.data.expense_number || '-' }}
+        </template>
+
         <template #cell-user_name="{ row }">
           <BaseText
             :text="row.data.customer ? row.data.customer.name : '-'"
@@ -227,6 +233,7 @@ import { useUserStore } from '@/scripts/admin/stores/user'
 import abilities from '@/scripts/admin/stub/abilities'
 
 import UFOIcon from '@/scripts/components/icons/empty/UFOIcon.vue'
+import DuplicateExpenseModal from '@/scripts/admin/components/modal-components/DuplicateExpenseModal.vue'
 import ExpenseDropdown from '@/scripts/admin/components/dropdowns/ExpenseIndexDropdown.vue'
 
 const companyStore = useCompanyStore()
@@ -278,6 +285,12 @@ const expenseColumns = computed(() => {
     {
       key: 'expense_date',
       label: t('expenses.date'),
+      thClass: 'extra',
+      tdClass: 'font-medium text-gray-900',
+    },
+    {
+      key: 'expense_number',
+      label: t('expenses.expense_number'),
       thClass: 'extra',
       tdClass: 'font-medium text-gray-900',
     },

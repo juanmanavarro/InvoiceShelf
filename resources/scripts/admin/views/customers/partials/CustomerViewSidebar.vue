@@ -35,7 +35,7 @@
         variant="gray"
         @input="onSearch()"
       >
-        <BaseIcon name="SearchIcon" class="text-gray-500" />
+        <BaseIcon name="MagnifyingGlassIcon" class="text-gray-500" />
       </BaseInput>
 
       <div class="flex mb-6 ml-3" role="group" aria-label="First group">
@@ -47,7 +47,7 @@
         >
           <template #activator>
             <BaseButton variant="gray">
-              <BaseIcon name="FilterIcon" />
+              <BaseIcon name="FunnelIcon" />
             </BaseButton>
           </template>
 
@@ -122,9 +122,9 @@
           :id="'customer-' + customer.id"
           :to="`/admin/customers/${customer.id}/view`"
           :class="[
-            'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-transparent',
+            'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-l-transparent',
             {
-              'bg-gray-100 border-l-4 border-primary-500 border-solid':
+              'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
                 hasActiveUrl(customer.id),
             },
           ]"

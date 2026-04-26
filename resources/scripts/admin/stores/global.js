@@ -1,4 +1,4 @@
-import axios from 'axios'
+import http from '@/scripts/http'
 import { defineStore } from 'pinia'
 import { useCompanyStore } from './company'
 import { useUserStore } from './user'
@@ -11,8 +11,7 @@ export const useGlobalStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
 
-  return defineStoreFunc({
-    id: 'global',
+  return defineStoreFunc('global', {
     state: () => ({
       // Global Configuration
       config: null,
@@ -48,9 +47,9 @@ export const useGlobalStore = (useWindow = false) => {
     actions: {
       bootstrap() {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get('/api/v1/bootstrap')
-            .then((response) => {
+            .then(async (response) => {
               const companyStore = useCompanyStore()
               const userStore = useUserStore()
               const moduleStore = useModuleStore()
@@ -71,8 +70,8 @@ export const useGlobalStore = (useWindow = false) => {
               moduleStore.apiToken = response.data.global_settings.api_token
               moduleStore.enableModules = response.data.modules
 
-                // company store
-                companyStore.companies = response.data.companies
+              // company store
+              companyStore.companies = response.data.companies
               companyStore.selectedCompany = response.data.current_company
               companyStore.setSelectedCompany(response.data.current_company)
               companyStore.selectedCompanySettings =
@@ -80,9 +79,31 @@ export const useGlobalStore = (useWindow = false) => {
               companyStore.selectedCompanyCurrency =
                 response.data.current_company_currency
 
-              if(typeof global.locale !== 'string') {
-                global.locale.value =
-                  response.data.current_user_settings.language || 'en'
+              // Determine and load the appropriate language
+              const userLanguage = response.data.current_user_settings?.language
+              const companyLanguage = response.data.current_company_settings?.language
+              const targetLanguage = userLanguage || companyLanguage || 'en'
+
+              // Load the language dynamically if it's not English
+              if (targetLanguage !== 'en' && window.loadLanguage) {
+                try {
+                  await window.loadLanguage(targetLanguage)
+                } catch (error) {
+                  console.warn('Failed to load language during bootstrap:', error)
+                  // Fall back to English if loading fails
+                  if (typeof global.locale !== 'string') {
+                    global.locale.value = 'en'
+                  } else {
+                    global.locale = 'en'
+                  }
+                }
+              } else {
+                // Set locale for English or when loadLanguage is not available
+                if (typeof global.locale !== 'string') {
+                  global.locale.value = targetLanguage
+                } else {
+                  global.locale = targetLanguage
+                }
               }
 
               this.isAppLoaded = true
@@ -101,7 +122,7 @@ export const useGlobalStore = (useWindow = false) => {
             resolve(this.currencies)
           } else {
             this.areCurrenciesLoading = true
-            axios
+            http
               .get('/api/v1/currencies')
               .then((response) => {
                 this.currencies = response.data.data.filter((currency) => {
@@ -121,7 +142,7 @@ export const useGlobalStore = (useWindow = false) => {
 
       fetchConfig(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/config`, { params })
             .then((response) => {
               if (response.data.languages) {
@@ -143,7 +164,7 @@ export const useGlobalStore = (useWindow = false) => {
           if (this.dateFormats.length) {
             resolve(this.dateFormats)
           } else {
-            axios
+            http
               .get('/api/v1/date/formats')
               .then((response) => {
                 this.dateFormats = response.data.date_formats
@@ -162,7 +183,7 @@ export const useGlobalStore = (useWindow = false) => {
           if (this.timeFormats.length) {
             resolve(this.timeFormats)
           } else {
-            axios
+            http
               .get('/api/v1/time/formats')
               .then((response) => {
                 this.timeFormats = response.data.time_formats
@@ -181,7 +202,7 @@ export const useGlobalStore = (useWindow = false) => {
           if (this.timeZones.length) {
             resolve(this.timeZones)
           } else {
-            axios
+            http
               .get('/api/v1/timezones')
               .then((response) => {
                 this.timeZones = response.data.time_zones
@@ -200,7 +221,7 @@ export const useGlobalStore = (useWindow = false) => {
           if (this.countries.length) {
             resolve(this.countries)
           } else {
-            axios
+            http
               .get('/api/v1/countries')
               .then((response) => {
                 this.countries = response.data.data
@@ -216,7 +237,7 @@ export const useGlobalStore = (useWindow = false) => {
 
       fetchPlaceholders(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/number-placeholders`, { params })
             .then((response) => {
               resolve(response)
@@ -238,7 +259,7 @@ export const useGlobalStore = (useWindow = false) => {
 
       updateGlobalSettings({ data, message }) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/v1/settings', data)
             .then((response) => {
               Object.assign(this.globalSettings, data.settings)

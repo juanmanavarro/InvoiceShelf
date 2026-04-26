@@ -32,7 +32,7 @@
                 :class="[
                   'relative  md:h-24 lg:h-36 rounded hover:bg-gray-50',
                   {
-                    'outline-none ring ring-offset-1 ring-primary-500':
+                    'outline-hidden ring-3 ring-offset-1 ring-primary-500':
                       displayVideo,
                   },
                 ]"
@@ -66,7 +66,7 @@
                 :class="[
                   'relative  md:h-24 lg:h-36 rounded hover:bg-gray-50',
                   {
-                    'outline-none ring ring-offset-1 ring-primary-500':
+                    'outline-hidden ring-3 ring-offset-1 ring-primary-500':
                       displayImage === screenshot.url,
                   },
                 ]"
@@ -195,7 +195,7 @@
                     checked
                       ? 'bg-primary-50 border-primary-200 z-10'
                       : 'border-gray-200',
-                    'relative border p-4 flex flex-col cursor-pointer md:pl-4 md:pr-6 md:grid md:grid-cols-2 focus:outline-none',
+                    'relative border p-4 flex flex-col cursor-pointer md:pl-4 md:pr-6 md:grid md:grid-cols-2 focus:outline-hidden',
                   ]"
                 >
                   <div class="flex items-center text-sm">
@@ -274,7 +274,7 @@
               class="mr-4 flex items-center justify-center text-base"
               @click="installModule()"
             >
-              <BaseIcon v-if="!isInstalling" name="DownloadIcon" class="mr-2" />
+              <BaseIcon v-if="!isInstalling" name="ArrowDownTrayIcon" class="mr-2" />
               {{ $t('modules.install') }}
             </BaseButton>
           </div>
@@ -306,7 +306,7 @@
                 class="mr-4 flex items-center justify-center text-base"
                 @click="disableModule"
               >
-                <BaseIcon v-if="!isDisabling" name="BanIcon" class="mr-2" />
+                <BaseIcon v-if="!isDisabling" name="NoSymbolIcon" class="mr-2" />
                 {{ $t('modules.disable') }}
               </BaseButton>
               <BaseButton
@@ -673,7 +673,7 @@ import { useRoute } from 'vue-router'
 import { useDialogStore } from '@/scripts/stores/dialog'
 import { useI18n } from 'vue-i18n'
 import moment from 'moment'
-import axios from 'axios'
+import http from '@/scripts/http'
 import ModulePlaceholder from './partials/ModulePlaceholder.vue'
 import RecentModuleCard from './partials/RecentModuleCard.vue'
 import { useNotificationStore } from '@/scripts/stores/notification'
@@ -853,7 +853,7 @@ async function installModule() {
         module: moduleData.value.module_name,
       }
 
-      let requestResponse = await axios.post(currentStep.stepUrl, updateParams)
+      let requestResponse = await http.post(currentStep.stepUrl, updateParams)
 
       currentStep.completed = true
       if (requestResponse.data) {
@@ -908,19 +908,19 @@ function getErrorMessage(message) {
 
   switch (message) {
     case 'module_not_found':
-      msg = t('modules.module_not_found')
+      msg.value = t('modules.module_not_found')
       break
 
     case 'module_not_purchased':
-      msg = t('modules.module_not_purchased')
+      msg.value = t('modules.module_not_purchased')
       break
 
     case 'version_not_supported':
-      msg = t('modules.version_not_supported')
+      msg.value = t('modules.version_not_supported')
       break
 
     default:
-      msg = message
+      msg.value = message
       break
   }
 

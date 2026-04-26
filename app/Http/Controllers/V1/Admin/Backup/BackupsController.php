@@ -5,6 +5,7 @@
 namespace App\Http\Controllers\V1\Admin\Backup;
 
 use App\Jobs\CreateBackupJob;
+use App\Models\FileDisk;
 use App\Rules\Backup\PathToZip;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,6 +28,16 @@ class BackupsController extends ApiController
         $configuredBackupDisks = config('backup.backup.destination.disks');
 
         try {
+            if ($request->file_disk_id) {
+                $fileDisk = FileDisk::find($request->file_disk_id);
+                if ($fileDisk) {
+                    $fileDisk->setConfig();
+                    $prefix = env('DYNAMIC_DISK_PREFIX', 'temp_');
+                    config(['backup.backup.destination.disks' => [$prefix.$fileDisk->driver]]);
+                    $configuredBackupDisks = config('backup.backup.destination.disks');
+                }
+            }
+
             $backupDestination = BackupDestination::create(config('filesystems.default'), config('backup.backup.name'));
 
             $backups = Cache::remember("backups-{$request->file_disk_id}", now()->addSeconds(4), function () use ($backupDestination) {
@@ -65,7 +76,10 @@ class BackupsController extends ApiController
     {
         $this->authorize('manage backups');
 
-        dispatch(new CreateBackupJob($request->all()))->onQueue(config('backup.queue.name'));
+        $data = $request->all();
+        $data['company'] = $request->header('company');
+
+        dispatch(new CreateBackupJob($data))->onQueue(config('backup.queue.name'));
 
         return $this->respondSuccess();
     }

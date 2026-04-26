@@ -7,6 +7,7 @@ use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
@@ -14,7 +15,7 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -24,14 +25,15 @@ class UsersController extends Controller
 
         $user = $request->user();
 
-        $users = User::applyFilters($request->all())
+        $users = User::whereCompany()
+            ->applyFilters($request->all())
             ->where('id', '<>', $user->id)
             ->latest()
             ->paginate($limit);
 
         return UserResource::collection($users)
             ->additional(['meta' => [
-                'user_total_count' => User::count(),
+                'user_total_count' => User::whereCompany()->count(),
             ]]);
     }
 
@@ -39,7 +41,7 @@ class UsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\UserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(UserRequest $request)
     {
@@ -53,7 +55,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(User $user)
     {
@@ -66,7 +68,7 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\UserRequest  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(UserRequest $request, User $user)
     {
@@ -80,8 +82,8 @@ class UsersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Request  $request
+     * @return JsonResponse
      */
     public function delete(DeleteUserRequest $request)
     {

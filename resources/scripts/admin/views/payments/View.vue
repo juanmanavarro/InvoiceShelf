@@ -54,7 +54,7 @@
           type="text"
           @input="onSearch"
         >
-          <BaseIcon name="SearchIcon" class="h-5" />
+          <BaseIcon name="MagnifyingGlassIcon" class="h-5" />
         </BaseInput>
 
         <div class="flex ml-3" role="group" aria-label="First group">
@@ -65,7 +65,7 @@
           >
             <template #activator>
               <BaseButton variant="gray">
-                <BaseIcon name="FilterIcon" />
+                <BaseIcon name="FunnelIcon" />
               </BaseButton>
             </template>
 
@@ -147,9 +147,9 @@
             :id="'payment-' + payment.id"
             :to="`/admin/payments/${payment.id}/view`"
             :class="[
-              'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-transparent',
+              'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-l-transparent',
               {
-                'bg-gray-100 border-l-4 border-primary-500 border-solid':
+                'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
                   hasActiveUrl(payment.id),
               },
             ]"

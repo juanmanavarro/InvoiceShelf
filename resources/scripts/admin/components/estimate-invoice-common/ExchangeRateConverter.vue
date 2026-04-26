@@ -10,8 +10,8 @@
       <div v-if="hasActiveProvider && isEdit">
         <BaseIcon
           v-tooltip="{ content: 'Fetch Latest Exchange rate' }"
-          name="RefreshIcon"
-          :class="`h-4 w-4 text-primary-500 cursor-pointer outline-none ${
+          name="ArrowPathIcon"
+          :class="`h-4 w-4 text-primary-500 cursor-pointer outline-hidden ${
             isFetching
               ? ' animate-spin rotate-180 cursor-not-allowed pointer-events-none '
               : ''

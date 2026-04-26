@@ -1,4 +1,4 @@
-import axios from 'axios'
+import http from '@/scripts/http'
 import { defineStore } from 'pinia'
 import { useNotificationStore } from '@/scripts/stores/notification'
 import { handleError } from '@/scripts/helpers/error-handling'
@@ -7,15 +7,15 @@ export const useTaxTypeStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
 
-  return defineStoreFunc({
-    id: 'taxType',
-
+  return defineStoreFunc('taxType', {
     state: () => ({
       taxTypes: [],
       currentTaxType: {
         id: null,
         name: '',
+        calculation_type: 'percentage',
         percent: 0,
+        fixed_amount: 0,
         description: '',
         compound_tax: false,
         collective_tax: 0,
@@ -31,7 +31,9 @@ export const useTaxTypeStore = (useWindow = false) => {
         this.currentTaxType = {
           id: null,
           name: '',
+          calculation_type: 'percentage',
           percent: 0,
+          fixed_amount: 0,
           description: '',
           compound_tax: false,
           collective_tax: 0,
@@ -40,7 +42,7 @@ export const useTaxTypeStore = (useWindow = false) => {
 
       fetchTaxTypes(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/tax-types`, { params })
             .then((response) => {
               this.taxTypes = response.data.data
@@ -55,7 +57,7 @@ export const useTaxTypeStore = (useWindow = false) => {
 
       fetchTaxType(id) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/tax-types/${id}`)
             .then((response) => {
               this.currentTaxType = response.data.data
@@ -71,7 +73,7 @@ export const useTaxTypeStore = (useWindow = false) => {
       addTaxType(data) {
         const notificationStore = useNotificationStore()
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/v1/tax-types', data)
             .then((response) => {
               this.taxTypes.push(response.data.data)
@@ -91,7 +93,7 @@ export const useTaxTypeStore = (useWindow = false) => {
       updateTaxType(data) {
         const notificationStore = useNotificationStore()
         return new Promise((resolve, reject) => {
-          axios
+          http
             .put(`/api/v1/tax-types/${data.id}`, data)
             .then((response) => {
               if (response.data) {
@@ -115,7 +117,7 @@ export const useTaxTypeStore = (useWindow = false) => {
 
       fetchSalesTax(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/m/sales-tax-us/current-tax', data)
             .then((response) => {
               if (response.data) {
@@ -137,7 +139,7 @@ export const useTaxTypeStore = (useWindow = false) => {
 
       deleteTaxType(id) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .delete(`/api/v1/tax-types/${id}`)
             .then((response) => {
               if (response.data.success) {

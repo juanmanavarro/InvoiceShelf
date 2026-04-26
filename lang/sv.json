@@ -29,6 +29,8 @@
     "to_date": "Till datum",
     "from": "Från",
     "to": "Till",
+    "cc": "CC",
+    "bcc": "BCC",
     "ok": "Ok",
     "yes": "Ja",
     "no": "Nej",
@@ -111,12 +113,12 @@
       "results": "resultat"
     },
     "file_upload": {
-      "drag_a_file": "Drag a file here or",
-      "browse": "browse",
+      "drag_a_file": "Dra hit en fil",
+      "browse": "Bläddra",
       "to_choose": "to choose a file"
     },
     "multiselect": {
-      "the_list_is_empty": "The list is empty",
+      "the_list_is_empty": "Listan är tom",
       "no_results_found": "Inga resultat hittades"
     },
     "copy_to_clipboard": "Kopiera till urklipp"
@@ -161,7 +163,10 @@
     "name": "Namn",
     "description": "Beskrivning",
     "percent": "Procent",
-    "compound_tax": "Sammansatt moms"
+    "compound_tax": "Sammansatt moms",
+    "percentage": "Percentage",
+    "fixed_amount": "Fixed Amount",
+    "tax_type": "Tax Type"
   },
   "global_search": {
     "search": "Sök...",
@@ -191,7 +196,7 @@
   "customers": {
     "title": "Kunder",
     "prefix": "Prefix",
-    "tax_id": "Tax ID",
+    "tax_id": "Momsreg.nr",
     "add_customer": "Lägg till kund",
     "contacts_list": "Kundlista",
     "name": "Namn",
@@ -303,6 +308,7 @@
     "total": "Summa",
     "discount": "Rabatt",
     "sub_total": "Delsumma",
+    "net_total": "Net",
     "estimate_number": "Kostnadsförslagsnummer",
     "ref_number": "Ref Nummer",
     "contact": "Kontakt",
@@ -635,7 +641,7 @@
     "updated_message": "Betalning uppdaterades",
     "deleted_message": "Betalning raderades | Betalningar raderades",
     "invalid_amount_message": "Betalsumman är ogiltig",
-    "amount_due": "Due Amount"
+    "amount_due": "Förfallet belopp"
   },
   "expenses": {
     "title": "Utgifter",
@@ -646,9 +652,12 @@
     "currency": "Valuta",
     "contact": "Kontakt",
     "category": "Kategori",
+    "uncategorized": "Uncategorized",
     "from_date": "Från datum",
     "to_date": "Till datum",
     "expense_date": "Datum",
+    "expense_number": "Utgiftsnummer",
+    "expense_number_placeholder": "EXP-001",
     "description": "Beskrivning",
     "receipt": "Kvitto",
     "amount": "Summa",
@@ -852,7 +861,8 @@
       "payment_modes": "Betalmetoder",
       "notes": "Anteckningar",
       "exchange_rate": "Växelkurser",
-      "address_information": "Adressinformation"
+      "address_information": "Adressinformation",
+      "pdf_generation": "PDF Generation"
     },
     "address_information": {
       "section_description": "  Du kan uppdatera din adressinformation genom att använda formuläret nedan."
@@ -864,7 +874,7 @@
     "primary_currency": "Primär valuta",
     "timezone": "Tidszon",
     "date_format": "Datumformat",
-    "time_format": "Time Format",
+    "time_format": "T",
     "currencies": {
       "title": "Valutor",
       "currency": "Valuta | Valutor",
@@ -893,6 +903,7 @@
       "mailgun_endpoint": "Mailgun Endpoint",
       "ses_secret": "SES Säkerhet",
       "ses_key": "SES nyckel",
+      "ses_region": "AWS Region",
       "password": "Lösenord",
       "username": "Användarnamn",
       "mail_config": "Epostinställningar",
@@ -904,7 +915,15 @@
     "pdf": {
       "title": "PDF-inställningar",
       "footer_text": "Sidfotstext",
-      "pdf_layout": "PDF-layout"
+      "pdf_layout": "PDF-layout",
+      "pdf_configuration": "PDF Generation Settings",
+      "section_description": "Change the way PDFs are generated",
+      "driver": "PDF Driver to use",
+      "papersize": "Papersize",
+      "papersize_hint": "Papersize in width and height (ex. \"210mm 297mm\")",
+      "gotenberg_host": "Gotenberg service host",
+      "pdf_variables_save_successfully": "PDF configuration saved successfully",
+      "pdf_variables_save_error": "PDF configuration could not be saved"
     },
     "company_info": {
       "company_info": "Företagsinfo",
@@ -939,7 +958,7 @@
       "name": "Namn",
       "slug": "Permalänk",
       "required": "Tvingad",
-      "placeholder": "Placeholder",
+      "placeholder": "Platshållare",
       "help_text": "Hjälptext",
       "default_value": "Standardvärde",
       "prefix": "Prefix",
@@ -970,7 +989,7 @@
       "model_type": {
         "customer": "Kund",
         "invoice": "Faktura",
-        "estimate": "Estimate",
+        "estimate": "Estimat",
         "expense": "Expense",
         "payment": "Betalning"
       }
@@ -991,7 +1010,7 @@
       "delimiter_description": "Tecken för att ange gränsen mellan 2 separata komponenter. Som standard är den inställd till -",
       "delimiter_param_label": "Avgränsarens värde",
       "date_format": "Datumformat",
-      "time_format": "Time Format",
+      "time_format": "Tidsformat",
       "date_format_description": "Ett lokalt datum- och tidsfält som accepterar en formatsparameter. Standardformatet: 'Y' renderar innevarande år.",
       "date_format_param_label": "Format",
       "sequence": "Sekvens",
@@ -1087,6 +1106,8 @@
         "description": "Spara tid genom att skapa noteringar som kan återanvändas på fakturor, betalningsförslag, och betalningar.",
         "notes": "Anteckningar",
         "type": "Typ",
+        "is_default": "Select by default",
+        "is_default_description": "This note will be selected by default in new invoices.",
         "add_note": "Lägg till anteckning",
         "add_new_note": "Lägg till ny anteckning",
         "name": "Namn",
@@ -1193,14 +1214,23 @@
       "tax_per_item": "Moms per artikel",
       "tax_name": "Namn",
       "compound_tax": "Sammansatt moms",
+      "amount": "Amount",
       "percent": "Procent",
+      "fixed_amount": "Fixed Amount",
+      "calculation_type": "Calculation Type",
+      "percentage": "Percentage",
+      "fixed": "Fixed",
       "action": "Handling",
       "tax_setting_description": "Aktivera detta om du vill lägga till momssats på individuella fakturaartiklar. Som standard sätts moms direkt på fakturan.",
       "created_message": "Momssats skapades",
       "updated_message": "Momssats uppdaterades",
       "deleted_message": "Momssats raderades",
       "confirm_delete": "Du kommer inte kunna återställa denna Momssats",
-      "already_in_use": "Momssats används"
+      "already_in_use": "Momssats används",
+      "tax_included": "Inclusive taxes",
+      "tax_included_description": "Enable this if you want to report that taxes are already included in the invoice items or invoice total.",
+      "tax_included_by_default": "Enable inclusive taxes by default",
+      "tax_included_by_default_description": "Enable this if you want to set inclusive taxes by default"
     },
     "payment_modes": {
       "title": "Betalmetoder",
@@ -1236,7 +1266,7 @@
       "time_zone": "Tidszon",
       "fiscal_year": "Räkenskapsår",
       "date_format": "Datumformattering",
-      "time_format": "Time Fromat",
+      "time_format": "Time Format",
       "discount_setting": "Rabattinställningar",
       "discount_per_item": "Rabatt per artikel ",
       "discount_setting_description": "Aktivera detta om du vill kunna lägga rabatt på enskilda fakturaartiklar. Rabatt ges som standard på hela fakturan.",
@@ -1297,7 +1327,8 @@
       "finishing_update": "Avslutar uppdateringen",
       "update_failed": "Uppdatering misslyckades",
       "update_failed_text": "Uppdateringen misslyckades på steg : {step} step",
-      "update_warning": "Alla programfiler och standard mallfiler kommer att skrivas över när du uppdaterar programmet med det här verktyget. Ta en säkerhetskopia av dina mallar & databas innan du uppdaterar."
+      "update_warning": "Alla programfiler och standard mallfiler kommer att skrivas över när du uppdaterar programmet med det här verktyget. Ta en säkerhetskopia av dina mallar & databas innan du uppdaterar.",
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
     },
     "backup": {
       "title": "Säkerhetskopiering | Säkerhetskopieringar",
@@ -1588,7 +1619,7 @@
   "pdf_invoice_label": "Faktura",
   "pdf_invoice_number": "Fakturanummer",
   "pdf_invoice_date": "Fakturadatum",
-  "pdf_invoice_due_date": "Inbetalningsdatum",
+  "pdf_invoice_due_date": "Förfallodatum",
   "pdf_notes": "Anteckningar",
   "pdf_items_label": "Artiklar",
   "pdf_quantity_label": "Antal",
@@ -1596,6 +1627,7 @@
   "pdf_discount_label": "Rabatt",
   "pdf_amount_label": "Belopp",
   "pdf_subtotal": "Delsumma",
+  "pdf_net_total": "Net",
   "pdf_total": "Summa",
   "pdf_payment_label": "Betalning",
   "pdf_payment_receipt_label": "Betalningskvitto",
@@ -1618,6 +1650,7 @@
   "pdf_total_tax_label": "SUMMA MOMS",
   "pdf_tax_types_label": "Momssatser",
   "pdf_expenses_label": "Utgifter",
+  "pdf_expense_group_total_label": "Group total:",
   "pdf_bill_to": "Faktureras till,",
   "pdf_ship_to": "Skickas till,",
   "pdf_received_from": "Från:",
@@ -1625,7 +1658,7 @@
   "pdf_tax_id": "Org.Nr",
   "pdf_vat_id": "Momsreg. nr",
   "pdf_amount_paid": "Amount Paid",
-  "pdf_amount_due": "Amount Due",
+  "pdf_amount_due": "Förfallet belopp",
   "mail_thanks": "Tack",
   "mail_view_estimate": "View Estimate",
   "mail_viewed_estimate": ":name viewed this Estimate.",

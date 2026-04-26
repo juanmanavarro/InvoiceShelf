@@ -1,4 +1,4 @@
-import axios from 'axios'
+import http from '@/scripts/http'
 import moment from 'moment'
 import { defineStore } from 'pinia'
 import { useRoute } from 'vue-router'
@@ -6,14 +6,13 @@ import { useCompanyStore } from './company'
 import { useNotificationStore } from '@/scripts/stores/notification'
 import paymentStub from '../stub/payment'
 import { handleError } from '@/scripts/helpers/error-handling'
+import { useNotesStore } from './note'
 
 export const usePaymentStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
 
-  return defineStoreFunc({
-    id: 'payment',
-
+  return defineStoreFunc('payment', {
     state: () => ({
       payments: [],
       paymentTotalCount: 0,
@@ -56,6 +55,7 @@ export const usePaymentStore = (useWindow = false) => {
     actions: {
       fetchPaymentInitialData(isEdit) {
         const companyStore = useCompanyStore()
+        const notesStore = useNotesStore()
         const route = useRoute()
 
         this.isFetchingInitialData = true
@@ -80,6 +80,8 @@ export const usePaymentStore = (useWindow = false) => {
 
             // On Create
             else if (!isEdit && res2.data) {
+              await notesStore.fetchNotes()
+              this.currentPayment.notes = notesStore.getDefaultNoteForType('Payment')?.notes
               this.currentPayment.payment_date = moment().format('YYYY-MM-DD')
               this.currentPayment.payment_number = res2.data.nextNumber
               this.currentPayment.currency =
@@ -95,7 +97,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       fetchPayments(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/payments`, { params })
             .then((response) => {
               this.payments = response.data.data
@@ -111,7 +113,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       fetchPayment(id) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/payments/${id}`)
             .then((response) => {
               Object.assign(this.currentPayment, response.data.data)
@@ -126,7 +128,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       addPayment(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/v1/payments', data)
             .then((response) => {
               this.payments.push(response.data)
@@ -146,7 +148,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       updatePayment(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .put(`/api/v1/payments/${data.id}`, data)
             .then((response) => {
               if (response.data) {
@@ -175,7 +177,7 @@ export const usePaymentStore = (useWindow = false) => {
         const notificationStore = useNotificationStore()
 
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post(`/api/v1/payments/delete`, id)
             .then((response) => {
               let index = this.payments.findIndex(
@@ -199,7 +201,7 @@ export const usePaymentStore = (useWindow = false) => {
       deleteMultiplePayments() {
         const notificationStore = useNotificationStore()
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post(`/api/v1/payments/delete`, { ids: this.selectedPayments })
             .then((response) => {
               this.selectedPayments.forEach((payment) => {
@@ -210,7 +212,7 @@ export const usePaymentStore = (useWindow = false) => {
               })
               notificationStore.showNotification({
                 type: 'success',
-                message: global.tc('payments.deleted_message', 2),
+                message: global.t('payments.deleted_message', 2),
               })
               resolve(response)
             })
@@ -256,7 +258,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       searchPayment(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/payments`, { params })
             .then((response) => {
               this.payments = response.data
@@ -271,7 +273,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       previewPayment(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/payments/${params.id}/send/preview`, { params })
             .then((response) => {
               resolve(response)
@@ -285,7 +287,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       sendEmail(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post(`/api/v1/payments/${data.id}/send`, data)
             .then((response) => {
               const notificationStore = useNotificationStore()
@@ -304,7 +306,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       getNextNumber(params, setState = false) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/next-number?key=payment`, { params })
             .then((response) => {
               if (setState) {
@@ -327,7 +329,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       fetchPaymentModes(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/payment-methods`, { params })
             .then((response) => {
               this.paymentModes = response.data.data
@@ -342,7 +344,7 @@ export const usePaymentStore = (useWindow = false) => {
 
       fetchPaymentMode(id) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/payment-methods/${id}`)
             .then((response) => {
               this.currentPaymentMode = response.data.data
@@ -358,7 +360,7 @@ export const usePaymentStore = (useWindow = false) => {
       addPaymentMode(data) {
         const notificationStore = useNotificationStore()
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post(`/api/v1/payment-methods`, data)
             .then((response) => {
               this.paymentModes.push(response.data.data)
@@ -378,7 +380,7 @@ export const usePaymentStore = (useWindow = false) => {
       updatePaymentMode(data) {
         const notificationStore = useNotificationStore()
         return new Promise((resolve, reject) => {
-          axios
+          http
             .put(`/api/v1/payment-methods/${data.id}`, data)
             .then((response) => {
               if (response.data) {
@@ -406,7 +408,7 @@ export const usePaymentStore = (useWindow = false) => {
         const notificationStore = useNotificationStore()
 
         return new Promise((resolve, reject) => {
-          axios
+          http
             .delete(`/api/v1/payment-methods/${id}`)
             .then((response) => {
               let index = this.paymentModes.findIndex(

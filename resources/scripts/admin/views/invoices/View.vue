@@ -322,7 +322,7 @@ onSearched = debounce(onSearched, 500)
             @input="onSearched()"
           >
             <template #right>
-              <BaseIcon name="SearchIcon" class="h-5 text-gray-400" />
+              <BaseIcon name="MagnifyingGlassIcon" class="h-5 text-gray-400" />
             </template>
           </BaseInput>
         </div>
@@ -331,7 +331,7 @@ onSearched = debounce(onSearched, 500)
           <BaseDropdown class="ml-3" position="bottom-start">
             <template #activator>
               <BaseButton size="md" variant="gray">
-                <BaseIcon name="FilterIcon" />
+                <BaseIcon name="FunnelIcon" />
               </BaseButton>
             </template>
             <div
@@ -391,8 +391,8 @@ onSearched = debounce(onSearched, 500)
           </BaseDropdown>
 
           <BaseButton class="ml-1" size="md" variant="gray" @click="sortData">
-            <BaseIcon v-if="getOrderBy" name="SortAscendingIcon" />
-            <BaseIcon v-else name="SortDescendingIcon" />
+            <BaseIcon v-if="getOrderBy" name="BarsArrowUpIcon" />
+            <BaseIcon v-else name="BarsArrowDownIcon" />
           </BaseButton>
         </div>
       </div>
@@ -412,9 +412,9 @@ onSearched = debounce(onSearched, 500)
             :id="'invoice-' + invoice.id"
             :to="`/admin/invoices/${invoice.id}/view`"
             :class="[
-              'flex justify-between side-invoice p-4 cursor-pointer hover:bg-gray-100 items-center border-l-4 border-transparent',
+              'flex justify-between side-invoice p-4 cursor-pointer hover:bg-gray-100 items-center border-l-4 border-l-transparent',
               {
-                'bg-gray-100 border-l-4 border-primary-500 border-solid':
+                'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
                   hasActiveUrl(invoice.id),
               },
             ]"

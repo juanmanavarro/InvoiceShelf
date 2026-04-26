@@ -101,7 +101,7 @@
                 transition
                 duration-150
                 ease-in-out
-                focus:outline-none
+                focus:outline-hidden
               "
               @click="hideNotificationAction"
             >
@@ -161,7 +161,7 @@ function clearNotificationTimeOut() {
 }
 
 function setNotificationTimeOut() {
-  notiTimeOut = setTimeout(() => {
+  notiTimeOut.value = setTimeout(() => {
     notificationStore.hideNotification(props.notification)
   }, props.notification.time || 5000)
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1\Admin\Company;
 
+use App\Facades\Hashids;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompaniesRequest;
 use App\Http\Resources\CompanyResource;
@@ -9,7 +10,6 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Silber\Bouncer\BouncerFacade;
-use Vinkla\Hashids\Facades\Hashids;
 
 class CompaniesController extends Controller
 {
@@ -61,10 +61,10 @@ class CompaniesController extends Controller
         $company = Company::find($request->header('company'));
         $this->authorize('transfer company ownership', $company);
 
-        if ($user->hasCompany($company->id)) {
+        if (! $user->hasCompany($company->id)) {
             return response()->json([
                 'success' => false,
-                'message' => 'User does not belongs to this company.',
+                'message' => 'User does not belong to this company.',
             ]);
         }
 

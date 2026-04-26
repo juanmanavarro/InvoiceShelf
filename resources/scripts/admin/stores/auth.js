@@ -1,4 +1,4 @@
-import axios from 'axios'
+import http from '@/scripts/http'
 import { defineStore } from 'pinia'
 import { useNotificationStore } from '@/scripts/stores/notification'
 import { handleError } from '@/scripts/helpers/error-handling'
@@ -7,8 +7,7 @@ export const useAuthStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
 
-  return defineStoreFunc({
-    id: 'auth',
+  return defineStoreFunc('auth', {
     state: () => ({
       status: '',
 
@@ -22,9 +21,9 @@ export const useAuthStore = (useWindow = false) => {
     actions: {
       login(data) {
         return new Promise((resolve, reject) => {
-          axios.get('/sanctum/csrf-cookie').then((response) => {
+          http.get('/sanctum/csrf-cookie').then((response) => {
             if (response) {
-              axios
+              http
                 .post('/login', data)
                 .then((response) => {
                   resolve(response)
@@ -45,22 +44,31 @@ export const useAuthStore = (useWindow = false) => {
 
       logout() {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/auth/logout')
-            .then((response) => {
+            .then(async (response) => {
               const notificationStore = useNotificationStore()
               notificationStore.showNotification({
                 type: 'success',
                 message: 'Logged out successfully.',
               })
 
+              // Clear stored auth data so next login doesn't send stale tokens
+              window.Ls.remove('auth.token')
+              window.Ls.remove('selectedCompany')
+
+              // Refresh CSRF token so next login works cleanly
+              await http.get('/sanctum/csrf-cookie').catch(() => {})
+
               window.router.push('/login')
-                // resetStore.clearPinia()
               resolve(response)
             })
             .catch((err) => {
               handleError(err)
-              window.router.push('/')
+              window.Ls.remove('auth.token')
+              window.Ls.remove('selectedCompany')
+              http.get('/sanctum/csrf-cookie').catch(() => {})
+              window.router.push('/login')
               reject(err)
             })
         })

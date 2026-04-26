@@ -23,6 +23,7 @@ use App\Http\Controllers\V1\Admin\ExchangeRate\GetActiveProviderController;
 use App\Http\Controllers\V1\Admin\ExchangeRate\GetExchangeRateController;
 use App\Http\Controllers\V1\Admin\ExchangeRate\GetSupportedCurrenciesController;
 use App\Http\Controllers\V1\Admin\ExchangeRate\GetUsedCurrenciesController;
+use App\Http\Controllers\V1\Admin\Expense\DuplicateExpenseController;
 use App\Http\Controllers\V1\Admin\Expense\ExpenseCategoriesController;
 use App\Http\Controllers\V1\Admin\Expense\ExpensesController;
 use App\Http\Controllers\V1\Admin\Expense\ShowReceiptController;
@@ -76,6 +77,7 @@ use App\Http\Controllers\V1\Admin\Settings\GetCompanySettingsController;
 use App\Http\Controllers\V1\Admin\Settings\GetSettingsController;
 use App\Http\Controllers\V1\Admin\Settings\GetUserSettingsController;
 use App\Http\Controllers\V1\Admin\Settings\MailConfigurationController;
+use App\Http\Controllers\V1\Admin\Settings\PDFConfigurationController;
 use App\Http\Controllers\V1\Admin\Settings\TaxTypesController;
 use App\Http\Controllers\V1\Admin\Settings\UpdateCompanySettingsController;
 use App\Http\Controllers\V1\Admin\Settings\UpdateSettingsController;
@@ -311,6 +313,8 @@ Route::prefix('/v1')->group(function () {
 
             Route::post('/expenses/delete', [ExpensesController::class, 'delete']);
 
+            Route::post('/expenses/{expense}/duplicate', DuplicateExpenseController::class);
+
             Route::apiResource('expenses', ExpensesController::class);
 
             Route::apiResource('categories', ExpenseCategoriesController::class);
@@ -396,6 +400,15 @@ Route::prefix('/v1')->group(function () {
             Route::post('/mail/test', [MailConfigurationController::class, 'testEmailConfig']);
 
             Route::get('/company/mail/config', GetCompanyMailConfigurationController::class);
+
+            // PDF Generation
+            // ----------------------------------
+
+            Route::get('/pdf/drivers', [PDFConfigurationController::class, 'getDrivers']);
+
+            Route::get('/pdf/config', [PDFConfigurationController::class, 'getEnvironment']);
+
+            Route::post('/pdf/config', [PDFConfigurationController::class, 'saveEnvironment']);
 
             Route::apiResource('notes', NotesController::class);
 

@@ -22,6 +22,8 @@ use App\Policies\UserPolicy;
 use App\Space\InstallUtils;
 use Gate;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\ServiceProvider;
 use Silber\Bouncer\Database\Models as BouncerModels;
 use Silber\Bouncer\Database\Role;
@@ -66,8 +68,8 @@ class AppServiceProvider extends ServiceProvider
 
         // In demo mode, prevent all outgoing emails and notifications
         if (config('app.env') === 'demo') {
-            \Illuminate\Support\Facades\Mail::fake();
-            \Illuminate\Support\Facades\Notification::fake();
+            Mail::fake();
+            Notification::fake();
         }
     }
 
@@ -127,6 +129,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage backups', [SettingsPolicy::class, 'manageBackups']);
         Gate::define('manage file disk', [SettingsPolicy::class, 'manageFileDisk']);
         Gate::define('manage email config', [SettingsPolicy::class, 'manageEmailConfig']);
+        Gate::define('manage pdf config', [SettingsPolicy::class, 'managePDFConfig']);
         Gate::define('manage notes', [NotePolicy::class, 'manageNotes']);
         Gate::define('view notes', [NotePolicy::class, 'viewNotes']);
 

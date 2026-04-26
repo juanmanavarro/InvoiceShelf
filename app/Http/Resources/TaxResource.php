@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaxResource extends JsonResource
@@ -9,7 +10,7 @@ class TaxResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      */
     public function toArray($request): array
     {
@@ -25,6 +26,8 @@ class TaxResource extends JsonResource
             'name' => $this->name,
             'amount' => $this->amount,
             'percent' => $this->percent,
+            'calculation_type' => $this->calculation_type,
+            'fixed_amount' => $this->fixed_amount,
             'compound_tax' => $this->compound_tax,
             'base_amount' => $this->base_amount,
             'currency_id' => $this->currency_id,

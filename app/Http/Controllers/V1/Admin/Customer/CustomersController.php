@@ -7,15 +7,15 @@ use App\Http\Requests;
 use App\Http\Requests\DeleteCustomersRequest;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -26,13 +26,8 @@ class CustomersController extends Controller
         $customers = Customer::with('creator')
             ->whereCompany()
             ->applyFilters($request->all())
-            ->select(
-                'customers.*',
-                DB::raw('sum(invoices.base_due_amount) as base_due_amount'),
-                DB::raw('sum(invoices.due_amount) as due_amount'),
-            )
-            ->groupBy('customers.id')
-            ->leftJoin('invoices', 'customers.id', '=', 'invoices.customer_id')
+            ->withSum('invoices as base_due_amount', 'base_due_amount')
+            ->withSum('invoices as due_amount', 'due_amount')
             ->paginateData($limit);
 
         return CustomerResource::collection($customers)
@@ -44,8 +39,8 @@ class CustomersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Request  $request
+     * @return JsonResponse
      */
     public function store(Requests\CustomerRequest $request)
     {
@@ -59,7 +54,7 @@ class CustomersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Customer $customer)
     {
@@ -71,8 +66,8 @@ class CustomersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Request  $request
+     * @return JsonResponse
      */
     public function update(Requests\CustomerRequest $request, Customer $customer)
     {
@@ -90,14 +85,18 @@ class CustomersController extends Controller
     /**
      * Remove a list of Customers along side all their resources (ie. Estimates, Invoices, Payments and Addresses)
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Request  $request
+     * @return JsonResponse
      */
     public function delete(DeleteCustomersRequest $request)
     {
         $this->authorize('delete multiple customers');
 
-        Customer::deleteCustomers($request->ids);
+        $ids = Customer::whereCompany()
+            ->whereIn('id', $request->ids)
+            ->pluck('id');
+
+        Customer::deleteCustomers($ids);
 
         return response()->json([
             'success' => true,

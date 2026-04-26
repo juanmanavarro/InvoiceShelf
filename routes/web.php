@@ -34,6 +34,9 @@ Route::post('login', [LoginController::class, 'login']);
 
 Route::post('auth/logout', function () {
     Auth::guard('web')->logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
 });
 
 // Customer auth
@@ -113,7 +116,8 @@ Route::prefix('/customer')->group(function () {
 
 Route::get('/installation', function () {
     return view('app');
-})->name('install')->middleware('redirect-if-installed');
+})->name('install')
+    ->middleware(['redirect-if-installed']);
 
 // Move other http requests to the Vue App
 // -------------------------------------------------

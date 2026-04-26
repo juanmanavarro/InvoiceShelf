@@ -5,7 +5,7 @@
         {{ modalStore.title }}
 
         <BaseIcon
-          name="XIcon"
+          name="XMarkIcon"
           class="w-6 h-6 text-gray-500 cursor-pointer"
           @click="closeCompanyModal"
         />
@@ -98,7 +98,7 @@
         </BaseInputGrid>
       </div>
 
-      <div class="z-0 flex justify-end p-4 bg-gray-50 border-modal-bg">
+      <div class="z-0 flex justify-end p-4 bg-gray-50 border-t border-gray-200">
         <BaseButton
           class="mr-3 text-sm"
           variant="primary-outline"
@@ -117,7 +117,7 @@
           <template #left="slotProps">
             <BaseIcon
               v-if="!isSaving"
-              name="SaveIcon"
+              name="ArrowDownOnSquareIcon"
               :class="slotProps.class"
             />
           </template>

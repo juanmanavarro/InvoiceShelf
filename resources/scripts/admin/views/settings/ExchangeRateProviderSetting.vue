@@ -1,31 +1,33 @@
 <template>
   <ExchangeRateProviderModal />
   <BaseCard>
-    <div slot="header" class="flex flex-wrap justify-between lg:flex-nowrap">
-      <div>
-        <h6 class="text-lg font-medium text-left">
-          {{ $t('settings.menu_title.exchange_rate') }}
-        </h6>
-        <p
-          class="mt-2 text-sm leading-snug text-left text-gray-500"
-          style="max-width: 680px"
-        >
-          {{ $t('settings.exchange_rate.providers_description') }}
-        </p>
+    <template #header>
+      <div class="flex flex-wrap justify-between lg:flex-nowrap">
+        <div>
+          <h6 class="text-lg font-medium text-left">
+            {{ $t('settings.menu_title.exchange_rate') }}
+          </h6>
+          <p
+            class="mt-2 text-sm leading-snug text-left text-gray-500"
+            style="max-width: 680px"
+          >
+            {{ $t('settings.exchange_rate.providers_description') }}
+          </p>
+        </div>
+        <div class="mt-4 lg:mt-0 lg:ml-2">
+          <BaseButton
+            variant="primary-outline"
+            size="lg"
+            @click="addExchangeRate"
+          >
+            <template #left="slotProps">
+              <PlusIcon :class="slotProps.class" />
+            </template>
+            {{ $t('settings.exchange_rate.new_driver') }}
+          </BaseButton>
+        </div>
       </div>
-      <div class="mt-4 lg:mt-0 lg:ml-2">
-        <BaseButton
-          variant="primary-outline"
-          size="lg"
-          @click="addExchangeRate"
-        >
-          <template #left="slotProps">
-            <PlusIcon :class="slotProps.class" />
-          </template>
-          {{ $t('settings.exchange_rate.new_driver') }}
-        </BaseButton>
-      </div>
-    </div>
+    </template>
 
     <BaseTable ref="table" class="mt-16" :data="fetchData" :columns="drivers">
       <template #cell-driver="{ row }">
@@ -47,7 +49,7 @@
         <BaseDropdown>
           <template #activator>
             <div class="inline-block">
-              <DotsHorizontalIcon class="w-5 text-gray-500" />
+              <EllipsisHorizontalIcon class="w-5 text-gray-500" />
             </div>
           </template>
 
@@ -71,16 +73,16 @@ import { useExchangeRateStore } from '@/scripts/admin/stores/exchange-rate'
 import { useCompanyStore } from '@/scripts/admin/stores/company'
 import { useModalStore } from '@/scripts/stores/modal'
 import { useDialogStore } from '@/scripts/stores/dialog'
-import { SaveIcon } from '@heroicons/vue/outline'
+import { ArrowDownOnSquareIcon } from '@heroicons/vue/24/outline'
 import { ref, computed, inject, reactive } from 'vue'
 import ExchangeRateProviderModal from '@/scripts/admin/components/modal-components/ExchangeRateProviderModal.vue'
 import { useI18n } from 'vue-i18n'
 import {
   PlusIcon,
-  DotsHorizontalIcon,
+  EllipsisHorizontalIcon,
   PencilIcon,
   TrashIcon,
-} from '@heroicons/vue/outline'
+} from '@heroicons/vue/24/outline'
 import BaseTable from '@/scripts/components/base/base-table/BaseTable.vue'
 
 // store

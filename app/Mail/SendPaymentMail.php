@@ -2,12 +2,12 @@
 
 namespace App\Mail;
 
+use App\Facades\Hashids;
 use App\Models\EmailLog;
 use App\Models\Payment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Vinkla\Hashids\Facades\Hashids;
 
 class SendPaymentMail extends Mailable
 {
@@ -36,6 +36,8 @@ class SendPaymentMail extends Mailable
         $log = EmailLog::create([
             'from' => $this->data['from'],
             'to' => $this->data['to'],
+            'cc' => $this->data['cc'] ?? null,
+            'bcc' => $this->data['bcc'] ?? null,
             'subject' => $this->data['subject'],
             'body' => $this->data['body'],
             'mailable_type' => Payment::class,

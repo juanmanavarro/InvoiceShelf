@@ -5,6 +5,7 @@ use App\Http\Requests\TaxTypeRequest;
 use App\Models\TaxType;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\deleteJson;
@@ -96,4 +97,36 @@ test('create negative tax type', function () {
         ->assertStatus(201);
 
     $this->assertDatabaseHas('tax_types', $taxType);
+});
+
+test('create fixed amount tax type', function () {
+    $taxType = TaxType::factory()->raw([
+        'calculation_type' => 'fixed',
+        'percent' => null,
+        'fixed_amount' => 5000,
+    ]);
+
+    postJson('api/v1/tax-types', $taxType)
+        ->assertStatus(201);
+
+    $this->assertDatabaseHas('tax_types', $taxType);
+});
+
+test('create percentage tax type with three decimals', function () {
+    $payload = TaxType::factory()->raw([
+        'calculation_type' => 'percentage',
+        'percent' => 6.625,
+        'fixed_amount' => null,
+    ]);
+
+    $response = postJson('api/v1/tax-types', $payload)
+        ->assertStatus(201);
+
+    $taxTypeId = $response->json('data.id');
+
+    expect($taxTypeId)->not()->toBeNull();
+
+    $rawPercent = DB::table('tax_types')->where('id', $taxTypeId)->value('percent');
+
+    expect((string) $rawPercent)->toBe('6.625');
 });

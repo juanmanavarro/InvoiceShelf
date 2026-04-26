@@ -3,7 +3,7 @@
     :title="$t('wizard.verify_domain.title')"
     :description="$t('wizard.verify_domain.desc')"
   >
-    <div class="w-full md:w-2/3">
+    <div class="w-full">
       <BaseInputGroup
         :label="$t('wizard.verify_domain.app_domain')"
         :error="v$.app_domain.$error && v$.app_domain.$errors[0].$message"
@@ -22,8 +22,8 @@
     <ul class="w-full text-gray-600 list-disc list-inside">
       <li class="text-sm leading-8">
         {{ $t('wizard.verify_domain.notes.not_contain') }}
-        <b class="inline-block px-1 bg-gray-100 rounded-sm">https://</b> {{ $t('wizard.verify_domain.notes.or') }}
-        <b class="inline-block px-1 bg-gray-100 rounded-sm">http</b> {{ $t('wizard.verify_domain.notes.in_front') }}
+        <b class="inline-block px-1 bg-gray-100 rounded-xs">https://</b> {{ $t('wizard.verify_domain.notes.or') }}
+        <b class="inline-block px-1 bg-gray-100 rounded-xs">http</b> {{ $t('wizard.verify_domain.notes.in_front') }}
       </li>
       <li class="text-sm leading-8">
         {{ $t('wizard.verify_domain.notes.if_you') }}
@@ -87,7 +87,7 @@ async function verifyDomain() {
   try {
     await installationStore.setInstallationDomain(formData)
     await installationStore.installationLogin()
-    let driverRes = await installationStore.checkAutheticated()
+    let driverRes = await installationStore.checkAuthenticated()
 
     if (driverRes.data) {
       emit('next', 4)

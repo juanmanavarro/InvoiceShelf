@@ -73,7 +73,7 @@
             @input="onSearched()"
           >
             <template #right>
-              <BaseIcon name="SearchIcon" class="text-gray-400" />
+              <BaseIcon name="MagnifyingGlassIcon" class="text-gray-400" />
             </template>
           </BaseInput>
         </div>
@@ -87,7 +87,7 @@
           >
             <template #activator>
               <BaseButton size="md" variant="gray">
-                <BaseIcon name="FilterIcon" />
+                <BaseIcon name="FunnelIcon" />
               </BaseButton>
             </template>
 
@@ -169,9 +169,9 @@
             :id="'estimate-' + estimate.id"
             :to="`/admin/estimates/${estimate.id}/view`"
             :class="[
-              'flex justify-between side-estimate p-4 cursor-pointer hover:bg-gray-100 items-center border-l-4 border-transparent',
+              'flex justify-between side-estimate p-4 cursor-pointer hover:bg-gray-100 items-center border-l-4 border-l-transparent',
               {
-                'bg-gray-100 border-l-4 border-primary-500 border-solid':
+                'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
                   hasActiveUrl(estimate.id),
               },
             ]"

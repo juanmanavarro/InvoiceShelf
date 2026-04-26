@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import http from '@/scripts/http'
 import recurringInvoiceStub from '@/scripts/admin/stub/recurring-invoice'
 import recurringInvoiceItemStub from '@/scripts/admin/stub/recurring-invoice-item'
 import TaxStub from '../stub/tax'
@@ -14,14 +14,13 @@ import moment from 'moment'
 import _ from 'lodash'
 import { useInvoiceStore } from './invoice'
 import { useNotificationStore } from '@/scripts/stores/notification'
+import { useNotesStore } from './note'
 
 export const useRecurringInvoiceStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
 
-  return defineStoreFunc({
-    id: 'recurring-invoice',
-
+  return defineStoreFunc('recurring-invoice', {
     state: () => ({
       templates: [],
       recurringInvoices: [],
@@ -36,17 +35,56 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
       },
 
       frequencies: [
-        { label: global.t('recurring_invoices.frequency.every_minute'), value: '* * * * *' },
-        { label: global.t('recurring_invoices.frequency.every_30_minute'), value: '*/30 * * * *' },
-        { label: global.t('recurring_invoices.frequency.every_hour'), value: '0 * * * *' },
-        { label: global.t('recurring_invoices.frequency.every_2_hour'), value: '0 */2 * * *' },
-        { label: global.t('recurring_invoices.frequency.every_day_at_midnight'), value: '0 0 * * *' },
-        { label: global.t('recurring_invoices.frequency.every_week'), value: '0 0 * * 0' },
-        { label: global.t('recurring_invoices.frequency.every_15_days_at_midnight'), value: '0 5 */15 * *' },
-        { label: global.t('recurring_invoices.frequency.on_the_first_day_of_every_month_at_midnight'), value: '0 0 1 * *' },
-        { label: global.t('recurring_invoices.frequency.every_6_month'), value: '0 0 1 */6 *' },
-        { label: global.t('recurring_invoices.frequency.every_year_on_the_first_day_of_january_at_midnight'), value: '0 0 1 1 *' },
-        { label: global.t('recurring_invoices.frequency.custom'), value: 'CUSTOM' },
+        {
+          label: global.t('recurring_invoices.frequency.every_minute'),
+          value: '* * * * *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.every_30_minute'),
+          value: '*/30 * * * *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.every_hour'),
+          value: '0 * * * *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.every_2_hour'),
+          value: '0 */2 * * *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.every_day_at_midnight'),
+          value: '0 0 * * *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.every_week'),
+          value: '0 0 * * 0',
+        },
+        {
+          label: global.t(
+            'recurring_invoices.frequency.every_15_days_at_midnight',
+          ),
+          value: '0 5 */15 * *',
+        },
+        {
+          label: global.t(
+            'recurring_invoices.frequency.on_the_first_day_of_every_month_at_midnight',
+          ),
+          value: '0 0 1 * *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.every_6_month'),
+          value: '0 0 1 */6 *',
+        },
+        {
+          label: global.t(
+            'recurring_invoices.frequency.every_year_on_the_first_day_of_january_at_midnight',
+          ),
+          value: '0 0 1 1 *',
+        },
+        {
+          label: global.t('recurring_invoices.frequency.custom'),
+          value: 'CUSTOM',
+        },
       ],
     }),
 
@@ -57,6 +95,10 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
             return a + b['total']
           }, 0) || 0
         )
+      },
+
+      getNetTotal() {
+        return this.getSubtotalWithDiscount - this.getTotalTax
       },
 
       getTotalSimpleTax() {
@@ -94,6 +136,9 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
       },
 
       getTotal() {
+        if (this.newRecurringInvoice.tax_included) {
+          return this.getSubtotalWithDiscount
+        }
         return this.getSubtotalWithDiscount + this.getTotalTax
       },
     },
@@ -115,7 +160,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       addRecurringInvoice(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post('/api/v1/recurring-invoices', data)
             .then((response) => {
               this.recurringInvoices = [
@@ -140,7 +185,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
       fetchRecurringInvoice(id) {
         return new Promise((resolve, reject) => {
           this.isFetchingViewData = true
-          axios
+          http
             .get(`/api/v1/recurring-invoices/${id}`)
             .then((response) => {
               Object.assign(this.newRecurringInvoice, response.data.data)
@@ -160,7 +205,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       updateRecurringInvoice(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .put(`/api/v1/recurring-invoices/${data.id}`, data)
             .then((response) => {
               resolve(response)
@@ -173,7 +218,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
               })
 
               let pos = this.recurringInvoices.findIndex(
-                (invoice) => invoice.id === response.data.data.id
+                (invoice) => invoice.id === response.data.data.id,
               )
 
               this.recurringInvoices[pos] = response.data.data
@@ -187,7 +232,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       selectCustomer(id) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/customers/${id}`)
             .then((response) => {
               this.newRecurringInvoice.customer = response.data.data
@@ -203,7 +248,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       searchRecurringInvoice(data) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/recurring-invoices?${data}`)
             .then((response) => {
               resolve(response)
@@ -217,7 +262,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       fetchRecurringInvoices(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get(`/api/v1/recurring-invoices`, { params })
             .then((response) => {
               this.recurringInvoices = response.data.data
@@ -235,11 +280,11 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       deleteRecurringInvoice(id) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .post(`/api/v1/recurring-invoices/delete`, id)
             .then((response) => {
               let index = this.recurringInvoices.findIndex(
-                (invoice) => invoice.id === id
+                (invoice) => invoice.id === id,
               )
               this.recurringInvoices.splice(index, 1)
               resolve(response)
@@ -257,14 +302,14 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
           if (id) {
             ids = [id]
           }
-          axios
+          http
             .post(`/api/v1/recurring-invoices/delete`, {
               ids: ids,
             })
             .then((response) => {
               this.selectedRecurringInvoices.forEach((invoice) => {
                 let index = this.recurringInvoices.findIndex(
-                  (_inv) => _inv.id === invoice.id
+                  (_inv) => _inv.id === invoice.id,
                 )
                 this.recurringInvoices.splice(index, 1)
               })
@@ -304,7 +349,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
           this.selectAllField = false
         } else {
           let allInvoiceIds = this.recurringInvoices.map(
-            (invoice) => invoice.id
+            (invoice) => invoice.id,
           )
           this.selectedRecurringInvoices = allInvoiceIds
           this.selectAllField = true
@@ -334,6 +379,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
         const invoiceStore = useInvoiceStore()
         const taxTypeStore = useTaxTypeStore()
         const route = useRoute()
+        const notesStore = useNotesStore()
 
         this.isFetchingInitialSettings = true
         this.newRecurringInvoice.currency = companyStore.selectedCompanyCurrency
@@ -348,12 +394,17 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
         // on create
         if (!isEdit) {
+          await notesStore.fetchNotes()
+          this.newRecurringInvoice.notes =
+            notesStore.getDefaultNoteForType('Invoice')?.notes
           this.newRecurringInvoice.tax_per_item =
             companyStore.selectedCompanySettings.tax_per_item
           this.newRecurringInvoice.discount_per_item =
             companyStore.selectedCompanySettings.discount_per_item
-          this.newRecurringInvoice.sales_tax_type = companyStore.selectedCompanySettings.sales_tax_type
-          this.newRecurringInvoice.sales_tax_address_type = companyStore.selectedCompanySettings.sales_tax_address_type
+          this.newRecurringInvoice.sales_tax_type =
+            companyStore.selectedCompanySettings.sales_tax_type
+          this.newRecurringInvoice.sales_tax_address_type =
+            companyStore.selectedCompanySettings.sales_tax_address_type
           this.newRecurringInvoice.starts_at = moment().format('YYYY-MM-DD')
           this.newRecurringInvoice.next_invoice_date = moment()
             .add(7, 'days')
@@ -395,7 +446,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
             this.isFetchingInitialSettings = false
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err)
             handleError(err)
           })
       },
@@ -403,7 +454,9 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
       addSalesTaxUs() {
         const taxTypeStore = useTaxTypeStore()
         let salesTax = { ...TaxStub }
-        let found = this.newRecurringInvoice.taxes.find((_t) => _t.name === 'Sales Tax' && _t.type === 'MODULE')
+        let found = this.newRecurringInvoice.taxes.find(
+          (_t) => _t.name === 'Sales Tax' && _t.type === 'MODULE',
+        )
         if (found) {
           for (const key in found) {
             if (Object.prototype.hasOwnProperty.call(salesTax, key)) {
@@ -420,14 +473,15 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
       },
 
       setSelectedFrequency() {
-        let data = this.frequencies.find(
-          (frequency) => {
-            return frequency.value === this.newRecurringInvoice.frequency
-          }
-        )
-        data ? this.newRecurringInvoice.selectedFrequency = data
-          : this.newRecurringInvoice.selectedFrequency = { label: 'Custom', value: 'CUSTOM' }
-
+        let data = this.frequencies.find((frequency) => {
+          return frequency.value === this.newRecurringInvoice.frequency
+        })
+        data
+          ? (this.newRecurringInvoice.selectedFrequency = data)
+          : (this.newRecurringInvoice.selectedFrequency = {
+              label: 'Custom',
+              value: 'CUSTOM',
+            })
       },
 
       resetSelectedNote() {
@@ -436,7 +490,7 @@ export const useRecurringInvoiceStore = (useWindow = false) => {
 
       fetchRecurringInvoiceFrequencyDate(params) {
         return new Promise((resolve, reject) => {
-          axios
+          http
             .get('/api/v1/recurring-invoice-frequency', { params })
             .then((response) => {
               this.newRecurringInvoice.next_invoice_at =

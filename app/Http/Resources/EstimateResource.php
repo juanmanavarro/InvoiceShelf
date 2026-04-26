@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EstimateResource extends JsonResource
@@ -9,7 +10,7 @@ class EstimateResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      */
     public function toArray($request): array
     {
@@ -21,6 +22,7 @@ class EstimateResource extends JsonResource
             'status' => $this->status,
             'reference_number' => $this->reference_number,
             'tax_per_item' => $this->tax_per_item,
+            'tax_included' => $this->tax_included,
             'discount_per_item' => $this->discount_per_item,
             'notes' => $this->getNotes(),
             'discount' => $this->discount,
