@@ -204,7 +204,7 @@
 
         <template #cell-estimate_number="{ row }">
           <router-link
-            :to="{ path: `estimates/${row.data.id}/view` }"
+            :to="{ path: `estimates/${row.data.id}/edit` }"
             class="font-medium text-primary-500"
           >
             {{ row.data.estimate_number }}
