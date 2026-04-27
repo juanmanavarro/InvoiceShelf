@@ -353,7 +353,9 @@ async function submitForm() {
 
     const response = await action(data)
 
-    router.push(`/admin/invoices/${response.data.data.id}/view`)
+    if (!isEdit.value) {
+      router.push(`/admin/invoices/${response.data.data.id}/view`)
+    }
   } catch (err) {
     console.error(err)
   }

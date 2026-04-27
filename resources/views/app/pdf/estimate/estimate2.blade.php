@@ -433,6 +433,8 @@
                     <h1>@lang('pdf_estimate_label')</h1>
                     <h4>{{ $estimate->estimate_number }}</h4>
                     <h4>{{ $estimate->formattedEstimateDate }}</h4>
+                    <h4>{{ $estimate->formattedExpiryDate }}</h4>
+                    @include('app.pdf.partials.custom-fields', ['model' => $estimate, 'containerStyle' => 'margin-top: 8px; page-break-inside: avoid;'])
                 </td>
             </tr>
         </table>

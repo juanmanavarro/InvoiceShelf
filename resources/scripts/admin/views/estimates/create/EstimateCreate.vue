@@ -299,7 +299,7 @@ async function submitForm() {
   try {
     let res = await action(data)
 
-    if (res.data.data) {
+    if (!isEdit.value && res.data.data) {
       router.push(`/admin/estimates/${res.data.data.id}/view`)
     }
   } catch (err) {

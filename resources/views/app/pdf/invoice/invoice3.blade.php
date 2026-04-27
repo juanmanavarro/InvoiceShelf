@@ -365,6 +365,7 @@
                         <td class="attribute-label">@lang('pdf_invoice_due_date')</td>
                         <td class="attribute-value"> &nbsp;{{ $invoice->formattedDueDate }}</td>
                     </tr>
+                    @include('app.pdf.partials.custom-fields', ['model' => $invoice, 'asRows' => true])
                 </table>
             </div>
             <div style="clear: both;"></div>

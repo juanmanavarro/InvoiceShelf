@@ -402,6 +402,8 @@
                     <h1>@lang('pdf_invoice_label')</h1>
                     <h4>{{ $invoice->invoice_number }}</h4>
                     <h4>{{ $invoice->formattedInvoiceDate }}</h4>
+                    <h4>{{ $invoice->formattedDueDate }}</h4>
+                    @include('app.pdf.partials.custom-fields', ['model' => $invoice, 'containerStyle' => 'margin-top: 8px; page-break-inside: avoid;'])
                 </td>
             </tr>
         </table>
