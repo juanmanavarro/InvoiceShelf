@@ -427,7 +427,6 @@
 
             <div class="billing-address-container billing-address" @if ($shipping_address === '<br />') style="float:right; margin-right:30px;" @endif>
                 @if ($billing_address)
-                    <b>@lang('pdf_bill_to')</b> <br>
                     {!! $billing_address !!}
                 @endif
             </div>
