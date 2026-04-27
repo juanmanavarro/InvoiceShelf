@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Requests\EstimatesRequest;
+use App\Models\Address;
+use App\Models\CompanySetting;
+use App\Models\Customer;
 use App\Models\Estimate;
 use App\Models\EstimateItem;
 use App\Models\Tax;
@@ -26,6 +29,32 @@ test('estimate belongs to customer', function () {
     $estimate = Estimate::factory()->forCustomer()->create();
 
     $this->assertTrue($estimate->customer()->exists());
+});
+
+test('estimate billing address includes customer tax id', function () {
+    $taxId = 'ES12345678Z';
+    $customer = Customer::factory()->create([
+        'tax_id' => $taxId,
+    ]);
+
+    Address::factory()->create([
+        'customer_id' => $customer->id,
+        'company_id' => $customer->company_id,
+        'type' => Address::BILLING_TYPE,
+    ]);
+
+    CompanySetting::setSettings([
+        'estimate_billing_address_format' => '<h3>{BILLING_ADDRESS_NAME}</h3><p>{BILLING_PHONE}</p>',
+    ], $customer->company_id);
+
+    $estimate = Estimate::factory()->create([
+        'customer_id' => $customer->id,
+        'company_id' => $customer->company_id,
+    ]);
+
+    expect($estimate->getCustomerBillingAddress())
+        ->toContain($taxId)
+        ->not->toContain(__('pdf_tax_id').': ');
 });
 
 test('estimate has many taxes', function () {

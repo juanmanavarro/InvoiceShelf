@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Requests\InvoicesRequest;
+use App\Models\Address;
+use App\Models\CompanySetting;
+use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Tax;
@@ -40,6 +43,32 @@ test('invoice belongs to customer', function () {
     $invoice = Invoice::factory()->forCustomer()->create();
 
     $this->assertTrue($invoice->customer()->exists());
+});
+
+test('invoice billing address includes customer tax id', function () {
+    $taxId = 'ES12345678Z';
+    $customer = Customer::factory()->create([
+        'tax_id' => $taxId,
+    ]);
+
+    Address::factory()->create([
+        'customer_id' => $customer->id,
+        'company_id' => $customer->company_id,
+        'type' => Address::BILLING_TYPE,
+    ]);
+
+    CompanySetting::setSettings([
+        'invoice_billing_address_format' => '<h3>{BILLING_ADDRESS_NAME}</h3><p>{BILLING_PHONE}</p>',
+    ], $customer->company_id);
+
+    $invoice = Invoice::factory()->create([
+        'customer_id' => $customer->id,
+        'company_id' => $customer->company_id,
+    ]);
+
+    expect($invoice->getCustomerBillingAddress())
+        ->toContain($taxId)
+        ->not->toContain(__('pdf_tax_id').': ');
 });
 
 test('get previous status', function () {

@@ -645,11 +645,13 @@ class Invoice extends Model implements HasMedia
 
     public function getCustomerBillingAddress()
     {
-        if ($this->customer && (! $this->customer->billingAddress()->exists())) {
+        if ($this->customer && (! $this->customer->billingAddress()->exists()) && ! $this->customer->tax_id) {
             return false;
         }
 
         $format = CompanySetting::getSetting('invoice_billing_address_format', $this->company_id);
+
+        $format = $this->withCustomerTaxIdInBillingAddressFormat($format);
 
         return $this->getFormattedString($format);
     }

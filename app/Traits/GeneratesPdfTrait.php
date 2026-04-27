@@ -148,7 +148,7 @@ trait GeneratesPdfTrait
             '{CONTACT_EMAIL}' => $customer->email,
             '{CONTACT_PHONE}' => $customer->phone,
             '{CONTACT_WEBSITE}' => $customer->website,
-            '{CONTACT_TAX_ID}' => __('pdf_tax_id').': '.$customer->tax_id,
+            '{CONTACT_TAX_ID}' => $customer->tax_id ?: '',
         ];
 
         $customFields = $this->fields;
@@ -188,5 +188,14 @@ trait GeneratesPdfTrait
         // custom field values. Notes also pass through this method, so they
         // get the same treatment without needing a separate wrapper.
         return PdfHtmlSanitizer::sanitize($str);
+    }
+
+    protected function withCustomerTaxIdInBillingAddressFormat(?string $format): ?string
+    {
+        if (! $this->customer?->tax_id || str_contains((string) $format, '{CONTACT_TAX_ID}')) {
+            return $format;
+        }
+
+        return trim((string) $format).'<p>{CONTACT_TAX_ID}</p>';
     }
 }
