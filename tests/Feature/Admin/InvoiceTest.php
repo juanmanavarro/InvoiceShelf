@@ -221,7 +221,53 @@ test('send invoice to customer', function () {
     $invoice2 = Invoice::find($invoices->id);
 
     $this->assertEquals($invoice2->status, Invoice::STATUS_SENT);
-    Mail::assertSent(SendInvoiceMail::class);
+    Mail::assertSent(SendInvoiceMail::class, function (SendInvoiceMail $mail) use ($invoice2) {
+        return $mail->data['subject'] === 'Nueva factura de '.$invoice2->company->name;
+    });
+});
+
+test('send invoice mail renders configured body as plain text', function () {
+    $invoice = Invoice::factory()->create();
+
+    $mail = new SendInvoiceMail([
+        'from' => 'john@example.com',
+        'to' => 'doe@example.com',
+        'subject' => 'email subject',
+        'body' => '<p>Hola <b>cliente</b></p><p>Gracias</p>',
+        'invoice' => $invoice->toArray(),
+        'company' => $invoice->company->toArray(),
+        'attach' => [
+            'data' => null,
+        ],
+    ]);
+
+    $mail->assertSeeInText('Hola cliente');
+    $mail->assertSeeInText("Hola cliente\n\nGracias");
+    $mail->assertDontSeeInText('<b>cliente</b>');
+    $mail->assertDontSeeInHtml('Powered by');
+});
+
+test('send invoice preview renders configured body as plain text', function () {
+    $invoice = Invoice::factory()->create([
+        'invoice_date' => '1988-07-18',
+        'due_date' => '1988-08-18',
+    ]);
+
+    $response = getJson('api/v1/invoices/'.$invoice->id.'/send/preview?'.http_build_query([
+        'from' => 'john@example.com',
+        'to' => 'doe@example.com',
+        'subject' => 'email subject',
+        'body' => '<p>Hola <b>cliente</b></p><p>Gracias</p>',
+    ]));
+
+    $response
+        ->assertOk()
+        ->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
+
+    expect($response->getContent())
+        ->toContain("Hola cliente\n\nGracias")
+        ->not->toContain('<html')
+        ->not->toContain('Powered by');
 });
 
 test('invoice mark as paid', function () {

@@ -7,7 +7,6 @@ use App\Http\Requests\SendInvoiceRequest;
 use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Mail\Markdown;
 
 class SendInvoicePreviewController extends Controller
 {
@@ -21,11 +20,13 @@ class SendInvoicePreviewController extends Controller
     {
         $this->authorize('send invoice', $invoice);
 
-        $markdown = new Markdown(view(), config('mail.markdown'));
-
         $data = $invoice->sendInvoiceData($request->all());
         $data['url'] = $invoice->invoicePdfUrl;
 
-        return $markdown->render('emails.send.invoice', ['data' => $data]);
+        return response(
+            view('emails.send.invoice-text', ['data' => $data])->render(),
+            200,
+            ['Content-Type' => 'text/plain; charset=UTF-8']
+        );
     }
 }

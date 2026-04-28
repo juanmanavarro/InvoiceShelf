@@ -58,3 +58,11 @@ test('invoice pdf table renders custom task and total headings', function () {
         ->not->toContain("lang('pdf_items_label')")
         ->not->toContain("lang('pdf_amount_label')");
 });
+
+test('send invoice modal preview preserves plain text line breaks', function () {
+    expect(file_get_contents(base_path('resources/scripts/admin/components/modal-components/SendInvoiceModal.vue')))
+        ->toContain('whitespace-pre-wrap')
+        ->toContain('previewContent.value = previewResponse.data')
+        ->toContain('Nueva factura de ${companyStore.selectedCompany.name}')
+        ->not->toContain('new Blob([previewResponse.data]');
+});

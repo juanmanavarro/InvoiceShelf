@@ -51,7 +51,7 @@ class SendInvoiceMail extends Mailable
 
         $mailContent = $this->from($this->data['from'], config('mail.from.name'))
             ->subject($this->data['subject'])
-            ->markdown('emails.send.invoice', ['data', $this->data]);
+            ->text('emails.send.invoice-text', ['data' => $this->data]);
 
         if ($this->data['attach']['data']) {
             $mailContent->attachData(
