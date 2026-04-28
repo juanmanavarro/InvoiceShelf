@@ -629,6 +629,12 @@ class Invoice extends Model implements HasMedia
 
         $format = CompanySetting::getSetting('invoice_company_address_format', $this->company_id);
 
+        $format = str_replace(
+            '<p>{COMPANY_ADDRESS_STREET_1}</p><p>{COMPANY_ADDRESS_STREET_2}</p>',
+            '<p>{COMPANY_ADDRESS_STREET_1} {COMPANY_ADDRESS_STREET_2}</p>',
+            $format
+        );
+
         return $this->getFormattedString($format);
     }
 

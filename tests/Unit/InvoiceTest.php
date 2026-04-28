@@ -71,6 +71,31 @@ test('invoice billing address includes customer tax id', function () {
         ->not->toContain(__('pdf_tax_id').': ');
 });
 
+test('invoice company address renders street and number on the same line', function () {
+    $customer = Customer::factory()->create();
+
+    Address::factory()->create([
+        'company_id' => $customer->company_id,
+        'customer_id' => null,
+        'user_id' => null,
+        'address_street_1' => 'Calle Mayor',
+        'address_street_2' => '12',
+    ]);
+
+    CompanySetting::setSettings([
+        'invoice_company_address_format' => '<h3><strong>{COMPANY_NAME}</strong></h3><p>{COMPANY_ADDRESS_STREET_1}</p><p>{COMPANY_ADDRESS_STREET_2}</p>',
+    ], $customer->company_id);
+
+    $invoice = Invoice::factory()->create([
+        'customer_id' => $customer->id,
+        'company_id' => $customer->company_id,
+    ]);
+
+    expect($invoice->getCompanyAddress())
+        ->toContain('Calle Mayor 12')
+        ->not->toContain('Calle Mayor<br />12');
+});
+
 test('get previous status', function () {
     $invoice = Invoice::factory()->create();
 

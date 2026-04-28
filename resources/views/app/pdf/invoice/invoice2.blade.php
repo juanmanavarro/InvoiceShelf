@@ -46,11 +46,20 @@
         }
 
         .header-logo {
-            padding-top: 45px;
+            padding-top: 0px;
             position: absolute;
-            text-transform: capitalize;
-            color: #fff;
+            top: 0px;
+            color: #040405;
 
+        }
+
+        .invoice-title {
+            color: #040405;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+            position: absolute;
+            top: 0px;
         }
 
         .header-section-right {
@@ -97,14 +106,14 @@
 
         .content-wrapper {
             display: block;
-            margin-top: 60px;
+            margin-top: 42px;
             padding-bottom: 20px;
         }
 
         .address-container {
             display: block;
-            padding-top: 20px;
-            margin-top: 18px;
+            padding-top: 8px;
+            margin-top: 8px;
         }
 
         /* -- Company -- */
@@ -392,8 +401,8 @@
                     @if ($logo)
                         <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
                     @elseif ($invoice->customer->company)
-                        <h1 class="header-logo" style="padding-top: 0px;">
-                            {{ $invoice->customer->company->name }}
+                        <h1 class="invoice-title">
+                            Factura
                         </h1>
                     @endif
                 </td>
@@ -447,6 +456,8 @@
                 {!! $notes !!}
             @endif
         </div>
+
+        @include('app.pdf.invoice.partials.footer')
     </div>
 </body>
 

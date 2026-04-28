@@ -1,7 +1,7 @@
 <table width="100%" class="items-table" cellspacing="0" border="0">
     <tr class="item-table-heading-row">
         <th width="2%" class="pr-20 text-right item-table-heading">#</th>
-        <th width="40%" class="pl-0 text-left item-table-heading">@lang('pdf_items_label')</th>
+        <th width="40%" class="pl-0 text-left item-table-heading">Tareas</th>
         @foreach($customFields as $field)
             <th class="text-right item-table-heading">{{ $field->label }}</th>
         @endforeach
@@ -13,7 +13,7 @@
         @if($invoice->tax_per_item === 'YES')
         <th class="pl-10 text-right item-table-heading">@lang('pdf_tax_label')</th>
         @endif
-        <th class="text-right item-table-heading">@lang('pdf_amount_label')</th>
+        <th class="text-right item-table-heading">Total</th>
     </tr>
     @php
         $index = 1

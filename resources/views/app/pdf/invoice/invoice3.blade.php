@@ -37,9 +37,20 @@
 
         .header-logo {
 
-            text-transform: capitalize;
-            color: #817AE3;
+            color: #040405;
             padding-top: 0px;
+            margin-top: 0px;
+        }
+
+        .invoice-title {
+            color: #040405;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .invoice-title-cell {
+            vertical-align: top;
         }
 
         .company-address-container {
@@ -68,7 +79,7 @@
             display: block;
             float: left;
             width: 45%;
-            padding: 10px 0 0 30px;
+            padding: 0px 0 0 30px;
         }
 
         /* -- Shipping -- */
@@ -317,11 +328,11 @@
     <div class="header-container">
         <table width="100%">
             <tr>
-                <td width="50%" class="header-section-left">
+                <td width="50%" class="header-section-left invoice-title-cell">
                     @if ($logo)
                         <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
                     @else
-                        <h1 class="header-logo"> {{ $invoice->customer->company->name }} </h1>
+                        <h1 class="invoice-title">Factura</h1>
                     @endif
                 </td>
                 <td width="50%" class="text-right company-address-container company-address">
@@ -382,6 +393,8 @@
                 {!! $notes !!}
             @endif
         </div>
+
+        @include('app.pdf.invoice.partials.footer')
     </div>
 </body>
 

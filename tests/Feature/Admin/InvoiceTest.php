@@ -320,8 +320,12 @@ test('clone invoice', function () {
 test('create invoice with negative tax', function () {
     $invoice = Invoice::factory()
         ->raw([
+            'tax' => -1500,
+            'exchange_rate' => 1,
             'taxes' => [Tax::factory()->raw([
-                'percent' => -9.99,
+                'name' => 'Retencion',
+                'percent' => -15,
+                'amount' => -1500,
             ])],
             'items' => [InvoiceItem::factory()->raw()],
         ]);
@@ -345,6 +349,10 @@ test('create invoice with negative tax', function () {
 
     $this->assertDatabaseHas('taxes', [
         'tax_type_id' => $invoice['taxes'][0]['tax_type_id'],
+        'name' => 'Retencion',
+        'percent' => -15,
+        'amount' => -1500,
+        'base_amount' => -1500,
     ]);
 });
 

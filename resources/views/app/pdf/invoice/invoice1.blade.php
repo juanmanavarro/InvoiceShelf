@@ -46,10 +46,21 @@
         }
 
         .header-logo {
-            margin-top: 20px;
+            margin-top: 0px;
+            padding-top: 0px;
             padding-bottom: 20px;
-            text-transform: capitalize;
-            color: #7675ff;
+            color: #040405;
+        }
+
+        .invoice-title {
+            color: #040405;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .invoice-title-cell {
+            vertical-align: top;
         }
 
         .content-wrapper {
@@ -126,7 +137,7 @@
         /* -- Billing -- */
 
         .billing-address-container {
-            padding-top: 50px;
+            padding-top: 24px;
             float: left;
             padding-left: 30px;
         }
@@ -335,12 +346,12 @@
     <div class="header-container">
         <table width="100%">
             <tr>
-                <td class="text-center">
+                <td class="text-center invoice-title-cell">
                     @if ($logo)
                         <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
                     @else
                         @if ($invoice->customer->company)
-                            <h2 class="header-logo"> {{ $invoice->customer->company->name }}</h2>
+                            <h2 class="invoice-title">Factura</h2>
                         @endif
                     @endif
                 </td>
@@ -404,6 +415,8 @@
                 {!! $notes !!}
             @endif
         </div>
+
+        @include('app.pdf.invoice.partials.footer')
     </div>
 </body>
 
