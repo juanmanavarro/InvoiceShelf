@@ -17,7 +17,7 @@ trait GeneratesPdfTrait
         if ($pdf && file_exists($pdf['path'])) {
             return response()->make(file_get_contents($pdf['path']), 200, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="'.$pdf['file_name'].'"',
+                'Content-Disposition' => 'inline; filename="'.$this->getPdfDownloadFileName($collection_name, $pdf['file_name']).'"',
             ]);
         }
 
@@ -29,8 +29,17 @@ trait GeneratesPdfTrait
 
         return response()->make($pdf->stream(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$this[$collection_name.'_number'].'.pdf"',
+            'Content-Disposition' => 'inline; filename="'.$this->getPdfDownloadFileName($collection_name).'"',
         ]);
+    }
+
+    public function getPdfDownloadFileName(string $collection_name, ?string $defaultFileName = null): string
+    {
+        if (method_exists($this, 'getPdfFileName')) {
+            return $this->getPdfFileName($collection_name);
+        }
+
+        return $defaultFileName ?? $this[$collection_name.'_number'].'.pdf';
     }
 
     public function getGeneratedPDF($collection_name)

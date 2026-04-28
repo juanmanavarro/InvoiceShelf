@@ -96,6 +96,14 @@ test('invoice company address renders street and number on the same line', funct
         ->not->toContain('Calle Mayor<br />12');
 });
 
+test('invoice pdf filename uses factura prefix and sanitized invoice number', function () {
+    $invoice = Invoice::factory()->make([
+        'invoice_number' => '36/2026',
+    ]);
+
+    expect($invoice->getPdfFileName('invoice'))->toBe('Factura_362026.pdf');
+});
+
 test('get previous status', function () {
     $invoice = Invoice::factory()->create();
 

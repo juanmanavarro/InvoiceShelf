@@ -128,6 +128,17 @@ class Invoice extends Model implements HasMedia
         return url('/invoices/pdf/'.$this->unique_hash);
     }
 
+    public function getPdfFileName(string $collection_name): string
+    {
+        if ($collection_name !== 'invoice') {
+            return $this[$collection_name.'_number'].'.pdf';
+        }
+
+        $invoiceNumber = preg_replace('/[^A-Za-z0-9]/', '', $this->invoice_number);
+
+        return 'Factura_'.$invoiceNumber.'.pdf';
+    }
+
     public function getPaymentModuleEnabledAttribute()
     {
         if (Module::has('Payments')) {
