@@ -339,10 +339,10 @@ async function submitForm() {
       data.discount = data.discount * 100
     }
   }
-    if (
-    !invoiceStore.newInvoice.tax_per_item === 'YES'
+  if (
+    invoiceStore.newInvoice.tax_per_item !== 'YES'
     && data.taxes.length
-  ){
+  ) {
     data.tax_type_ids = data.taxes.map(_t => _t.tax_type_id)
   }
 

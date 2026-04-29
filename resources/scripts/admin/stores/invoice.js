@@ -17,6 +17,8 @@ import { useItemStore } from './item'
 import { useUserStore } from './user'
 import { useNotesStore } from './note'
 
+const defaultInvoiceTaxNames = ['iva', 'retencion']
+
 export const useInvoiceStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
@@ -199,6 +201,65 @@ export const useInvoiceStore = (useWindow = false) => {
           salesTax.id = found.tax_type_id
           taxTypeStore.taxTypes.push(salesTax)
         }
+      },
+
+      addDefaultInvoiceTaxes() {
+        if (this.newInvoice.tax_per_item === 'YES') {
+          return
+        }
+
+        const taxTypeStore = useTaxTypeStore()
+        const normalizeTaxName = (name) =>
+          (name || '')
+            .toString()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase()
+
+        defaultInvoiceTaxNames.forEach((taxName) => {
+          const foundTaxType = taxTypeStore.taxTypes.find(
+            (taxType) => normalizeTaxName(taxType.name) === taxName,
+          )
+
+          if (!foundTaxType) {
+            return
+          }
+
+          const hasTax = this.newInvoice.taxes.some(
+            (tax) => tax.tax_type_id === foundTaxType.id,
+          )
+
+          if (hasTax) {
+            return
+          }
+
+          let amount = 0
+
+          if (
+            foundTaxType.calculation_type === 'percentage' &&
+            this.getSubtotalWithDiscount &&
+            foundTaxType.percent
+          ) {
+            amount = Math.round(
+              (this.getSubtotalWithDiscount * foundTaxType.percent) / 100,
+            )
+          } else if (foundTaxType.calculation_type === 'fixed') {
+            amount = foundTaxType.fixed_amount
+          }
+
+          this.newInvoice.taxes.push({
+            ...taxStub,
+            id: Guid.raw(),
+            name: foundTaxType.name,
+            percent: foundTaxType.percent,
+            tax_type_id: foundTaxType.id,
+            amount,
+            calculation_type: foundTaxType.calculation_type,
+            fixed_amount: foundTaxType.fixed_amount,
+            compound_tax: foundTaxType.compound_tax,
+          })
+        })
       },
 
       sendInvoice(data) {
@@ -565,6 +626,9 @@ export const useInvoiceStore = (useWindow = false) => {
             }
             if (isEdit) {
               this.addSalesTaxUs()
+            }
+            if (!isEdit) {
+              this.addDefaultInvoiceTaxes()
             }
 
             this.isFetchingInitialSettings = false
