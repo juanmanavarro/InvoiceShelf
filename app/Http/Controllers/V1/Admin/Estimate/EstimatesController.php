@@ -43,7 +43,9 @@ class EstimatesController extends Controller
 
         GenerateEstimatePdfJob::dispatch($estimate);
 
-        return new EstimateResource($estimate);
+        return (new EstimateResource($estimate))
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function show(Request $request, Estimate $estimate)

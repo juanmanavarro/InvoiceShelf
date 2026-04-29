@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -218,43 +219,56 @@ class Estimate extends Model implements HasMedia
 
     public static function createEstimate($request)
     {
-        $data = $request->getEstimatePayload();
+        return DB::transaction(function () use ($request) {
+            $data = $request->getEstimatePayload();
 
-        if ($request->has('estimateSend')) {
-            $data['status'] = self::STATUS_SENT;
-        }
+            if ($request->has('estimateSend')) {
+                $data['status'] = self::STATUS_SENT;
+            }
 
-        $estimate = self::create($data);
-        $estimate->unique_hash = Hashids::connection(Estimate::class)->encode($estimate->id);
-        $serial = (new SerialNumberFormatter)
-            ->setModel($estimate)
-            ->setCompany($estimate->company_id)
-            ->setCustomer($estimate->customer_id)
-            ->setNextNumbers();
+            $serial = (new SerialNumberFormatter)
+                ->setModel(new Estimate)
+                ->setCompany($data['company_id'])
+                ->setCustomer($data['customer_id'])
+                ->setNextNumbers();
 
-        $estimate->sequence_number = $serial->nextSequenceNumber;
-        $estimate->customer_sequence_number = $serial->nextCustomerSequenceNumber;
-        $estimate->save();
+            if (blank($data['estimate_number'] ?? null)) {
+                $data['estimate_number'] = $serial->getNextNumber();
+            }
 
-        $company_currency = CompanySetting::getSetting('currency', $request->header('company'));
+            $estimate = self::create($data);
+            $estimate->unique_hash = Hashids::connection(Estimate::class)->encode($estimate->id);
+            $estimate->sequence_number = $serial->nextSequenceNumber;
+            $estimate->customer_sequence_number = $serial->nextCustomerSequenceNumber;
+            $estimate->save();
 
-        if ((string) $data['currency_id'] !== $company_currency) {
-            ExchangeRateLog::addExchangeRateLog($estimate);
-        }
+            $company_currency = CompanySetting::getSetting('currency', $request->header('company'));
 
-        self::createItems($estimate, $request, $estimate->exchange_rate);
+            if ((string) $data['currency_id'] !== $company_currency) {
+                ExchangeRateLog::addExchangeRateLog($estimate);
+            }
 
-        if ($request->has('taxes') && (! empty($request->taxes))) {
-            self::createTaxes($estimate, $request, $estimate->exchange_rate);
-        }
+            self::createItems($estimate, $request, $estimate->exchange_rate);
 
-        $customFields = $request->customFields;
+            if ($request->has('taxes') && (! empty($request->taxes))) {
+                self::createTaxes($estimate, $request, $estimate->exchange_rate);
+            }
 
-        if ($customFields) {
-            $estimate->addCustomFields($customFields);
-        }
+            $customFields = $request->customFields;
 
-        return $estimate;
+            if ($customFields) {
+                $estimate->addCustomFields($customFields);
+            }
+
+            return Estimate::with([
+                'items',
+                'items.fields',
+                'items.fields.customField',
+                'customer',
+                'taxes',
+            ])
+                ->find($estimate->id);
+        });
     }
 
     public function updateEstimate($request)
@@ -314,10 +328,15 @@ class Estimate extends Model implements HasMedia
         $estimateItems = $request->items;
 
         foreach ($estimateItems as $estimateItem) {
+            $subTotal = (int) round($estimateItem['price'] * $estimateItem['quantity']);
+            $discountVal = min((int) ($estimateItem['discount_val'] ?? 0), $subTotal);
+
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['exchange_rate'] = $exchange_rate;
             $estimateItem['base_price'] = $estimateItem['price'] * $exchange_rate;
-            $estimateItem['base_discount_val'] = $estimateItem['discount_val'] * $exchange_rate;
+            $estimateItem['discount_val'] = $discountVal;
+            $estimateItem['total'] = $subTotal - $discountVal;
+            $estimateItem['base_discount_val'] = $discountVal * $exchange_rate;
             $estimateItem['base_tax'] = $estimate['tax'] * $exchange_rate;
             $estimateItem['base_total'] = $estimateItem['total'] * $exchange_rate;
 

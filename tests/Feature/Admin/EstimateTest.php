@@ -49,7 +49,9 @@ test('create estimate', function () {
     ]);
 
     postJson('api/v1/estimates', $estimate)
-        ->assertStatus(201);
+        ->assertStatus(201)
+        ->assertJsonPath('data.estimate_number', $estimate['estimate_number'])
+        ->assertJsonPath('data.items.0.name', $estimate['items'][0]['name']);
 
     $this->assertDatabaseHas('estimates', [
         'template_name' => $estimate['template_name'],
@@ -62,6 +64,86 @@ test('create estimate', function () {
         'total' => $estimate['total'],
         'notes' => $estimate['notes'],
         'tax' => $estimate['tax'],
+    ]);
+
+    $this->assertDatabaseHas('estimate_items', [
+        'estimate_id' => Estimate::where('estimate_number', $estimate['estimate_number'])->value('id'),
+        'name' => $estimate['items'][0]['name'],
+        'price' => $estimate['items'][0]['price'],
+        'quantity' => $estimate['items'][0]['quantity'],
+        'total' => max(
+            ($estimate['items'][0]['price'] * $estimate['items'][0]['quantity']) - $estimate['items'][0]['discount_val'],
+            0
+        ),
+    ]);
+
+    $this->assertDatabaseHas('taxes', [
+        'estimate_id' => Estimate::where('estimate_number', $estimate['estimate_number'])->value('id'),
+        'tax_type_id' => $estimate['taxes'][0]['tax_type_id'],
+        'amount' => $estimate['taxes'][0]['amount'],
+    ]);
+});
+
+test('create estimate with generated estimate number', function () {
+    $estimate = Estimate::factory()->raw([
+        'items' => [
+            EstimateItem::factory()->raw(),
+        ],
+        'taxes' => [
+            Tax::factory()->raw(),
+        ],
+    ]);
+
+    unset($estimate['estimate_number']);
+
+    $response = postJson('api/v1/estimates', $estimate)
+        ->assertStatus(201)
+        ->assertJsonPath('data.status', Estimate::STATUS_DRAFT)
+        ->assertJsonPath('data.items.0.name', $estimate['items'][0]['name']);
+
+    expect($response->json('data.estimate_number'))->toStartWith('EST-');
+
+    $this->assertDatabaseHas('estimates', [
+        'id' => $response->json('data.id'),
+        'estimate_number' => $response->json('data.estimate_number'),
+    ]);
+});
+
+test('create estimate normalizes item totals without tax', function () {
+    $estimate = Estimate::factory()->raw([
+        'sub_total' => 37500,
+        'tax' => 7875,
+        'total' => 45375,
+        'items' => [
+            EstimateItem::factory()->raw([
+                'price' => 15000,
+                'quantity' => 1,
+                'discount_val' => 0,
+                'tax' => 3150,
+                'total' => 18150,
+            ]),
+        ],
+        'taxes' => [
+            Tax::factory()->raw([
+                'amount' => 7875,
+            ]),
+        ],
+    ]);
+
+    unset($estimate['estimate_number']);
+
+    $response = postJson('api/v1/estimates', $estimate)
+        ->assertStatus(201)
+        ->assertJsonPath('data.sub_total', 37500)
+        ->assertJsonPath('data.tax', 7875)
+        ->assertJsonPath('data.total', 45375)
+        ->assertJsonPath('data.items.0.total', 15000);
+
+    $this->assertDatabaseHas('estimate_items', [
+        'estimate_id' => $response->json('data.id'),
+        'price' => 15000,
+        'tax' => 3150,
+        'total' => 15000,
     ]);
 });
 
