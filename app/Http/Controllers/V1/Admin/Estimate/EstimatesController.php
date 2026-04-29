@@ -21,6 +21,7 @@ class EstimatesController extends Controller
         $estimates = Estimate::whereCompany()
             ->join('customers', 'customers.id', '=', 'estimates.customer_id')
             ->applyFilters($request->all())
+            ->with(['fields.customField'])
             ->select('estimates.*', 'customers.name')
             ->latest()
             ->paginateData($limit);

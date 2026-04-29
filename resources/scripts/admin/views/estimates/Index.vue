@@ -64,7 +64,7 @@
           :options="status"
           searchable
           :placeholder="$t('general.select_a_status')"
-          @update:modelValue="setActiveTab"
+          @update:model-value="setActiveTab"
           @remove="clearStatusSearch()"
         />
       </BaseInputGroup>
@@ -171,10 +171,10 @@
 
       <BaseTable
         ref="tableComponent"
+        :key="tableKey"
         :data="fetchData"
         :columns="estimateColumns"
         :placeholder-count="estimateStore.totalEstimateCount >= 20 ? 10 : 5"
-        :key="tableKey"
         class="mt-10"
       >
         <template #header>
@@ -215,6 +215,10 @@
           <BaseText :text="row.data.customer.name" />
         </template>
 
+        <template #cell-project="{ row }">
+          <BaseText :text="getEstimateProject(row.data)" />
+        </template>
+
         <template #cell-status="{ row }">
           <BaseEstimateStatusBadge :status="row.data.status" class="px-3 py-1">
             <BaseEstimateStatusLabel :status="row.data.status"/>
@@ -251,6 +255,10 @@ import ObservatoryIcon from '@/scripts/components/icons/empty/ObservatoryIcon.vu
 import EstimateDropDown from '@/scripts/admin/components/dropdowns/EstimateIndexDropdown.vue'
 import SendEstimateModal from '@/scripts/admin/components/modal-components/SendEstimateModal.vue'
 import BaseEstimateStatusLabel from "@/scripts/components/base/BaseEstimateStatusLabel.vue";
+
+defineOptions({
+  name: 'EstimateIndex',
+})
 
 const estimateStore = useEstimateStore()
 const dialogStore = useDialogStore()
@@ -308,6 +316,7 @@ const estimateColumns = computed(() => {
     },
     { key: 'estimate_number', label: t('estimates.number', 2) },
     { key: 'name', label: t('estimates.customer') },
+    { key: 'project', label: 'Proyecto' },
     { key: 'status', label: t('estimates.status') },
     {
       key: 'total',
@@ -344,6 +353,14 @@ function hasAtleastOneAbility() {
     abilities.VIEW_ESTIMATE,
     abilities.SEND_ESTIMATE,
   ])
+}
+
+function getEstimateProject(estimate) {
+  const projectField = estimate.fields?.find((field) => {
+    return field.custom_field?.slug === 'CUSTOM_ESTIMATE_PROYECTO'
+  })
+
+  return projectField?.default_answer || '-'
 }
 
 async function clearStatusSearch(removedOption, id) {
