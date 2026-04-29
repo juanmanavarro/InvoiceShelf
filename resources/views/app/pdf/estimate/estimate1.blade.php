@@ -40,21 +40,37 @@
         .header-bottom-divider {
             color: rgba(0, 0, 0, 0.2);
             position: absolute;
-            top: 90px;
+            top: 78px;
             left: 0px;
             width: 100%;
+        }
+
+        .header-title-table {
+            margin-top: 18px;
         }
 
         .header-logo {
 
             margin-top: 20px;
             text-transform: capitalize;
-            color: #817AE3;
+            color: #040405;
         }
 
-        .header {
-            font-size: 20px;
-            color: rgba(0, 0, 0, 0.7);
+        .estimate-title {
+            color: #040405;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px 0px 0px 30px;
+            text-align: left;
+        }
+
+        .estimate-author {
+            color: #040405;
+            font-size: 14px;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px 30px 0px 0px;
+            text-align: right;
         }
 
         .wrapper {
@@ -67,11 +83,11 @@
         /* -- Company Details -- */
 
         .company-details-container {
-            padding-top: 30px;
+            padding-top: 0px;
         }
 
         .company-address-container {
-            padding-top: 15px;
+            padding-top: 0px;
             float: left;
             padding-left: 30px;
             width: 30%;
@@ -85,6 +101,7 @@
             width: 30%;
             text-transform: capitalize;
             margin-bottom: 2px;
+            padding-top: 0px;
         }
 
         .company-address-container h1 {
@@ -394,16 +411,13 @@
 
 <body>
     <div class="header-container">
-        <table width="100%">
+        <table width="100%" class="header-title-table">
             <tr>
-                <td class="text-center">
-                    @if ($logo)
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
-                    @else
-                        @if ($estimate->customer->company)
-                            <h2 class="header-logo"> {{ $estimate->customer->company->name }} </h2>
-                        @endif
-                    @endif
+                <td width="50%">
+                    <h2 class="estimate-title">Presupuesto</h2>
+                </td>
+                <td width="50%">
+                    <h2 class="estimate-author">{{ $estimate_creator_name }}</h2>
                 </td>
             </tr>
         </table>
@@ -413,7 +427,9 @@
     <div class="wrapper">
         <div class="company-details-container">
             <div class="company-address-container company-address">
-                {!! $company_address !!}
+                @if ($billing_address)
+                    {!! $billing_address !!}
+                @endif
             </div>
 
             <div class="estimate-details-container">
@@ -437,16 +453,7 @@
         </div>
 
         <div class="customer-address-container">
-            @if ($billing_address !== '<br />')
-                <div class="billing-address-container billing-address">
-                    @if ($billing_address)
-                        {!! $billing_address !!}
-                    @endif
-                </div>
-            @endif
-
-
-            <div @if ($billing_address !== '<br />') class="shipping-address-container shipping-address" @else class="shipping-address-container--left shipping-address" style="padding-left:30px;" @endif>
+            <div class="shipping-address-container--left shipping-address" style="padding-left:30px;">
 
                 @if ($shipping_address)
                     <b>@lang('pdf_ship_to') </b> <br>

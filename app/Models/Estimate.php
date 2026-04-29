@@ -442,6 +442,7 @@ class Estimate extends Model implements HasMedia
             'estimate' => $this,
             'customFields' => $customFields,
             'logo' => $logo ?? null,
+            'estimate_creator_name' => $company->name,
             'company_address' => $this->getCompanyAddress(),
             'shipping_address' => $this->getCustomerShippingAddress(),
             'billing_address' => $this->getCustomerBillingAddress(),

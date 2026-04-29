@@ -29,16 +29,37 @@
         /* -- Header -- */
 
         .header-container {
-            margin-top: -30px;
+            margin-top: -18px;
             width: 100%;
             padding: 0px 30px;
+        }
+
+        .header-title-table {
+            margin-top: 12px;
         }
 
         .header-logo {
 
             text-transform: capitalize;
-            color: #817AE3;
+            color: #040405;
             padding-top: 0px;
+        }
+
+        .estimate-title {
+            color: #040405;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+            text-align: left;
+        }
+
+        .estimate-author {
+            color: #040405;
+            font-size: 14px;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+            text-align: right;
         }
 
         /* -- Company Address -- */
@@ -52,7 +73,7 @@
         }
 
         .company-address {
-            margin-top: 12px;
+            margin-top: 0px;
             font-size: 12px;
             line-height: 15px;
             color: #595959;
@@ -71,7 +92,7 @@
             display: block;
             float: left;
             width: 45%;
-            padding: 10px 0 0 30px;
+            padding: 0px 0 0 30px;
         }
 
         /* -- Shipping -- */
@@ -354,17 +375,13 @@
 
 <body>
     <div class="header-container">
-        <table width="100%">
+        <table width="100%" class="header-title-table">
             <tr>
                 <td width="50%" class="header-section-left">
-                    @if ($logo)
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
-                    @else
-                        <h1 class="header-logo"> {{ $estimate->customer->company->name }} </h1>
-                    @endif
+                    <h1 class="estimate-title">Presupuesto</h1>
                 </td>
-                <td width="50%" class="text-right company-address-container company-address">
-                    {!! $company_address !!}
+                <td width="50%">
+                    <h1 class="estimate-author">{{ $estimate_creator_name }}</h1>
                 </td>
             </tr>
         </table>

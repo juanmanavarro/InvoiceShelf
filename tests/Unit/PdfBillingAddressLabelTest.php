@@ -51,11 +51,35 @@ test('invoice pdf templates render black invoice title instead of company name f
     }
 });
 
+test('estimate pdf templates render custom header without company address', function () {
+    $templates = [
+        'resources/views/app/pdf/estimate/estimate1.blade.php',
+        'resources/views/app/pdf/estimate/estimate2.blade.php',
+        'resources/views/app/pdf/estimate/estimate3.blade.php',
+    ];
+
+    foreach ($templates as $template) {
+        expect(file_get_contents(base_path($template)))
+            ->toContain('Presupuesto')
+            ->toContain('color: #040405')
+            ->toContain('$estimate_creator_name')
+            ->toContain('header-title')
+            ->not->toContain('$estimate->customer->company->name')
+            ->not->toContain('$company_address');
+    }
+});
+
 test('invoice pdf table renders custom task and total headings', function () {
     expect(file_get_contents(base_path('resources/views/app/pdf/invoice/partials/table.blade.php')))
         ->toContain('Tareas')
         ->toContain('Total')
         ->not->toContain("lang('pdf_items_label')")
+        ->not->toContain("lang('pdf_amount_label')");
+});
+
+test('estimate pdf table renders total heading for final column', function () {
+    expect(file_get_contents(base_path('resources/views/app/pdf/estimate/partials/table.blade.php')))
+        ->toContain('Total')
         ->not->toContain("lang('pdf_amount_label')");
 });
 

@@ -28,17 +28,20 @@
         /* -- Header -- */
 
         .header-container {
-            background: #817AE3;
             position: absolute;
             width: 100%;
-            height: 141px;
+            height: 105px;
             left: 0px;
             top: -60px;
         }
 
+        .header-title-table {
+            margin-top: 0px;
+        }
+
         .header-section-left {
-            padding-top: 45px;
-            padding-bottom: 45px;
+            padding-top: 34px;
+            padding-bottom: 20px;
             padding-left: 30px;
             display: inline-block;
             width: 30%;
@@ -48,16 +51,33 @@
             position: absolute;
 
             text-transform: capitalize;
-            color: #fff;
+            color: #040405;
+        }
+
+        .estimate-title {
+            color: #040405;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+            text-align: left;
+        }
+
+        .estimate-author {
+            color: #040405;
+            font-size: 14px;
+            line-height: 1;
+            margin: 0px;
+            padding: 0px;
+            text-align: right;
         }
 
         .header-section-right {
             display: inline-block;
             width: 35%;
             float: right;
-            padding: 20px 30px 20px 0px;
+            padding: 34px 30px 20px 0px;
             text-align: right;
-            color: white;
+            color: #040405;
         }
 
         .header {
@@ -96,14 +116,14 @@
 
         .content-wrapper {
             display: block;
-            margin-top: 60px;
+            margin-top: 24px;
             padding-bottom: 20px;
         }
 
         .address-container {
             display: block;
-            padding-top: 20px;
-            margin-top: 10px;
+            padding-top: 0px;
+            margin-top: 0px;
         }
 
         /* -- Company Address -- */
@@ -416,25 +436,13 @@
 
 <body>
     <div class="header-container">
-        <table width="100%">
+        <table width="100%" class="header-title-table">
             <tr>
-                @if ($logo)
-                    <td width="60%" class="header-section-left">
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
-                    </td>
-                @else
-                    <td width="60%" class="header-section-left" style="padding-top: 0px;">
-                        @if ($estimate->customer->company)
-                            <h1 class="header-logo"> {{ $estimate->customer->company->name }} </h1>
-                        @endif
-                    </td>
-                @endif
-                <td width="40%" class="header-section-right estimate-details-container">
-                    <h1>@lang('pdf_estimate_label')</h1>
-                    <h4>{{ $estimate->estimate_number }}</h4>
-                    <h4>{{ $estimate->formattedEstimateDate }}</h4>
-                    <h4>{{ $estimate->formattedExpiryDate }}</h4>
-                    @include('app.pdf.partials.custom-fields', ['model' => $estimate, 'containerStyle' => 'margin-top: 8px; page-break-inside: avoid;'])
+                <td width="60%" class="header-section-left">
+                    <h1 class="estimate-title">Presupuesto</h1>
+                </td>
+                <td width="40%" class="header-section-right">
+                    <h1 class="estimate-author">{{ $estimate_creator_name }}</h1>
                 </td>
             </tr>
         </table>
@@ -443,7 +451,9 @@
     <div class="content-wrapper">
         <div class="address-container">
             <div class="company-address-container company-address">
-                {!! $company_address !!}
+                @if ($billing_address)
+                    {!! $billing_address !!}
+                @endif
             </div>
 
             @if ($shipping_address !== '<br />')
@@ -455,13 +465,27 @@
                 </div>
             @endif
 
-            <div class="billing-address-container billing-address" @if ($shipping_address === '<br />') style="float:right; margin-right:30px;" @endif>
-                @if ($billing_address)
-                    {!! $billing_address !!}
-                @endif
-            </div>
             <div style="clear: both;"></div>
         </div>
+
+        <div class="estimate-details-container" style="float:right; padding: 0 30px 0 0;">
+            <table>
+                <tr>
+                    <td class="attribute-label">@lang('pdf_estimate_number')</td>
+                    <td class="attribute-value"> &nbsp;{{ $estimate->estimate_number }}</td>
+                </tr>
+                <tr>
+                    <td class="attribute-label">@lang('pdf_estimate_date')</td>
+                    <td class="attribute-value"> &nbsp;{{ $estimate->formattedEstimateDate }}</td>
+                </tr>
+                <tr>
+                    <td class="attribute-label">@lang('pdf_estimate_expire_date')</td>
+                    <td class="attribute-value"> &nbsp;{{ $estimate->formattedExpiryDate }}</td>
+                </tr>
+                @include('app.pdf.partials.custom-fields', ['model' => $estimate, 'asRows' => true])
+            </table>
+        </div>
+        <div style="clear: both;"></div>
 
         @include('app.pdf.estimate.partials.table')
 

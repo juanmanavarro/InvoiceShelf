@@ -10,7 +10,7 @@
         @if($estimate->discount_per_item === 'YES')
         <th class="pl-10 text-right item-table-heading">@lang('pdf_discount_label')</th>
         @endif
-        <th class="text-right item-table-heading">@lang('pdf_amount_label')</th>
+        <th class="text-right item-table-heading">Total</th>
     </tr>
     @php
         $index = 1
