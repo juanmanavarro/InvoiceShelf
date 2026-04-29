@@ -1,18 +1,18 @@
 <template>
   <div
     v-if="
-      store[storeProp] && store[storeProp].customFields.length > 0 && !isLoading
+      store[storeProp] && visibleCustomFields.length > 0 && !isLoading
     "
   >
     <BaseInputGrid :layout="gridLayout">
       <SingleField
-        v-for="(field, index) in store[storeProp].customFields"
-        :key="field.id"
+        v-for="entry in visibleCustomFields"
+        :key="entry.field.id"
         :custom-field-scope="customFieldScope"
         :store="store"
         :store-prop="storeProp"
-        :index="index"
-        :field="field"
+        :index="entry.index"
+        :field="entry.field"
       />
     </BaseInputGrid>
   </div>
@@ -22,7 +22,7 @@
 import moment from 'moment'
 import lodash from 'lodash'
 import { useCustomFieldStore } from '@/scripts/admin/stores/custom-field'
-import { watch } from 'vue'
+import { computed, watch } from 'vue'
 import SingleField from './CreateCustomFieldsSingle.vue'
 
 const customFieldStore = useCustomFieldStore()
@@ -56,6 +56,20 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  excludeSlugs: {
+    type: Array,
+    default: () => [],
+  },
+})
+
+const visibleCustomFields = computed(() => {
+  return props.store[props.storeProp].customFields
+    .map((field, index) => ({ field, index }))
+    .filter((entry) => {
+      const slug = entry.field.slug || entry.field.custom_field?.slug
+
+      return !props.excludeSlugs.includes(slug)
+    })
 })
 
 getInitialCustomFields()
@@ -80,6 +94,8 @@ function mergeExistingValues() {
           ...field,
           id: field.custom_field_id,
           value: value,
+          slug: field.custom_field.slug,
+          type: field.custom_field.type,
           label: field.custom_field.label,
           options: field.custom_field.options,
           is_required: field.custom_field.is_required,

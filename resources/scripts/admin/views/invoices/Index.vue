@@ -203,7 +203,7 @@
         <!-- Invoice Number  -->
         <template #cell-invoice_number="{ row }">
           <router-link
-            :to="{ path: `invoices/${row.data.id}/view` }"
+            :to="{ path: `invoices/${row.data.id}/edit` }"
             class="font-medium text-primary-500"
           >
             {{ row.data.invoice_number }}

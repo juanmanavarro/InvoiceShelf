@@ -72,6 +72,7 @@
         :v="v$"
         :is-loading="isLoadingContent"
         :is-edit="isEdit"
+        :custom-field-scope="invoiceValidationScope"
       />
 
       <BaseScrollPane>
@@ -110,6 +111,7 @@
               :store="invoiceStore"
               store-prop="newInvoice"
               :custom-field-scope="invoiceValidationScope"
+              :exclude-slugs="isEdit ? ['CUSTOM_INVOICE_PROYECTO'] : []"
               class="mb-6"
             />
 
