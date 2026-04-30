@@ -200,6 +200,10 @@
           <BaseText :text="row.data.customer.name" />
         </template>
 
+        <template #cell-project="{ row }">
+          <BaseText :text="getInvoiceProject(row.data)" />
+        </template>
+
         <!-- Invoice Number  -->
         <template #cell-invoice_number="{ row }">
           <router-link
@@ -353,6 +357,7 @@ const invoiceColumns = computed(() => {
     },
     { key: 'invoice_number', label: t('invoices.number') },
     { key: 'name', label: t('invoices.customer') },
+    { key: 'project', label: 'Proyecto' },
     { key: 'status', label: t('invoices.status') },
     {
       key: 'due_amount',
@@ -395,6 +400,14 @@ function hasAtleastOneAbility() {
     abilities.VIEW_INVOICE,
     abilities.SEND_INVOICE,
   ])
+}
+
+function getInvoiceProject(invoice) {
+  const projectField = invoice.fields?.find((field) => {
+    return field.custom_field?.slug === 'CUSTOM_INVOICE_PROYECTO'
+  })
+
+  return projectField?.default_answer || '-'
 }
 
 async function clearStatusSearch(removedOption, id) {

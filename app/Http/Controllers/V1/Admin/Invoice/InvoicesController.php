@@ -26,7 +26,7 @@ class InvoicesController extends Controller
 
         $invoices = Invoice::whereCompany()
             ->applyFilters($request->all())
-            ->with('customer')
+            ->with(['customer', 'fields.customField'])
             ->latest()
             ->paginateData($limit);
 

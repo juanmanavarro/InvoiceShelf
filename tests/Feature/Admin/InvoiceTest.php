@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\V1\Admin\Invoice\InvoicesController;
 use App\Http\Requests\InvoicesRequest;
+use App\Models\CustomField;
+use App\Models\CustomFieldValue;
 use App\Mail\SendInvoiceMail;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -32,6 +34,33 @@ test('testGetInvoices', function () {
     $response = getJson('api/v1/invoices?page=1&type=OVERDUE&limit=20');
 
     $response->assertOk();
+});
+
+test('invoice index includes project custom field', function () {
+    $invoice = Invoice::factory()->create();
+
+    $customField = CustomField::factory()->create([
+        'model_type' => 'Invoice',
+        'slug' => 'CUSTOM_INVOICE_PROYECTO',
+        'type' => 'Text',
+        'company_id' => $invoice->company_id,
+    ]);
+
+    CustomFieldValue::factory()->create([
+        'custom_field_valuable_type' => Invoice::class,
+        'custom_field_valuable_id' => $invoice->id,
+        'type' => 'Text',
+        'custom_field_id' => $customField->id,
+        'company_id' => $invoice->company_id,
+        'string_answer' => 'Proyecto Alpha',
+    ]);
+
+    $response = getJson('api/v1/invoices?page=1&limit=10');
+
+    $response
+        ->assertOk()
+        ->assertJsonPath('data.0.fields.0.custom_field.slug', 'CUSTOM_INVOICE_PROYECTO')
+        ->assertJsonPath('data.0.fields.0.default_answer', 'Proyecto Alpha');
 });
 
 test('create invoice', function () {
