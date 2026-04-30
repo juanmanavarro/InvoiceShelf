@@ -914,7 +914,9 @@
       "from_name": "From Mail Name",
       "from_mail": "From Mail Address",
       "encryption": "Mail Encryption",
-      "mail_config_desc": "Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."
+      "mail_config_desc": "Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc.",
+      "ddev_notice_title": "DDEV is using mail settings from .env",
+      "ddev_notice_message": "This project is running in DDEV, so emails are sent with the mail configuration from the .env file. Changes made here will not affect email delivery while DDEV is active."
     },
     "pdf": {
       "title": "PDF Setting",
@@ -1525,7 +1527,9 @@
       "from_name": "From Mail Name",
       "from_mail": "From Mail Address",
       "encryption": "Mail Encryption",
-      "mail_config_desc": "Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."
+      "mail_config_desc": "Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc.",
+      "ddev_notice_title": "DDEV is using mail settings from .env",
+      "ddev_notice_message": "This project is running in DDEV, so emails are sent with the mail configuration from the .env file. Changes made here will not affect email delivery while DDEV is active."
     },
     "req": {
       "system_req": "System Requirements",

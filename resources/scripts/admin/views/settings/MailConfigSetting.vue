@@ -6,6 +6,14 @@
     :description="$t('settings.mail.mail_config_desc')"
   >
     <div v-if="mailDriverStore && mailDriverStore.mailConfigData" class="mt-14">
+      <BaseInfoAlert
+        v-if="mailDriverStore.mailConfigData.uses_environment_mail_config"
+        class="mb-6"
+        :title="$t('settings.mail.ddev_notice_title')"
+        :lists="[$t('settings.mail.ddev_notice_message')]"
+        :actions="[]"
+      />
+
       <component
         :is="mailDriver"
         :config-data="mailDriverStore.mailConfigData"
@@ -34,6 +42,7 @@ import Smtp from '@/scripts/admin/views/settings/mail-driver/SmtpMailDriver.vue'
 import Mailgun from '@/scripts/admin/views/settings/mail-driver/MailgunMailDriver.vue'
 import Ses from '@/scripts/admin/views/settings/mail-driver/SesMailDriver.vue'
 import Basic from '@/scripts/admin/views/settings/mail-driver/BasicMailDriver.vue'
+import BaseInfoAlert from '@/scripts/components/base/BaseInfoAlert.vue'
 import { ref, computed } from 'vue'
 import { useMailDriverStore } from '@/scripts/admin/stores/mail-driver'
 import { useModalStore } from '@/scripts/stores/modal'
