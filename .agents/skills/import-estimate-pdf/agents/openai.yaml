@@ -1,0 +1,4 @@
+interface:
+  display_name: "Import estimate PDF"
+  short_description: "Import presupuesto PDFs into InvoiceShelf"
+  default_prompt: "Import this estimate PDF into InvoiceShelf through the local API, creating the customer if needed."
