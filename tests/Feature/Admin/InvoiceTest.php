@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\V1\Admin\Invoice\InvoicesController;
 use App\Http\Requests\InvoicesRequest;
+use App\Mail\SendInvoiceMail;
 use App\Models\CustomField;
 use App\Models\CustomFieldValue;
-use App\Mail\SendInvoiceMail;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Tax;
@@ -61,6 +61,31 @@ test('invoice index includes project custom field', function () {
         ->assertOk()
         ->assertJsonPath('data.0.fields.0.custom_field.slug', 'CUSTOM_INVOICE_PROYECTO')
         ->assertJsonPath('data.0.fields.0.default_answer', 'Proyecto Alpha');
+});
+
+test('get invoices orders by invoice date descending by default and puts drafts last', function () {
+    $recentInvoice = Invoice::factory()->create([
+        'invoice_number' => 'INV-DATE-RECENT',
+        'status' => Invoice::STATUS_SENT,
+        'invoice_date' => '2024-02-01',
+    ]);
+
+    $olderInvoice = Invoice::factory()->create([
+        'invoice_number' => 'INV-DATE-OLDER',
+        'status' => Invoice::STATUS_SENT,
+        'invoice_date' => '2024-01-01',
+    ]);
+
+    $draftInvoice = Invoice::factory()->create([
+        'invoice_number' => 'INV-DATE-DRAFT',
+        'status' => Invoice::STATUS_DRAFT,
+        'invoice_date' => '2024-12-01',
+    ]);
+
+    $response = getJson('api/v1/invoices?page=1&limit=20');
+
+    expect(collect($response->json('data'))->pluck('id')->take(3)->all())
+        ->toBe([$recentInvoice->id, $olderInvoice->id, $draftInvoice->id]);
 });
 
 test('create invoice', function () {

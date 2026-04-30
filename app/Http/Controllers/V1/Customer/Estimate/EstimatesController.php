@@ -37,7 +37,6 @@ class EstimatesController extends Controller
                 'orderByField',
                 'orderBy',
             ]))
-            ->latest()
             ->paginateData($limit);
 
         return EstimateResource::collection($estimates)

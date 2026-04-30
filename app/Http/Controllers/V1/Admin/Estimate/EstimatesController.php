@@ -23,7 +23,6 @@ class EstimatesController extends Controller
             ->applyFilters($request->all())
             ->with(['fields.customField'])
             ->select('estimates.*', 'customers.name')
-            ->latest()
             ->paginateData($limit);
 
         return EstimateResource::collection($estimates)

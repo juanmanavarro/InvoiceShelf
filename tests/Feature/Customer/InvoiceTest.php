@@ -29,6 +29,31 @@ test('get customer invoices', function () {
     getJson("api/v1/{$customer->company->slug}/customer/invoices?page=1")->assertOk();
 });
 
+test('get customer invoices orders by invoice date descending by default', function () {
+    $customer = Auth::guard('customer')->user();
+
+    $recentInvoice = Invoice::factory()->create([
+        'company_id' => $customer->company_id,
+        'customer_id' => $customer->id,
+        'status' => Invoice::STATUS_SENT,
+        'invoice_number' => 'CINV-DATE-RECENT',
+        'invoice_date' => '2024-02-01',
+    ]);
+
+    $olderInvoice = Invoice::factory()->create([
+        'company_id' => $customer->company_id,
+        'customer_id' => $customer->id,
+        'status' => Invoice::STATUS_SENT,
+        'invoice_number' => 'CINV-DATE-OLDER',
+        'invoice_date' => '2024-01-01',
+    ]);
+
+    $response = getJson("api/v1/{$customer->company->slug}/customer/invoices?page=1&limit=20");
+
+    expect(collect($response->json('data'))->pluck('id')->take(2)->all())
+        ->toBe([$recentInvoice->id, $olderInvoice->id]);
+});
+
 test('get customer invoice', function () {
     $customer = Auth::guard('customer')->user();
 

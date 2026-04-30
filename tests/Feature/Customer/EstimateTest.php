@@ -30,6 +30,31 @@ test('get customer estimates', function () {
     getJson("api/v1/{$customer->company->slug}/customer/estimates?page=1")->assertOk();
 });
 
+test('get customer estimates orders by estimate date descending by default', function () {
+    $customer = Auth::guard('customer')->user();
+
+    $recentEstimate = Estimate::factory()->create([
+        'company_id' => $customer->company_id,
+        'customer_id' => $customer->id,
+        'status' => Estimate::STATUS_SENT,
+        'estimate_number' => 'CEST-DATE-RECENT',
+        'estimate_date' => '2024-02-01',
+    ]);
+
+    $olderEstimate = Estimate::factory()->create([
+        'company_id' => $customer->company_id,
+        'customer_id' => $customer->id,
+        'status' => Estimate::STATUS_SENT,
+        'estimate_number' => 'CEST-DATE-OLDER',
+        'estimate_date' => '2024-01-01',
+    ]);
+
+    $response = getJson("api/v1/{$customer->company->slug}/customer/estimates?page=1&limit=20");
+
+    expect(collect($response->json('data'))->pluck('id')->take(2)->all())
+        ->toBe([$recentEstimate->id, $olderEstimate->id]);
+});
+
 test('get customer estimate', function () {
     $customer = Auth::guard('customer')->user();
 

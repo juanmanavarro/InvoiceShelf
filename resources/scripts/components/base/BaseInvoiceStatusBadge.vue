@@ -20,7 +20,7 @@ export default {
     const badgeColorClasses = computed(() => {
       switch (props.status) {
         case 'DRAFT':
-          return 'bg-yellow-300/25 px-2  py-1 text-sm  text-yellow-800 uppercase font-normal text-center'
+          return 'bg-gray-200 px-2 py-1 text-sm text-gray-600 uppercase font-normal text-center'
         case 'SENT':
           return ' bg-yellow-500/25 px-2 py-1 text-sm  text-yellow-900 uppercase font-normal text-center '
         case 'VIEWED':

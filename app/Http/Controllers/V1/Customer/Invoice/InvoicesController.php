@@ -25,7 +25,6 @@ class InvoicesController extends Controller
             ->where('status', '<>', 'DRAFT')
             ->applyFilters($request->all())
             ->whereCustomer(Auth::guard('customer')->id())
-            ->latest()
             ->paginateData($limit);
 
         return InvoiceResource::collection($invoices)

@@ -426,7 +426,7 @@ async function fetchData({ page, filter, sort }) {
     from_date: filters.from_date,
     to_date: filters.to_date,
     invoice_number: filters.invoice_number,
-    orderByField: sort.fieldName || 'created_at',
+    orderByField: sort.fieldName || 'invoice_date',
     orderBy: sort.order || 'desc',
     page,
   }

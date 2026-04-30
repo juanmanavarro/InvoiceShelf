@@ -244,7 +244,7 @@ async function fetchData({ page, sort }) {
     estimate_number: filters.estimate_number,
     from_date: filters.from_date,
     to_date: filters.to_date,
-    orderByField: sort.fieldName || 'created_at',
+    orderByField: sort.fieldName || 'estimate_date',
     orderBy: sort.order || 'desc',
     page,
   }

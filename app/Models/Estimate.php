@@ -187,14 +187,23 @@ class Estimate extends Model implements HasMedia
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {
-            $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'sequence_number';
+            $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'estimate_date';
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'desc';
             $query->whereOrder($field, $orderBy);
+        } else {
+            $query->whereOrder('estimate_date', 'desc');
         }
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
+        if ($orderByField === 'estimate_date') {
+            $query->orderByRaw('case when status = ? then 1 else 0 end asc', [self::STATUS_DRAFT])
+                ->orderBy($orderByField, $orderBy);
+
+            return;
+        }
+
         $query->orderBy($orderByField, $orderBy);
     }
 

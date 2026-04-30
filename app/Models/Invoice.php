@@ -299,9 +299,18 @@ class Invoice extends Model implements HasMedia
             $query->where('customer_id', $customerId);
         })->when($filters['orderByField'] ?? null, function ($query, $orderByField) use ($filters) {
             $orderBy = $filters['orderBy'] ?? 'desc';
+
+            if ($orderByField === 'invoice_date') {
+                $query->orderByRaw('case when status = ? then 1 else 0 end asc', [self::STATUS_DRAFT])
+                    ->orderBy($orderByField, $orderBy);
+
+                return;
+            }
+
             $query->orderBy($orderByField, $orderBy);
         }, function ($query) {
-            $query->orderBy('sequence_number', 'desc');
+            $query->orderByRaw('case when status = ? then 1 else 0 end asc', [self::STATUS_DRAFT])
+                ->orderBy('invoice_date', 'desc');
         });
     }
 

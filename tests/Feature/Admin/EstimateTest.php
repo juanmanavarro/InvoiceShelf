@@ -37,6 +37,31 @@ test('get estimates', function () {
     $response->assertOk();
 });
 
+test('get estimates orders by estimate date descending by default and puts drafts last', function () {
+    $recentEstimate = Estimate::factory()->create([
+        'estimate_number' => 'EST-DATE-RECENT',
+        'status' => Estimate::STATUS_SENT,
+        'estimate_date' => '2024-02-01',
+    ]);
+
+    $olderEstimate = Estimate::factory()->create([
+        'estimate_number' => 'EST-DATE-OLDER',
+        'status' => Estimate::STATUS_SENT,
+        'estimate_date' => '2024-01-01',
+    ]);
+
+    $draftEstimate = Estimate::factory()->create([
+        'estimate_number' => 'EST-DATE-DRAFT',
+        'status' => Estimate::STATUS_DRAFT,
+        'estimate_date' => '2024-12-01',
+    ]);
+
+    $response = getJson('api/v1/estimates?page=1&limit=20');
+
+    expect(collect($response->json('data'))->pluck('id')->take(3)->all())
+        ->toBe([$recentEstimate->id, $olderEstimate->id, $draftEstimate->id]);
+});
+
 test('create estimate', function () {
     $estimate = Estimate::factory()->raw([
         'estimate_number' => 'EST-000006',
