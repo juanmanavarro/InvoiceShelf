@@ -30,6 +30,10 @@ class AppConfigProvider extends ServiceProvider
      */
     protected function configureMailFromDatabase(): void
     {
+        if ($this->shouldUseEnvironmentMailConfiguration()) {
+            return;
+        }
+
         try {
             // Get mail settings from database
             $mailSettings = Setting::getSettings([
@@ -110,6 +114,12 @@ class AppConfigProvider extends ServiceProvider
             // Silently fail if database is not available (during installation, migrations, etc.)
             // This prevents the application from breaking during setup
         }
+    }
+
+    protected function shouldUseEnvironmentMailConfiguration(): bool
+    {
+        return filter_var(env('IS_DDEV_PROJECT', false), FILTER_VALIDATE_BOOL)
+            || str_contains((string) config('app.url'), '.ddev.site');
     }
 
     /**

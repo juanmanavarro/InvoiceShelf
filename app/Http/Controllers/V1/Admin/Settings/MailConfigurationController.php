@@ -128,6 +128,10 @@ class MailConfigurationController extends Controller
     {
         $this->authorize('manage email config');
 
+        if ($this->shouldUseEnvironmentMailConfiguration()) {
+            return response()->json($this->getMailEnvironmentFromConfig());
+        }
+
         // Get mail settings from database
         $mailSettings = Setting::getSettings([
             'mail_driver',
@@ -156,6 +160,7 @@ class MailConfigurationController extends Controller
 
         // Base data that's always available
         $MailData = [
+            'uses_environment_mail_config' => false,
             'mail_driver' => $driver,
             'from_name' => $mailSettings['from_name'] ?? config('mail.from.name'),
             'from_mail' => $mailSettings['from_mail'] ?? config('mail.from.address'),
@@ -208,6 +213,59 @@ class MailConfigurationController extends Controller
         return response()->json($MailData);
     }
 
+    private function getMailEnvironmentFromConfig(): array
+    {
+        $driver = config('mail.default');
+
+        $mailData = [
+            'uses_environment_mail_config' => true,
+            'mail_driver' => $driver,
+            'from_name' => config('mail.from.name'),
+            'from_mail' => config('mail.from.address'),
+        ];
+
+        switch ($driver) {
+            case 'smtp':
+                $mailData = array_merge($mailData, [
+                    'mail_host' => config('mail.mailers.smtp.host', ''),
+                    'mail_port' => config('mail.mailers.smtp.port', ''),
+                    'mail_username' => config('mail.mailers.smtp.username', ''),
+                    'mail_password' => config('mail.mailers.smtp.password', ''),
+                    'mail_encryption' => config('mail.mailers.smtp.encryption', 'none'),
+                    'mail_scheme' => config('mail.mailers.smtp.scheme', ''),
+                    'mail_url' => config('mail.mailers.smtp.url', ''),
+                    'mail_timeout' => config('mail.mailers.smtp.timeout', ''),
+                    'mail_local_domain' => config('mail.mailers.smtp.local_domain', ''),
+                ]);
+                break;
+
+            case 'mailgun':
+                $mailData = array_merge($mailData, [
+                    'mail_mailgun_domain' => config('mail.mailers.mailgun.domain', ''),
+                    'mail_mailgun_secret' => config('mail.mailers.mailgun.secret', ''),
+                    'mail_mailgun_endpoint' => config('mail.mailers.mailgun.endpoint', 'api.mailgun.net'),
+                    'mail_mailgun_scheme' => config('mail.mailers.mailgun.scheme', 'https'),
+                ]);
+                break;
+
+            case 'ses':
+                $mailData = array_merge($mailData, [
+                    'mail_ses_key' => config('services.ses.key', ''),
+                    'mail_ses_secret' => config('services.ses.secret', ''),
+                    'mail_ses_region' => config('services.ses.region', 'us-east-1'),
+                ]);
+                break;
+
+            case 'sendmail':
+                $mailData = array_merge($mailData, [
+                    'mail_sendmail_path' => config('mail.mailers.sendmail.path', '/usr/sbin/sendmail -bs -i'),
+                ]);
+                break;
+        }
+
+        return $mailData;
+    }
+
     /**
      * Return the available mail drivers
      *
@@ -253,5 +311,11 @@ class MailConfigurationController extends Controller
         return response()->json([
             'success' => true,
         ]);
+    }
+
+    private function shouldUseEnvironmentMailConfiguration(): bool
+    {
+        return filter_var(env('IS_DDEV_PROJECT', false), FILTER_VALIDATE_BOOL)
+            || str_contains((string) config('app.url'), '.ddev.site');
     }
 }
