@@ -1,5 +1,7 @@
 <template>
-  <div class="grid h-screen grid-cols-12 overflow-y-hidden bg-gray-100">
+  <div
+    class="grid h-screen grid-cols-12 overflow-y-hidden bg-gray-100 transition-colors dark:bg-gray-950"
+  >
     <NotificationRoot />
 
     <div
@@ -13,6 +15,7 @@
         p-4
         mx-auto
         text-gray-900
+        dark:text-gray-100
         md:p-8 md:col-span-6
         lg:col-span-4
         flex-2
@@ -41,8 +44,8 @@
             not-italic
             font-medium
             leading-relaxed
-            text-left text-gray-400
-            md:pt-40
+             text-left text-gray-400 dark:text-gray-500
+             md:pt-40
           "
         >
           <p class="mb-3">

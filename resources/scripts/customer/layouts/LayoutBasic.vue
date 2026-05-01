@@ -6,7 +6,9 @@
 
     <!-- <SiteSidebar /> -->
 
-    <main class="mt-16 pb-16 h-screen overflow-y-auto min-h-0">
+    <main
+      class="mt-16 h-screen min-h-0 overflow-y-auto bg-gray-100 pb-16 transition-colors dark:bg-gray-950"
+    >
       <router-view />
     </main>
   </div>

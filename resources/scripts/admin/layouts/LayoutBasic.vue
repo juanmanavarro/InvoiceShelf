@@ -9,7 +9,7 @@
     <ExchangeRateBulkUpdateModal />
 
     <main
-      class="h-screen h-screen-ios overflow-y-auto md:pl-56 xl:pl-64 min-h-0"
+      class="h-screen h-screen-ios min-h-0 overflow-y-auto bg-gray-100 transition-colors dark:bg-gray-950 md:pl-56 xl:pl-64"
     >
       <div class="pt-16 pb-16">
         <router-view />

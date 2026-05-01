@@ -60,6 +60,20 @@
     </div>
 
     <ul class="flex float-right h-8 m-0 list-none md:h-9">
+      <li class="ml-2">
+        <button
+          type="button"
+          class="flex h-8 w-8 items-center justify-center rounded bg-white text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 md:h-9 md:w-9 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white"
+          :aria-label="isDark ? 'Activate light mode' : 'Activate dark mode'"
+          @click="toggleColorMode"
+        >
+          <BaseIcon
+            :name="isDark ? 'SunIcon' : 'MoonIcon'"
+            class="h-5 w-5"
+          />
+        </button>
+      </li>
+
       <li
         v-if="hasCreateAbilities"
         class="relative hidden float-left m-0 md:block"
@@ -77,10 +91,15 @@
                 text-sm text-black
                 bg-white
                 rounded
+                transition-colors
+                dark:bg-gray-900 dark:text-gray-100
                 md:h-9 md:w-9
               "
             >
-              <BaseIcon name="PlusIcon" class="w-5 h-5 text-gray-600" />
+              <BaseIcon
+                name="PlusIcon"
+                class="w-5 h-5 text-gray-600 dark:text-gray-200"
+              />
             </div>
           </template>
 
@@ -175,9 +194,10 @@
 <script setup>
 import { useAuthStore } from '@/scripts/admin/stores/auth'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useUserStore } from '@/scripts/admin/stores/user'
 import { useGlobalStore } from '@/scripts/admin/stores/global'
+import { isDarkMode, toggleTheme } from '@/scripts/services/theme'
 
 import CompanySwitcher from '@/scripts/components/CompanySwitcher.vue'
 import GlobalSearchBar from '@/scripts/components/GlobalSearchBar.vue'
@@ -189,6 +209,7 @@ const authStore = useAuthStore()
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
 const router = useRouter()
+const isDark = ref(isDarkMode())
 
 const previewAvatar = computed(() => {
   return userStore.currentUser && userStore.currentUser.avatar !== 0
@@ -224,5 +245,9 @@ async function logout() {
 
 function onToggle() {
   globalStore.setSidebarVisibility(true)
+}
+
+function toggleColorMode() {
+  isDark.value = toggleTheme() === 'dark'
 }
 </script>

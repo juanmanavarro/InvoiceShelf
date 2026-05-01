@@ -27,7 +27,9 @@
         leave-from="translate-x-0"
         leave-to="-translate-x-full"
       >
-        <div class="relative flex flex-col flex-1 w-full max-w-xs bg-white">
+        <div
+          class="relative flex w-full max-w-xs flex-1 flex-col bg-white text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-100"
+        >
           <TransitionChild
             as="template"
             enter="ease-in-out duration-300"
@@ -82,8 +84,8 @@
                 :to="item.link"
                 :class="[
                   hasActiveUrl(item.link)
-                    ? 'text-primary-500 border-l-primary-500 bg-gray-100 '
-                    : 'text-black border-l-transparent',
+                    ? 'border-l-primary-500 bg-gray-100 text-primary-500 dark:bg-gray-800'
+                    : 'border-l-transparent text-black dark:text-gray-200',
                   'cursor-pointer px-0 pl-4 py-3 flex items-center border-l-4 border-solid text-sm not-italic font-medium',
                 ]"
                 @click="globalStore.setSidebarVisibility(false)"
@@ -93,7 +95,7 @@
                   :class="[
                     hasActiveUrl(item.link)
                       ? 'text-primary-500 '
-                      : 'text-gray-400',
+                      : 'text-gray-400 dark:text-gray-500',
                     'mr-4 shrink-0 h-5 w-5',
                   ]"
                   @click="globalStore.setSidebarVisibility(false)"
@@ -120,6 +122,9 @@
       overflow-y-auto
       bg-white
       border-r border-gray-200 border-solid
+      text-gray-900
+      transition-colors
+      dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100
       xl:w-64
       md:fixed md:flex md:flex-col md:inset-y-0
       pt-16
@@ -136,9 +141,9 @@
         :to="item.link"
         :class="[
           hasActiveUrl(item.link)
-            ? 'text-primary-500 border-l-primary-500 bg-gray-100 '
-            : 'text-black border-l-transparent',
-          'cursor-pointer px-0 pl-6 hover:bg-gray-50 py-3 group flex items-center border-l-4 border-solid text-sm not-italic font-medium',
+            ? 'border-l-primary-500 bg-gray-100 text-primary-500 dark:bg-gray-800'
+            : 'border-l-transparent text-black dark:text-gray-200',
+          'group flex cursor-pointer items-center border-l-4 border-solid px-0 py-3 pl-6 text-sm font-medium not-italic hover:bg-gray-50 dark:hover:bg-gray-800/70',
         ]"
       >
         <BaseIcon
@@ -146,7 +151,7 @@
           :class="[
             hasActiveUrl(item.link)
               ? 'text-primary-500 group-hover:text-primary-500 '
-              : 'text-gray-400 group-hover:text-black',
+              : 'text-gray-400 group-hover:text-black dark:text-gray-500 dark:group-hover:text-gray-100',
             'mr-4 shrink-0 h-5 w-5 ',
           ]"
         />

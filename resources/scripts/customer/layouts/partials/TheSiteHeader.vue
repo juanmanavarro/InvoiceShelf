@@ -2,7 +2,7 @@
   <Disclosure
     v-slot="{ open }"
     as="nav"
-    class="bg-white shadow-xs fixed top-0 left-0 z-20 w-full"
+    class="fixed top-0 left-0 z-20 w-full bg-white text-gray-900 shadow-xs transition-colors dark:bg-gray-900 dark:text-gray-100"
   >
     <div class="mx-auto px-8">
       <div class="flex justify-between h-16 w-full">
@@ -34,9 +34,9 @@
               :class="[
                 hasActiveUrl(item.link)
                   ? 'border-primary-500 text-primary-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
-              ]"
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-300 dark:hover:text-white dark:hover:border-gray-600',
+                  'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium',
+                ]"
             >
               {{ $t(item.title) }}
             </router-link>
@@ -45,18 +45,12 @@
         <div class="hidden sm:ml-6 sm:flex sm:items-center">
           <button
             type="button"
-            class="
-              bg-white
-              p-1
-              rounded-full
-              text-gray-400
-              hover:text-gray-500
-              focus:outline-hidden
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-primary-500
-            "
-          ></button>
+            class="rounded-full bg-white p-2 text-gray-500 transition hover:text-gray-700 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-white dark:focus:ring-offset-gray-900"
+            :aria-label="isDark ? 'Activate light mode' : 'Activate dark mode'"
+            @click="toggleColorMode"
+          >
+            <component :is="isDark ? SunIcon : MoonIcon" class="h-5 w-5" />
+          </button>
 
           <!-- Profile dropdown -->
 
@@ -73,6 +67,7 @@
                     focus:ring-2
                     focus:ring-offset-2
                     focus:ring-primary-500
+                    dark:bg-gray-800 dark:focus:ring-offset-gray-900
                   "
                 >
                   <img
@@ -118,6 +113,7 @@
               focus:ring-2
               focus:ring-offset-2
               focus:ring-primary-500
+              dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-offset-gray-900
             "
           >
             <span class="sr-only">Open main menu</span>
@@ -128,7 +124,7 @@
       </div>
     </div>
 
-    <DisclosurePanel class="sm:hidden">
+    <DisclosurePanel class="bg-white transition-colors dark:bg-gray-900 sm:hidden">
       <div class="pt-2 pb-3 space-y-1">
         <router-link
           v-for="item in globalStore.mainMenu"
@@ -136,43 +132,35 @@
           :to="`/${globalStore.companySlug}${item.link}`"
           :class="[
             hasActiveUrl(item.link)
-              ? 'bg-primary-50 border-primary-500 text-primary-700'
-              : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
+              ? 'bg-primary-50 border-primary-500 text-primary-700 dark:bg-gray-800 dark:text-primary-400'
+              : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:border-gray-600 dark:hover:text-white',
             'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
           ]"
           :aria-current="item.current ? 'page' : undefined"
           >{{ $t(item.title) }}
         </router-link>
       </div>
-      <div class="pt-4 pb-3 border-t border-gray-200">
+      <div class="pt-4 pb-3 border-t border-gray-200 dark:border-gray-800">
         <div class="flex items-center px-4">
           <div class="shrink-0">
             <img class="h-10 w-10 rounded-full" :src="previewAvatar" alt="" />
           </div>
           <div class="ml-3">
-            <div class="text-base font-medium text-gray-800">
+            <div class="text-base font-medium text-gray-800 dark:text-gray-100">
               {{ globalStore.currentUser.title }}
             </div>
-            <div class="text-sm font-medium text-gray-500">
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
               {{ globalStore.currentUser.email }}
             </div>
           </div>
           <button
             type="button"
-            class="
-              ml-auto
-              bg-white
-              shrink-0
-              p-1
-              rounded-full
-              text-gray-400
-              hover:text-gray-500
-              focus:outline-hidden
-              focus:ring-2
-              focus:ring-offset-2
-              focus:ring-primary-500
-            "
-          ></button>
+            class="ml-auto shrink-0 rounded-full bg-white p-2 text-gray-500 transition hover:text-gray-700 focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-white dark:focus:ring-offset-gray-900"
+            :aria-label="isDark ? 'Activate light mode' : 'Activate dark mode'"
+            @click="toggleColorMode"
+          >
+            <component :is="isDark ? SunIcon : MoonIcon" class="h-5 w-5" />
+          </button>
         </div>
         <div class="mt-3 space-y-1">
           <router-link
@@ -181,8 +169,8 @@
             :to="item.link"
             :class="[
               hasActiveUrl(item.link)
-                ? 'bg-primary-50 border-primary-500 text-primary-700'
-                : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800',
+                ? 'bg-primary-50 border-primary-500 text-primary-700 dark:bg-gray-800 dark:text-primary-400'
+                : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:border-gray-600 dark:hover:text-white',
               'block pl-3 pr-4 py-2 border-l-4 text-base font-medium',
             ]"
             >{{ $t(item.title) }}</router-link
@@ -199,6 +187,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, watch, computed } from 'vue'
 import { useGlobalStore } from '@/scripts/customer/stores/global'
 import MainLogo from '@/scripts/components/icons/MainLogo.vue'
+import { isDarkMode, toggleTheme } from '@/scripts/services/theme'
 import {
   Disclosure,
   DisclosureButton,
@@ -206,7 +195,14 @@ import {
   Menu,
   MenuButton,
 } from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon, CogIcon } from '@heroicons/vue/24/outline'
+import {
+  Bars3Icon,
+  XMarkIcon,
+  ArrowRightOnRectangleIcon,
+  CogIcon,
+  MoonIcon,
+  SunIcon,
+} from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -224,6 +220,7 @@ const userNavigation = [
 const authStore = useAuthStore()
 const router = useRouter()
 const activeRoute = ref('')
+const isDark = ref(isDarkMode())
 
 const previewAvatar = computed(() => {
   return globalStore.currentUser && globalStore.currentUser.avatar !== 0
@@ -262,5 +259,9 @@ function logout() {
       router.push({ name: 'customer.login' })
     }
   })
+}
+
+function toggleColorMode() {
+  isDark.value = toggleTheme() === 'dark'
 }
 </script>
