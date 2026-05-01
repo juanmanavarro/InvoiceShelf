@@ -2,7 +2,7 @@
   <Disclosure
     v-slot="{ open }"
     as="nav"
-    class="fixed top-0 left-0 z-20 w-full bg-white text-gray-900 shadow-xs transition-colors dark:bg-gray-900 dark:text-gray-100"
+    class="fixed top-0 left-0 z-20 w-full bg-white text-gray-900 shadow-xs transition-colors"
   >
     <div class="mx-auto px-8">
       <div class="flex justify-between h-16 w-full">

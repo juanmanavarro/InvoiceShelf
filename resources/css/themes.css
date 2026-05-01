@@ -11,3 +11,10 @@
     --color-primary-900: rgb(25, 5, 173);
     --color-primary-950: rgb(9, 0, 118);
 }
+
+.dark {
+    --color-primary-400: rgb(167, 170, 255);
+    --color-primary-500: rgb(118, 117, 255);
+    --color-primary-600: rgb(74, 61, 255);
+    --color-primary-700: rgb(51, 22, 255);
+}

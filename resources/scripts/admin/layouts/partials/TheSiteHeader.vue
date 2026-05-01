@@ -13,8 +13,8 @@
       py-3
       md:h-16 md:px-8
       bg-linear-to-r
-      from-primary-500
-      to-primary-400
+      from-[#4a3dff]
+      to-[#7675ff]
     "
   >
     <router-link
