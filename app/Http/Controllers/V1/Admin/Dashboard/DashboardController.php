@@ -28,6 +28,10 @@ class DashboardController extends Controller
 
         $this->authorize('view dashboard', $company);
 
+        $dashboardInvoices = fn () => Invoice::query()
+            ->whereCompany()
+            ->where('status', '!=', Invoice::STATUS_DRAFT);
+
         $invoice_totals = [];
         $expense_totals = [];
         $receipt_totals = [];
@@ -62,11 +66,8 @@ class DashboardController extends Controller
         while ($monthCounter < 12) {
             array_push(
                 $invoice_totals,
-                Invoice::whereBetween(
-                    'invoice_date',
-                    [$start->format('Y-m-d'), $end->format('Y-m-d')]
-                )
-                    ->whereCompany()
+                $dashboardInvoices()
+                    ->whereBetween('invoice_date', [$start->format('Y-m-d'), $end->format('Y-m-d')])
                     ->sum('base_total')
             );
             array_push(
@@ -101,11 +102,8 @@ class DashboardController extends Controller
 
         $start->subMonth()->endOfMonth();
 
-        $total_sales = Invoice::whereBetween(
-            'invoice_date',
-            [$startDate->format('Y-m-d'), $start->format('Y-m-d')]
-        )
-            ->whereCompany()
+        $total_sales = $dashboardInvoices()
+            ->whereBetween('invoice_date', [$startDate->format('Y-m-d'), $start->format('Y-m-d')])
             ->sum('base_total');
 
         $total_receipts = Payment::whereBetween(
@@ -133,14 +131,14 @@ class DashboardController extends Controller
         ];
 
         $total_customer_count = Customer::whereCompany()->count();
-        $total_invoice_count = Invoice::whereCompany()
+        $total_invoice_count = $dashboardInvoices()
             ->count();
         $total_estimate_count = Estimate::whereCompany()->count();
-        $total_amount_due = Invoice::whereCompany()
+        $total_amount_due = $dashboardInvoices()
             ->sum('base_due_amount');
 
-        $recent_due_invoices = Invoice::with('customer')
-            ->whereCompany()
+        $recent_due_invoices = $dashboardInvoices()
+            ->with('customer')
             ->where('base_due_amount', '>', 0)
             ->take(5)
             ->latest()
