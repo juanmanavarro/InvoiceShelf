@@ -32,6 +32,9 @@
         pb-[6rem]
         ml-56
         bg-white
+        text-gray-900
+        transition-colors
+        dark:bg-gray-900 dark:text-gray-100
         xl:ml-64
         w-88
         xl:block
@@ -45,7 +48,7 @@
           px-4
           pt-8
           pb-6
-          border border-gray-200 border-solid
+           border border-gray-200 border-solid dark:border-gray-800
         "
       >
         <BaseInput
@@ -76,7 +79,7 @@
                 pb-2
                 mb-2
                 text-sm
-                border-b border-gray-200 border-solid
+                 border-b border-gray-200 border-solid dark:border-gray-800
               "
             >
               {{ $t('general.sort_by') }}
@@ -139,7 +142,7 @@
 
       <div
         ref="paymentListSection"
-        class="h-full overflow-y-scroll border-l border-gray-200 border-solid"
+        class="h-full overflow-y-scroll border-l border-gray-200 border-solid dark:border-gray-800"
       >
         <div v-for="(payment, index) in paymentList" :key="index">
           <router-link
@@ -147,9 +150,9 @@
             :id="'payment-' + payment.id"
             :to="`/admin/payments/${payment.id}/view`"
             :class="[
-              'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-l-transparent',
+              'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 border-l-4 border-l-transparent',
               {
-                'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
+                'bg-gray-100 dark:bg-gray-800 border-l-4 border-l-primary-500 border-solid':
                   hasActiveUrl(payment.id),
               },
             ]"
@@ -165,9 +168,9 @@
                   not-italic
                   font-normal
                   leading-5
-                  text-black
-                  capitalize
-                  truncate
+                   text-black dark:text-gray-100
+                   capitalize
+                   truncate
                 "
               />
 
@@ -178,8 +181,8 @@
                   not-italic
                   font-medium
                   leading-5
-                  text-gray-500
-                  capitalize
+                   text-gray-500 dark:text-gray-300
+                   capitalize
                 "
               >
                 {{ payment?.payment_number }}
@@ -192,8 +195,8 @@
                   not-italic
                   font-medium
                   leading-5
-                  text-gray-500
-                  capitalize
+                   text-gray-500 dark:text-gray-300
+                   capitalize
                 "
               >
                 {{ payment?.invoice_number }}
@@ -209,13 +212,13 @@
                   not-italic
                   font-semibold
                   leading-8
-                  text-right text-gray-900
-                "
+                   text-right text-gray-900 dark:text-gray-100
+                 "
                 :amount="payment?.amount"
                 :currency="payment.customer?.currency"
               />
 
-              <div class="text-sm text-right text-gray-500 non-italic">
+              <div class="text-sm text-right text-gray-500 non-italic dark:text-gray-400">
                 {{ payment.formatted_payment_date }}
               </div>
             </div>
@@ -226,7 +229,7 @@
         </div>
         <p
           v-if="!paymentList?.length && !isLoading"
-          class="flex justify-center px-4 mt-5 text-sm text-gray-600"
+          class="flex justify-center px-4 mt-5 text-sm text-gray-600 dark:text-gray-400"
         >
           {{ $t('payments.no_matching_payments') }}
         </p>

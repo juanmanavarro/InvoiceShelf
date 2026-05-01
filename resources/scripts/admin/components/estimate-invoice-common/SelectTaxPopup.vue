@@ -44,14 +44,14 @@
             >
               <!-- Tax Search Input  -->
 
-              <div class="relative bg-white">
+               <div class="relative bg-white dark:bg-gray-900">
                 <div class="relative p-4">
                   <BaseInput
                     v-model="textSearch"
                     :placeholder="$t('general.search')"
                     type="text"
-                    class="text-black"
-                  >
+                     class="text-black dark:text-gray-100"
+                   >
                   </BaseInput>
                 </div>
 
@@ -64,15 +64,15 @@
                     overflow-auto
                     list
                     max-h-36
-                    border-t border-gray-200
-                  "
+                     border-t border-gray-200 dark:border-gray-800
+                   "
                 >
                   <div
                     v-for="(taxType, index) in filteredTaxType"
                     :key="index"
                     :class="{
-                      'bg-gray-100 cursor-not-allowed opacity-50 pointer-events-none':
-                        taxes.find((val) => {
+                       'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-50 pointer-events-none':
+                         taxes.find((val) => {
                           return val.tax_type_id === taxType.id
                         }),
                     }"
@@ -80,10 +80,10 @@
                     class="
                       px-6
                       py-4
-                      border-b border-gray-200 border-solid
-                      cursor-pointer
-                      hover:bg-gray-100 hover:cursor-pointer
-                      last:border-b-0
+                       border-b border-gray-200 border-solid dark:border-gray-800
+                       cursor-pointer
+                       hover:bg-gray-100 dark:hover:bg-gray-800 hover:cursor-pointer
+                       last:border-b-0
                     "
                     @click="selectTaxType(taxType, close)"
                   >
@@ -94,8 +94,8 @@
                           text-base
                           font-semibold
                           leading-tight
-                          text-gray-700
-                          cursor-pointer
+                           text-gray-700 dark:text-gray-200
+                           cursor-pointer
                         "
                       >
                         {{ taxType.name }}
@@ -106,8 +106,8 @@
                           m-0
                           text-base
                           font-semibold
-                          text-gray-700
-                          cursor-pointer
+                           text-gray-700 dark:text-gray-200
+                           cursor-pointer
                         "
                       >
                         <template v-if="taxType.calculation_type === 'fixed'">
@@ -121,8 +121,8 @@
                   </div>
                 </div>
 
-                <div v-else class="flex justify-center p-5 text-gray-400">
-                  <label class="text-base text-gray-500 cursor-pointer">
+                <div v-else class="flex justify-center p-5 text-gray-400 dark:text-gray-500">
+                  <label class="text-base text-gray-500 cursor-pointer dark:text-gray-400">
                     {{ $t('general.no_tax_found') }}
                   </label>
                 </div>
@@ -140,10 +140,10 @@
                   h-10
                   px-2
                   py-3
-                  bg-gray-200
-                  border-none
-                  outline-hidden
-                "
+                   bg-gray-200 dark:bg-gray-800
+                   border-none
+                   outline-hidden
+                 "
                 @click="openTaxTypeModal"
               >
                 <BaseIcon name="CheckCircleIcon" class="text-primary-400" />

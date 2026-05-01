@@ -25,7 +25,7 @@
 
     <!-- Sidebar -->
     <div
-      class="fixed top-0 left-0 hidden h-full pt-16 pb-4 bg-white w-88 xl:block"
+      class="fixed top-0 left-0 hidden h-full w-88 bg-white pt-16 pb-4 text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-100 xl:block"
     >
       <div
         class="
@@ -35,7 +35,7 @@
           px-4
           pt-8
           pb-6
-          border border-gray-200 border-solid
+           border border-gray-200 border-solid dark:border-gray-800
         "
       >
         <BaseInput
@@ -136,8 +136,8 @@
           h-full
           pb-32
           overflow-y-scroll
-          border-l border-gray-200 border-solid
-          sw-scroll
+           border-l border-gray-200 border-solid dark:border-gray-800
+           sw-scroll
         "
       >
         <router-link
@@ -146,9 +146,9 @@
           :key="index"
           :to="`/${globalStore.companySlug}/customer/estimates/${estimate.id}/view`"
           :class="[
-            'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-l-transparent',
+            'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 border-l-4 border-l-transparent',
             {
-              'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
+              'bg-gray-100 dark:bg-gray-800 border-l-4 border-l-primary-500 border-solid':
                 hasActiveUrl(estimate.id),
             },
           ]"
@@ -162,7 +162,7 @@
                 not-italic
                 font-medium
                 leading-5
-                text-gray-500
+                 text-gray-500 dark:text-gray-300
                 capitalize
               "
             >
@@ -182,13 +182,13 @@
                 not-italic
                 font-semibold
                 leading-8
-                text-right text-gray-900
-                block
+                   text-right text-gray-900 dark:text-gray-100
+                 block
               "
               :amount="estimate.total"
               :currency="estimate.currency"
             />
-            <div class="text-sm text-right text-gray-500 non-italic">
+            <div class="text-sm text-right text-gray-500 non-italic dark:text-gray-400">
               {{ estimate.formatted_estimate_date }}
             </div>
           </div>
@@ -196,7 +196,7 @@
 
         <p
           v-if="!estimateStore.estimates.length"
-          class="flex justify-center px-4 mt-5 text-sm text-gray-600"
+          class="flex justify-center px-4 mt-5 text-sm text-gray-600 dark:text-gray-400"
         >
           {{ $t('estimates.no_matching_estimates') }}
         </p>

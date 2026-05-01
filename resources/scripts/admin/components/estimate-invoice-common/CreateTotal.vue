@@ -7,6 +7,9 @@
       bg-white
       border border-gray-200 border-solid
       rounded
+      text-gray-900
+      transition-colors
+      dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100
       md:min-w-[390px]
       min-w-[300px]
       lg:mt-7
@@ -18,7 +21,7 @@
       </BaseContentPlaceholders>
       <label
         v-else
-        class="text-sm font-semibold leading-5 text-gray-400 uppercase"
+        class="text-sm font-semibold leading-5 text-gray-400 uppercase dark:text-gray-500"
       >
         {{ $t('estimates.sub_total') }}
       </label>
@@ -29,7 +32,7 @@
 
       <label
         v-else
-        class="flex items-center justify-center m-0 text-lg text-black uppercase "
+        class="flex items-center justify-center m-0 text-lg text-black uppercase dark:text-gray-100"
       >
         <BaseFormatMoney
           :amount="store.getSubTotal"
@@ -59,7 +62,7 @@
       </BaseContentPlaceholders>
       <label
         v-else-if="store[storeProp].tax_per_item === 'YES'"
-        class="m-0 text-sm font-semibold leading-5 text-gray-500 uppercase"
+        class="m-0 text-sm font-semibold leading-5 text-gray-500 uppercase dark:text-gray-400"
       >
         <template v-if="tax.calculation_type === 'percentage'">
           {{ tax.name }} - {{ tax.percent }}%
@@ -75,7 +78,7 @@
 
       <label
         v-else-if="store[storeProp].tax_per_item === 'YES'"
-        class="flex items-center justify-center m-0 text-lg text-black uppercase "
+        class="flex items-center justify-center m-0 text-lg text-black uppercase dark:text-gray-100"
       >
         <BaseFormatMoney :amount="tax.amount" :currency="defaultCurrency" />
       </label>
@@ -100,7 +103,7 @@
       <BaseContentPlaceholders v-if="isLoading">
         <BaseContentPlaceholdersText
           :lines="1"
-          class="w-24 h-8 border border-gray-200 rounded-md"
+            class="w-24 h-8 border border-gray-200 rounded-md dark:border-gray-700"
         />
       </BaseContentPlaceholders>
       <div v-else class="flex" style="width: 140px" role="group">
@@ -198,14 +201,14 @@
     </div>
 
     <div
-      class="flex items-center justify-between w-full pt-2 mt-5 border-t border-gray-200 border-solid "
+      class="mt-5 flex items-center justify-between w-full border-t border-gray-200 border-solid pt-2 dark:border-gray-700"
     >
       <BaseContentPlaceholders v-if="isLoading">
         <BaseContentPlaceholdersText :lines="1" class="w-16 h-5" />
       </BaseContentPlaceholders>
       <label
         v-else
-        class="m-0 text-sm font-semibold leading-5 text-gray-400 uppercase"
+        class="m-0 text-sm font-semibold leading-5 text-gray-400 uppercase dark:text-gray-500"
         >{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label
       >
 

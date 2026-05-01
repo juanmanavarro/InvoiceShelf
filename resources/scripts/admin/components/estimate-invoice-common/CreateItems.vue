@@ -9,10 +9,10 @@
       w-full
       px-6
       text-base
-      border border-b-0 border-gray-200 border-solid
+      border border-b-0 border-gray-200 border-solid dark:border-gray-700
       cursor-pointer
       text-primary-400
-      bg-white
+      bg-white dark:bg-gray-900 dark:text-primary-300
     "
   >
     <BaseSwitchSection
@@ -33,7 +33,7 @@
       />
       <col style="width: 15%; min-width: 120px" />
     </colgroup>
-    <thead class="bg-white border border-gray-200 border-solid">
+    <thead class="bg-white border border-gray-200 border-solid dark:border-gray-700 dark:bg-gray-900">
       <tr>
         <th
           class="
@@ -43,8 +43,8 @@
             not-italic
             font-medium
             leading-5
-            text-left text-gray-700
-            border-t border-b border-gray-200 border-solid
+            text-left text-gray-700 dark:text-gray-300
+            border-t border-b border-gray-200 border-solid dark:border-gray-700
           "
         >
           <BaseContentPlaceholders v-if="isLoading">
@@ -62,8 +62,8 @@
             not-italic
             font-medium
             leading-5
-            text-right text-gray-700
-            border-t border-b border-gray-200 border-solid
+            text-right text-gray-700 dark:text-gray-300
+            border-t border-b border-gray-200 border-solid dark:border-gray-700
           "
         >
           <BaseContentPlaceholders v-if="isLoading">
@@ -81,8 +81,8 @@
             not-italic
             font-medium
             leading-5
-            text-left text-gray-700
-            border-t border-b border-gray-200 border-solid
+            text-left text-gray-700 dark:text-gray-300
+            border-t border-b border-gray-200 border-solid dark:border-gray-700
           "
         >
           <BaseContentPlaceholders v-if="isLoading">
@@ -101,8 +101,8 @@
             not-italic
             font-medium
             leading-5
-            text-left text-gray-700
-            border-t border-b border-gray-200 border-solid
+            text-left text-gray-700 dark:text-gray-300
+            border-t border-b border-gray-200 border-solid dark:border-gray-700
           "
         >
           <BaseContentPlaceholders v-if="isLoading">
@@ -120,8 +120,8 @@
             not-italic
             font-medium
             leading-5
-            text-right text-gray-700
-            border-t border-b border-gray-200 border-solid
+            text-right text-gray-700 dark:text-gray-300
+            border-t border-b border-gray-200 border-solid dark:border-gray-700
           "
         >
           <BaseContentPlaceholders v-if="isLoading">
@@ -164,10 +164,11 @@
       px-6
       py-3
       text-base
-      border border-t-0 border-gray-200 border-solid
+      border border-t-0 border-gray-200 border-solid dark:border-gray-700
       cursor-pointer
       text-primary-400
       hover:bg-primary-100
+      dark:text-primary-300 dark:hover:bg-gray-800
     "
     @click="store.addItem"
   >

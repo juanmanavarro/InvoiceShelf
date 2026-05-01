@@ -1,5 +1,5 @@
 <template>
-  <tr class="box-border bg-white border border-gray-200 border-solid rounded-b">
+  <tr class="box-border rounded-b border border-gray-200 border-solid bg-white dark:border-gray-700 dark:bg-gray-900">
     <td colspan="5" class="p-0 text-left align-top">
       <table class="w-full">
         <colgroup>
@@ -143,7 +143,7 @@
               <BaseContentPlaceholders v-if="loading">
                 <BaseContentPlaceholdersText
                   :lines="1"
-                  class="w-24 h-8 border border-gray-200 rounded-md"
+                    class="w-24 h-8 border border-gray-200 rounded-md dark:border-gray-700"
                 />
               </BaseContentPlaceholders>
 
