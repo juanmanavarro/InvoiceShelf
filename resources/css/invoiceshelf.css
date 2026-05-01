@@ -12,6 +12,8 @@
 @source "../scripts/**/*.js";
 @source "../../resources/views/**/*.php";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-primary-50: var(--color-primary-50);
   --color-primary-100: var(--color-primary-100);
@@ -91,6 +93,10 @@ body {
 
 html {
     height: -webkit-fill-available;
+}
+
+html.dark body {
+    background-color: var(--color-gray-950);
 }
 
 .h-screen-ios {
