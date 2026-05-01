@@ -6,7 +6,15 @@
 
 <script setup>
 import { Chart } from 'chart.js/auto'
-import { ref, reactive, computed, onMounted, watchEffect, inject } from 'vue'
+import {
+  ref,
+  reactive,
+  computed,
+  onMounted,
+  onBeforeUnmount,
+  watchEffect,
+  inject,
+} from 'vue'
 import { useCompanyStore } from '@/scripts/admin/stores/company'
 
 const utils = inject('utils')
@@ -51,6 +59,57 @@ const defaultCurrency = computed(() => {
   return companyStore.selectedCompanyCurrency
 })
 
+function isDarkModeEnabled() {
+  return document.documentElement.classList.contains('dark')
+}
+
+function getChartTheme() {
+  return isDarkModeEnabled()
+    ? {
+        tickColor: '#94a3b8',
+        gridColor: 'rgba(71, 85, 105, 0.35)',
+        tooltipBackground: '#0f172a',
+        tooltipTitle: '#f8fafc',
+        tooltipBody: '#e2e8f0',
+        pointBackground: '#0f172a',
+        salesColor: '#e2e8f0',
+      }
+    : {
+        tickColor: '#64748b',
+        gridColor: 'rgba(226, 232, 240, 1)',
+        tooltipBackground: '#111827',
+        tooltipTitle: '#f9fafb',
+        tooltipBody: '#e5e7eb',
+        pointBackground: '#ffffff',
+        salesColor: '#040405',
+      }
+}
+
+function applyThemeToChart() {
+  if (!myLineChart) {
+    return
+  }
+
+  const theme = getChartTheme()
+
+  myLineChart.options.scales.x.ticks.color = theme.tickColor
+  myLineChart.options.scales.x.grid.color = theme.gridColor
+  myLineChart.options.scales.y.ticks.color = theme.tickColor
+  myLineChart.options.scales.y.grid.color = theme.gridColor
+  myLineChart.options.plugins.tooltip.backgroundColor = theme.tooltipBackground
+  myLineChart.options.plugins.tooltip.titleColor = theme.tooltipTitle
+  myLineChart.options.plugins.tooltip.bodyColor = theme.tooltipBody
+  myLineChart.data.datasets[0].borderColor = theme.salesColor
+  myLineChart.data.datasets[0].pointBorderColor = theme.salesColor
+  myLineChart.data.datasets[0].pointHoverBackgroundColor = theme.salesColor
+
+  myLineChart.data.datasets.forEach((dataset) => {
+    dataset.pointBackgroundColor = theme.pointBackground
+  })
+
+  myLineChart.update('none')
+}
+
 watchEffect(() => {
   if (props.labels) {
     if (myLineChart) {
@@ -62,12 +121,34 @@ watchEffect(() => {
 
 onMounted(() => {
   let context = graph.value.getContext('2d')
+  const theme = getChartTheme()
   let options = reactive({
     responsive: true,
     maintainAspectRatio: false,
+    scales: {
+      x: {
+        ticks: {
+          color: theme.tickColor,
+        },
+        grid: {
+          color: theme.gridColor,
+        },
+      },
+      y: {
+        ticks: {
+          color: theme.tickColor,
+        },
+        grid: {
+          color: theme.gridColor,
+        },
+      },
+    },
     plugins: {
       tooltip: {
         enabled: true,
+        backgroundColor: theme.tooltipBackground,
+        titleColor: theme.tooltipTitle,
+        bodyColor: theme.tooltipBody,
         callbacks: {
           label: function (context) {
             return utils.formatMoney(
@@ -91,16 +172,16 @@ onMounted(() => {
         fill: false,
         tension: 0.3,
         backgroundColor: 'rgba(230, 254, 249)',
-        borderColor: '#040405',
+        borderColor: theme.salesColor,
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,
         borderJoinStyle: 'miter',
-        pointBorderColor: '#040405',
-        pointBackgroundColor: '#fff',
+        pointBorderColor: theme.salesColor,
+         pointBackgroundColor: theme.pointBackground,
         pointBorderWidth: 1,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: '#040405',
+        pointHoverBackgroundColor: theme.salesColor,
         pointHoverBorderColor: 'rgba(220,220,220,1)',
         pointHoverBorderWidth: 2,
         pointRadius: 4,
@@ -118,7 +199,7 @@ onMounted(() => {
         borderDashOffset: 0.0,
         borderJoinStyle: 'miter',
         pointBorderColor: 'rgb(2, 201, 156)',
-        pointBackgroundColor: '#fff',
+         pointBackgroundColor: theme.pointBackground,
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: 'rgb(2, 201, 156)',
@@ -139,7 +220,7 @@ onMounted(() => {
         borderDashOffset: 0.0,
         borderJoinStyle: 'miter',
         pointBorderColor: 'rgb(255,0,0)',
-        pointBackgroundColor: '#fff',
+         pointBackgroundColor: theme.pointBackground,
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: 'rgb(255,0,0)',
@@ -160,7 +241,7 @@ onMounted(() => {
         borderDashOffset: 0.0,
         borderJoinStyle: 'miter',
         pointBorderColor: 'rgba(88, 81, 216, 1)',
-        pointBackgroundColor: '#fff',
+         pointBackgroundColor: theme.pointBackground,
         pointBorderWidth: 1,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: 'rgba(88, 81, 216, 1)',
@@ -178,6 +259,17 @@ onMounted(() => {
     data: data,
     options: options,
   })
+
+  window.addEventListener('invoiceshelf-theme-changed', applyThemeToChart)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('invoiceshelf-theme-changed', applyThemeToChart)
+
+  if (myLineChart) {
+    myLineChart.destroy()
+    myLineChart = null
+  }
 })
 
 function update() {

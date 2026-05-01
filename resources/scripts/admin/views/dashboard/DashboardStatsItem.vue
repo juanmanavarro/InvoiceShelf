@@ -10,6 +10,9 @@
       rounded
       shadow
       hover:bg-gray-50
+      text-gray-900
+      transition-colors
+      dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800
       xl:p-4
       lg:col-span-2
     "
@@ -17,10 +20,10 @@
     :to="route"
   >
     <div>
-      <span class="text-xl font-semibold leading-tight text-black xl:text-3xl">
+      <span class="text-xl font-semibold leading-tight text-black dark:text-gray-100 xl:text-3xl">
         <slot />
       </span>
-      <span class="block mt-1 text-sm leading-tight text-gray-500 xl:text-lg">
+      <span class="block mt-1 text-sm leading-tight text-gray-500 dark:text-gray-400 xl:text-lg">
         {{ label }}
       </span>
     </div>

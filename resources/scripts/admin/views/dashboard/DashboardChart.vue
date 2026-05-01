@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="dashboardStore.isDashboardDataLoaded"
-      class="grid grid-cols-10 mt-8 bg-white rounded shadow"
+      class="mt-8 grid grid-cols-10 rounded bg-white text-gray-900 shadow transition-colors dark:bg-gray-900 dark:text-gray-100"
     >
       <!-- Chart -->
       <div
@@ -50,14 +50,14 @@
           grid grid-cols-3
           col-span-10
           text-center
-          border-t border-l border-gray-200 border-solid
-          lg:border-t-0 lg:text-right lg:col-span-3
+           border-t border-l border-gray-200 border-solid dark:border-gray-800
+           lg:border-t-0 lg:text-right lg:col-span-3
           xl:col-span-2
           lg:grid-cols-1
         "
       >
         <div class="p-6">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-500 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.total_sales') }}
           </span>
           <br />
@@ -69,7 +69,7 @@
           </span>
         </div>
         <div class="p-6">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-500 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.total_receipts') }}
           </span>
           <br />
@@ -91,7 +91,7 @@
           </span>
         </div>
         <div class="p-6">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-500 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.total_expense') }}
           </span>
           <br />
@@ -116,11 +116,11 @@
           class="
             col-span-3
             p-6
-            border-t border-gray-200 border-solid
-            lg:col-span-1
+             border-t border-gray-200 border-solid dark:border-gray-800
+             lg:col-span-1
           "
         >
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-500 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.net_income') }}
           </span>
           <br />
