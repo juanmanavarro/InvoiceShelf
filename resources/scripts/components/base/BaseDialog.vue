@@ -62,6 +62,7 @@
               bg-white
               rounded-lg
               shadow-xl
+              dark:bg-gray-900
               sm:my-8 sm:align-middle sm:w-full sm:p-6
               relative
             "
@@ -99,12 +100,12 @@
               <div class="mt-3 text-center sm:mt-5">
                 <DialogTitle
                   as="h3"
-                  class="text-lg font-medium leading-6 text-gray-900"
+                  class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100"
                 >
                   {{ dialogStore.title }}
                 </DialogTitle>
                 <div class="mt-2">
-                  <p class="text-sm text-gray-500">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
                     {{ dialogStore.message }}
                   </p>
                 </div>

@@ -39,7 +39,7 @@ const props = defineProps({
   inputClass: {
     type: String,
     default:
-      'font-base block w-full sm:text-sm border-gray-200 rounded-md text-black',
+      'font-base block w-full sm:text-sm border-gray-200 rounded-md text-black bg-white dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500',
   },
   disabled: {
     type: Boolean,

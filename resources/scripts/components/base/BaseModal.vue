@@ -62,7 +62,7 @@
               my-4
               ${modalSize}
               sm:w-full
-              border-t-8 border-solid rounded shadow-xl  border-primary-500`"
+              border-t-8 border-solid rounded shadow-xl border-primary-500 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-white/10`"
             >
               <div
                 v-if="hasHeaderSlot"
@@ -76,6 +76,7 @@
                   font-medium
                   text-black
                   border-b border-gray-200 border-solid
+                  dark:border-gray-800 dark:text-gray-100
                 "
               >
                 <slot name="header" />

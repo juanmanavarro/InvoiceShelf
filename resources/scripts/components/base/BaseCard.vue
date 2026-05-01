@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-white rounded-lg shadow">
+  <div class="rounded-lg bg-white shadow transition-colors dark:bg-gray-900">
     <div
       v-if="hasHeaderSlot"
-      class="px-5 py-4 text-black border-b border-gray-100 border-solid"
+      class="border-b border-gray-100 border-solid px-5 py-4 text-black dark:border-gray-800 dark:text-gray-100"
     >
       <slot name="header" />
     </div>
@@ -11,7 +11,7 @@
     </div>
     <div
       v-if="hasFooterSlot"
-      class="px-5 py-4 border-t border-gray-100 border-solid sm:px-6"
+      class="border-t border-gray-100 border-solid px-5 py-4 dark:border-gray-800 sm:px-6"
     >
       <slot name="footer" />
     </div>

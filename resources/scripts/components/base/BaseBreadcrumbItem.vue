@@ -7,7 +7,7 @@
         text-sm
         font-medium
         leading-5
-        text-gray-900
+        text-gray-900 dark:text-gray-200
         outline-hidden
         focus:ring-2 focus:ring-offset-2 focus:ring-primary-400
       "
@@ -16,7 +16,7 @@
       {{ title }}
     </router-link>
 
-    <span v-if="!active" class="px-1">/</span>
+    <span v-if="!active" class="px-1 text-gray-400 dark:text-gray-500">/</span>
   </li>
 </template>
 

@@ -19,7 +19,7 @@
             ]"
             aria-hidden="true"
           >
-            <span class="rounded-full bg-white w-1.5 h-1.5" />
+            <span class="w-1.5 h-1.5 rounded-full bg-white dark:bg-gray-900" />
           </span>
           <div class="flex flex-col ml-3">
             <RadioGroupLabel
@@ -70,7 +70,7 @@ const props = defineProps({
   },
   unCheckedStateClass: {
     type: String,
-    default: 'bg-white ',
+    default: 'bg-white border-gray-300 dark:bg-gray-800 dark:border-gray-600',
   },
   optionGroupActiveStateClass: {
     type: String,
@@ -78,11 +78,11 @@ const props = defineProps({
   },
   checkedStateLabelClass: {
     type: String,
-    default: 'text-primary-900 ',
+    default: 'text-primary-900 dark:text-primary-400',
   },
   unCheckedStateLabelClass: {
     type: String,
-    default: 'text-gray-900',
+    default: 'text-gray-900 dark:text-gray-200',
   },
   optionGroupClass: {
     type: String,

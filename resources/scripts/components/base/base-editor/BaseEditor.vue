@@ -8,16 +8,16 @@
   </BaseContentPlaceholders>
   <div
     v-else
-    class="box-border w-full text-sm leading-8 text-left bg-white border border-gray-200 rounded-md min-h-[200px] overflow-hidden"
+    class="box-border w-full min-h-[200px] overflow-hidden rounded-md border border-gray-200 bg-white text-left text-sm leading-8 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
   >
     <div v-if="editor" class="editor-content">
-      <div class="flex justify-end p-2 border-b border-gray-200 md:hidden">
+      <div class="flex justify-end border-b border-gray-200 p-2 dark:border-gray-700 md:hidden">
         <BaseDropdown width-class="w-48">
           <template #activator>
             <div
-              class="flex items-center justify-center w-6 h-6 ml-2 text-sm text-black bg-white rounded-xs md:h-9 md:w-9"
+              class="ml-2 flex h-6 w-6 items-center justify-center rounded-xs bg-white text-sm text-black dark:bg-gray-800 dark:text-gray-100 md:h-9 md:w-9"
             >
-              <EllipsisVerticalIcon class="w-6 h-6 text-gray-600" />
+              <EllipsisVerticalIcon class="h-6 w-6 text-gray-600 dark:text-gray-300" />
             </div>
           </template>
           <div class="flex flex-wrap space-x-1">
@@ -25,36 +25,36 @@
               v-for="button in editorButtons"
               type="button"
               :key="button.name"
-              class="p-1 rounded hover:bg-gray-100"
+              class="rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="button.action"
             >
               <component
                 :is="button.icon"
                 v-if="button.icon"
-                class="w-4 h-4 text-gray-700 fill-gray-700"
+                class="h-4 w-4 fill-gray-700 text-gray-700 dark:fill-gray-300 dark:text-gray-300"
               />
-              <span v-else-if="button.text" class="px-1 text-sm font-medium text-gray-600">
+              <span v-else-if="button.text" class="px-1 text-sm font-medium text-gray-600 dark:text-gray-300">
                 {{ button.text }}
               </span>
             </button>
           </div>
         </BaseDropdown>
       </div>
-      <div class="hidden p-2 border-b border-gray-200 md:flex">
+      <div class="hidden border-b border-gray-200 p-2 dark:border-gray-700 md:flex">
         <div class="flex flex-wrap space-x-1">
           <button
               v-for="button in editorButtons"
               type="button"
               :key="button.name"
-              class="p-1 rounded hover:bg-gray-100"
+              class="rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="button.action"
             >
               <component
                 :is="button.icon"
                 v-if="button.icon"
-                class="w-4 h-4 text-gray-700 fill-gray-700"
+                class="h-4 w-4 fill-gray-700 text-gray-700 dark:fill-gray-300 dark:text-gray-300"
               />
-              <span v-else-if="button.text" class="px-1 text-sm font-medium text-gray-600">
+              <span v-else-if="button.text" class="px-1 text-sm font-medium text-gray-600 dark:text-gray-300">
                 {{ button.text }}
               </span>
             </button>
@@ -179,6 +179,7 @@ export default {
 .ProseMirror {
   min-height: 200px;
   padding: 8px 12px;
+  color: #111827;
   outline: none;
   @apply rounded-md rounded-tl-none rounded-tr-none border border-transparent;
 
@@ -239,6 +240,23 @@ export default {
     color: var(--color-primary-500);
     text-decoration: underline;
   }
+}
+
+.dark .ProseMirror {
+  color: #f3f4f6;
+}
+
+.dark .ProseMirror blockquote {
+  border-left-color: rgba(148, 163, 184, 0.45);
+}
+
+.dark .ProseMirror code {
+  background-color: rgba(148, 163, 184, 0.16);
+  color: #e5e7eb;
+}
+
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280;
 }
 
 .ProseMirror:focus {

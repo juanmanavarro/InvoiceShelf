@@ -13,20 +13,23 @@
 
     <div
       v-if="selectedCustomer"
-      class="
-        flex flex-col
-        p-4
-        bg-white
-        border border-gray-200 border-solid
-        min-h-[170px]
-        rounded-md
-      "
+        class="
+          flex flex-col
+          p-4
+          bg-white
+          border border-gray-200 border-solid
+          min-h-[170px]
+          rounded-md
+          text-gray-900
+          transition-colors
+          dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100
+        "
       @click.stop
     >
       <div class="flex relative justify-between mb-2">
         <BaseText
           :text="selectedCustomer.name"
-          class="flex-1 text-base font-medium text-left text-gray-900"
+          class="flex-1 text-base font-medium text-left text-gray-900 dark:text-gray-100"
         />
         <div class="flex">
           <a
@@ -73,7 +76,7 @@
               mb-1
               text-sm
               font-medium
-              text-left text-gray-400
+               text-left text-gray-400 dark:text-gray-500
               uppercase
               whitespace-nowrap
             "
@@ -123,7 +126,7 @@
               mb-1
               text-sm
               font-medium
-              text-left text-gray-400
+               text-left text-gray-400 dark:text-gray-500
               uppercase
               whitespace-nowrap
             "
@@ -186,12 +189,14 @@
             justify-center
             px-0
             p-0
-            py-16
-            bg-white
-            border border-gray-200 border-solid
-            rounded-md
-            min-h-[170px]
-          "
+             py-16
+             bg-white
+             border border-gray-200 border-solid
+             rounded-md
+             min-h-[170px]
+             transition-colors
+             dark:border-gray-700 dark:bg-gray-900
+           "
         >
           <BaseIcon
             name="UserIcon"
@@ -203,14 +208,14 @@
               p-2
               mr-5
               text-sm text-white
-              bg-gray-200
-              rounded-full
+               bg-gray-200 dark:bg-gray-700
+               rounded-full
               font-base
             "
           />
 
           <div class="mt-1">
-            <label class="text-lg font-medium text-gray-900">
+            <label class="text-lg font-medium text-gray-900 dark:text-gray-100">
               {{ $t('customers.new_customer') }}
               <span class="text-red-500"> * </span>
             </label>
@@ -239,13 +244,14 @@
             v-slot="{ close }"
             focus
             static
-            class="
-              overflow-hidden
-              rounded-md
-              shadow-lg
-              ring-1 ring-black/5
-              bg-white
-            "
+             class="
+               overflow-hidden
+               rounded-md
+               shadow-lg
+               ring-1 ring-black/5
+               bg-white
+               dark:bg-gray-900 dark:ring-white/10
+             "
           >
             <div class="relative">
               <BaseInput
@@ -263,8 +269,8 @@
                   flex flex-col
                   overflow-auto
                   list
-                  border-t border-gray-200
-                "
+                   border-t border-gray-200 dark:border-gray-800
+                 "
               >
                 <li
                   v-for="(customer, index) in customerStore.customers"
@@ -274,11 +280,11 @@
                     flex
                     px-6
                     py-2
-                    border-b border-gray-200 border-solid
-                    cursor-pointer
-                    hover:cursor-pointer hover:bg-gray-100
-                    focus:outline-hidden focus:bg-gray-100
-                    last:border-b-0
+                     border-b border-gray-200 border-solid dark:border-gray-800
+                     cursor-pointer
+                     hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800
+                     focus:outline-hidden focus:bg-gray-100 dark:focus:bg-gray-800
+                     last:border-b-0
                   "
                   @click="selectNewCustomer(customer.id, close)"
                 >
@@ -295,8 +301,8 @@
                       font-semibold
                       leading-9
                       text-white
-                      bg-gray-300
-                      rounded-full
+                       bg-gray-300 dark:bg-gray-700
+                       rounded-full
                       avatar
                     "
                   >
@@ -322,17 +328,17 @@
                         m-0
                         text-sm
                         font-medium
-                        text-gray-400
-                        cursor-pointer
+                         text-gray-400 dark:text-gray-500
+                         cursor-pointer
                       "
                     />
                   </div>
                 </li>
                 <div
                   v-if="customerStore.customers.length === 0"
-                  class="flex justify-center p-5 text-gray-400"
+                  class="flex justify-center p-5 text-gray-400 dark:text-gray-500"
                 >
-                  <label class="text-base text-gray-500 cursor-pointer">
+                  <label class="text-base text-gray-500 cursor-pointer dark:text-gray-400">
                     {{ $t('customers.no_customers_found') }}
                   </label>
                 </div>
@@ -350,11 +356,11 @@
                 w-full
                 px-2
                 py-3
-                bg-gray-200
-                border-none
-                outline-hidden
-                focus:bg-gray-300
-              "
+                 bg-gray-200 dark:bg-gray-800
+                 border-none
+                 outline-hidden
+                 focus:bg-gray-300 dark:focus:bg-gray-700
+               "
               @click="openCustomerModal"
             >
               <BaseIcon name="UserPlusIcon" class="text-primary-400" />

@@ -19,7 +19,7 @@
       hover:border-gray-300
       group
       min-h-[100px]
-      bg-gray-50
+      bg-gray-50 dark:border-gray-700 dark:bg-gray-900
     "
     :class="avatar ? 'w-32 h-32' : 'w-full'"
   >
@@ -48,7 +48,7 @@
 
       <a
         href="#"
-        class="absolute z-30 bg-white rounded-full -bottom-3 -right-3 group"
+        class="absolute z-30 rounded-full bg-white -bottom-3 -right-3 group dark:bg-gray-800"
         @click.prevent.stop="onBrowse"
       >
         <BaseIcon
@@ -70,7 +70,7 @@
         name="CloudArrowUpIcon"
         class="h-6 mb-2 text-xl leading-6 text-gray-400"
       />
-      <p class="text-xs leading-4 text-center text-gray-400">
+      <p class="text-xs leading-4 text-center text-gray-400 dark:text-gray-500">
         {{ $t('general.file_upload.drag_a_file') }}
         <a
           class="
@@ -87,14 +87,14 @@
         </a>
         {{ $t('general.file_upload.to_choose') }}
       </p>
-      <p class="text-xs leading-4 text-center text-gray-400 mt-2">
+      <p class="mt-2 text-xs leading-4 text-center text-gray-400 dark:text-gray-500">
         {{ recommendedText }}
       </p>
     </div>
 
     <div
       v-else-if="localFiles.length && avatar && !multiple"
-      class="flex w-full h-full border border-gray-200 rounded justify-center items-center"
+      class="flex h-full w-full items-center justify-center rounded border border-gray-200 dark:border-gray-700 dark:bg-gray-900"
     >
       <img
         v-if="localFiles[0].image"
@@ -110,8 +110,8 @@
           flex
           justify-center
           items-center
-          text-gray-400
-          flex-col
+           text-gray-400 dark:text-gray-500
+           flex-col
           space-y-2
           px-2
           py-4
@@ -137,8 +137,8 @@
         <p
           v-if="localFiles[0].name"
           class="
-            text-gray-600
-            font-medium
+               text-gray-600 dark:text-gray-300
+             font-medium
             text-sm
             truncate
             overflow-hidden
@@ -160,18 +160,19 @@
           justify-center
           w-8
           h-8
-          bg-white
-          border border-gray-200
-          rounded-full
-          shadow-md
-          -bottom-3
+           bg-white
+           border border-gray-200
+           rounded-full
+           shadow-md
+           dark:border-gray-700 dark:bg-gray-800
+           -bottom-3
           -right-3
           group
           hover:border-gray-300
         "
         @click.prevent.stop="onAvatarRemove(localFiles[0])"
       >
-        <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black" />
+        <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black dark:text-gray-100" />
       </a>
     </div>
 
@@ -188,11 +189,12 @@
           block
           p-2
           m-2
-          bg-white
-          border border-gray-200
-          rounded
-          hover:border-gray-500
-          relative
+           bg-white
+           border border-gray-200
+           rounded
+           hover:border-gray-500
+           dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-500
+           relative
           max-w-md
         "
         @click.prevent
@@ -211,8 +213,8 @@
             flex
             justify-center
             items-center
-            text-gray-400
-            flex-col
+             text-gray-400 dark:text-gray-500
+             flex-col
             space-y-2
             px-2
             py-4
@@ -238,8 +240,8 @@
           <p
             v-if="localFile.name"
             class="
-              text-gray-600
-              font-medium
+               text-gray-600 dark:text-gray-300
+               font-medium
               text-sm
               truncate
               overflow-hidden
@@ -261,18 +263,19 @@
             justify-center
             w-8
             h-8
-            bg-white
-            border border-gray-200
-            rounded-full
-            shadow-md
-            -bottom-3
+             bg-white
+             border border-gray-200
+             rounded-full
+             shadow-md
+             dark:border-gray-700 dark:bg-gray-800
+             -bottom-3
             -right-3
             group
             hover:border-gray-300
           "
           @click.prevent.stop="onFileRemove(index)"
         >
-          <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black" />
+          <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black dark:text-gray-100" />
         </span>
       </a>
     </div>
@@ -286,11 +289,12 @@
           block
           p-2
           m-2
-          bg-white
-          border border-gray-200
-          rounded
-          hover:border-gray-500
-          relative
+           bg-white
+           border border-gray-200
+           rounded
+           hover:border-gray-500
+           dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-500
+           relative
           max-w-md
         "
         @click.prevent
@@ -309,8 +313,8 @@
             flex
             justify-center
             items-center
-            text-gray-400
-            flex-col
+             text-gray-400 dark:text-gray-500
+             flex-col
             space-y-2
             px-2
             py-4
@@ -336,8 +340,8 @@
           <p
             v-if="localFile.name"
             class="
-              text-gray-600
-              font-medium
+               text-gray-600 dark:text-gray-300
+               font-medium
               text-sm
               truncate
               overflow-hidden
@@ -359,18 +363,19 @@
             justify-center
             w-8
             h-8
-            bg-white
-            border border-gray-200
-            rounded-full
-            shadow-md
-            -bottom-3
+             bg-white
+             border border-gray-200
+             rounded-full
+             shadow-md
+             dark:border-gray-700 dark:bg-gray-800
+             -bottom-3
             -right-3
             group
             hover:border-gray-300
           "
           @click.prevent.stop="onFileRemove(index)"
         >
-          <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black" />
+          <BaseIcon name="XMarkIcon" class="h-4 text-xl leading-6 text-black dark:text-gray-100" />
         </span>
       </a>
     </div>

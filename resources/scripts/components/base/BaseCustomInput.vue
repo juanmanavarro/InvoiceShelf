@@ -27,7 +27,7 @@
 
         <div class="flex p-2">
           <ul v-for="(type, index) in fieldList" :key="index" class="list-none">
-            <li class="mb-1 ml-2 text-xs font-semibold text-gray-500 uppercase">
+            <li class="mb-1 ml-2 text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">
               {{ type.label }}
             </li>
 
@@ -39,7 +39,7 @@
                 text-sm
                 font-normal
                 cursor-pointer
-                hover:bg-gray-100
+                hover:bg-gray-100 dark:hover:bg-gray-800
                 rounded
                 ml-1
                 py-0.5
@@ -49,7 +49,7 @@
               <div class="flex pl-1">
                 <BaseIcon
                   name="ChevronDoubleRightIcon"
-                  class="h-3 mt-1 mr-2 text-gray-400"
+                  class="h-3 mt-1 mr-2 text-gray-400 dark:text-gray-500"
                 />
 
                 {{ field.label }}

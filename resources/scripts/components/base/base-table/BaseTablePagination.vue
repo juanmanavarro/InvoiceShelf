@@ -9,6 +9,9 @@
       py-3
       bg-white
       border-t border-gray-200
+      text-gray-700
+      transition-colors
+      dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300
       sm:px-6
     "
   >
@@ -16,7 +19,7 @@
       <a
         href="#"
         :class="{
-          'disabled cursor-normal pointer-events-none !bg-gray-100 !text-gray-400':
+          'disabled cursor-normal pointer-events-none !bg-gray-100 !text-gray-400 dark:!bg-gray-800 dark:!text-gray-500':
             pagination.currentPage === 1,
         }"
         class="
@@ -27,11 +30,12 @@
           py-2
           text-sm
           font-medium
-          text-gray-700
-          bg-white
-          border border-gray-300
-          rounded-md
-          hover:bg-gray-50
+           text-gray-700
+           bg-white
+           border border-gray-300
+           rounded-md
+           hover:bg-gray-50
+           dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800
         "
         @click="pageClicked(pagination.currentPage - 1)"
       >
@@ -40,7 +44,7 @@
       <a
         href="#"
         :class="{
-          'disabled cursor-default pointer-events-none !bg-gray-100 !text-gray-400':
+          'disabled cursor-default pointer-events-none !bg-gray-100 !text-gray-400 dark:!bg-gray-800 dark:!text-gray-500':
             pagination.currentPage === pagination.totalPages,
         }"
         class="
@@ -52,11 +56,12 @@
           ml-3
           text-sm
           font-medium
-          text-gray-700
-          bg-white
-          border border-gray-300
-          rounded-md
-          hover:bg-gray-50
+           text-gray-700
+           bg-white
+           border border-gray-300
+           rounded-md
+           hover:bg-gray-50
+           dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800
         "
         @click="pageClicked(pagination.currentPage + 1)"
       >
@@ -65,7 +70,7 @@
     </div>
     <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
       <div>
-        <p class="text-sm text-gray-700">
+        <p class="text-sm text-gray-700 dark:text-gray-300">
           {{ $t('general.pagination.showing') }}
           {{ ' ' }}
           <span
@@ -113,7 +118,7 @@
           <a
             href="#"
             :class="{
-              'disabled cursor-normal pointer-events-none !bg-gray-100 !text-gray-400':
+              'disabled cursor-normal pointer-events-none !bg-gray-100 !text-gray-400 dark:!bg-gray-800 dark:!text-gray-500':
                 pagination.currentPage === 1,
             }"
             class="
@@ -124,11 +129,12 @@
               py-2
               text-sm
               font-medium
-              text-gray-500
-              bg-white
-              border border-gray-300
-              rounded-l-md
-              hover:bg-gray-50
+               text-gray-500
+               bg-white
+               border border-gray-300
+               rounded-l-md
+               hover:bg-gray-50
+               dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800
             "
             @click="pageClicked(pagination.currentPage - 1)"
           >
@@ -142,8 +148,8 @@
             :class="{
               'z-10 bg-primary-50 border-primary-500 text-primary-600':
                 isActive(1),
-              'bg-white border-gray-300 text-gray-500 hover:bg-gray-50':
-                !isActive(1),
+               'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800':
+                 !isActive(1),
             }"
             class="
               relative
@@ -170,10 +176,11 @@
               py-2
               text-sm
               font-medium
-              text-gray-700
-              bg-white
-              border border-gray-300
-            "
+               text-gray-700
+               bg-white
+               border border-gray-300
+               dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300
+             "
           >
             ...
           </span>
@@ -184,8 +191,8 @@
             :class="{
               'z-10 bg-primary-50 border-primary-500 text-primary-600':
                 isActive(page),
-              'bg-white border-gray-300 text-gray-500 hover:bg-gray-50':
-                !isActive(page),
+               'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800':
+                 !isActive(page),
               disabled: page === '...',
             }"
             class="
@@ -196,11 +203,12 @@
               py-2
               text-sm
               font-medium
-              text-gray-500
-              bg-white
-              border border-gray-300
-              hover:bg-gray-50
-              md:inline-flex
+               text-gray-500
+               bg-white
+               border border-gray-300
+               hover:bg-gray-50
+               dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800
+               md:inline-flex
             "
             @click="pageClicked(page)"
           >
@@ -217,10 +225,11 @@
               py-2
               text-sm
               font-medium
-              text-gray-700
-              bg-white
-              border border-gray-300
-            "
+               text-gray-700
+               bg-white
+               border border-gray-300
+               dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300
+             "
           >
             ...
           </span>
@@ -231,8 +240,8 @@
             :class="{
               'z-10 bg-primary-50 border-primary-500 text-primary-600':
                 isActive(pagination.totalPages),
-              'bg-white border-gray-300 text-gray-500 hover:bg-gray-50':
-                !isActive(pagination.totalPages),
+               'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800':
+                 !isActive(pagination.totalPages),
             }"
             class="
               relative
@@ -258,15 +267,16 @@
               py-2
               text-sm
               font-medium
-              text-gray-500
-              bg-white
-              border border-gray-300
-              rounded-r-md
-              hover:bg-gray-50
-            "
+               text-gray-500
+               bg-white
+               border border-gray-300
+               rounded-r-md
+               hover:bg-gray-50
+               dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800
+             "
             :class="{
-              'disabled cursor-default pointer-events-none !bg-gray-100 !text-gray-400':
-                pagination.currentPage === pagination.totalPages,
+               'disabled cursor-default pointer-events-none !bg-gray-100 !text-gray-400 dark:!bg-gray-800 dark:!text-gray-500':
+                 pagination.currentPage === pagination.totalPages,
             }"
             @click="pageClicked(pagination.currentPage + 1)"
           >

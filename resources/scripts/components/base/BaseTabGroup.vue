@@ -3,7 +3,7 @@
     <TabGroup :default-index="defaultIndex" @change="onChange">
       <TabList
         :class="[
-          'flex border-b border-gray-200',
+          'flex border-b border-gray-200 dark:border-gray-800',
           'relative overflow-x-auto overflow-y-hidden',
           'lg:pb-0 lg:ml-0',
         ]"
@@ -18,8 +18,8 @@
             :class="[
               'px-8 py-2 text-sm leading-5 font-medium flex items-center relative border-b-2 mt-4 focus:outline-hidden whitespace-nowrap',
               selected
-                ? ' border-primary-400 text-black font-medium'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                ? 'border-primary-400 text-black font-medium dark:text-gray-100'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:border-gray-700',
             ]"
           >
             {{ tab.title }}

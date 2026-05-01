@@ -64,6 +64,7 @@
         border border-r-0 border-gray-200
         rounded-l-md
         bg-gray-50
+        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300
         sm:text-sm
       "
     >
@@ -82,7 +83,7 @@
         pointer-events-none
       "
     >
-      <span class="text-gray-500 sm:text-sm">
+      <span class="text-gray-500 sm:text-sm dark:text-gray-300">
         {{ inlineAddon }}
       </span>
     </div>
@@ -199,7 +200,7 @@ const props = defineProps({
   defaultInputClass: {
     type: String,
     default:
-      'font-base block w-full sm:text-sm border-gray-200 rounded-md text-black',
+        'font-base block w-full sm:text-sm border-gray-200 rounded-md text-black bg-white dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500',
   },
   iconLeftClass: {
     type: String,
@@ -258,7 +259,7 @@ const inputInvalidClass = computed(() => {
 
 const inputDisabledClass = computed(() => {
   if (props.disabled) {
-    return `border-gray-100 bg-gray-100 !text-gray-400 ring-gray-200 focus:ring-gray-200 focus:border-gray-100`
+      return `border-gray-100 bg-gray-100 !text-gray-400 ring-gray-200 focus:ring-gray-200 focus:border-gray-100 dark:border-gray-800 dark:bg-gray-800 dark:!text-gray-500 dark:ring-gray-800 dark:focus:ring-gray-800 dark:focus:border-gray-800`
   }
 
   return ''

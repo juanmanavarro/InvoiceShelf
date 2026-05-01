@@ -9,6 +9,8 @@
             bg-white
             border-b border-gray-200
             shadow
+            transition-colors
+            dark:border-gray-800 dark:bg-gray-900
             sm:rounded-lg
           "
         >
@@ -22,7 +24,8 @@
                   :class="[
                     getThClass(column),
                     {
-                      'text-bold text-black': sort.fieldName === column.key,
+                      'text-bold text-black dark:text-gray-100':
+                        sort.fieldName === column.key,
                     },
                   ]"
                   @click="changeSorting(column)"
@@ -51,7 +54,11 @@
               <tr
                 v-for="placeRow in placeholderCount"
                 :key="placeRow"
-                :class="placeRow % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+                :class="
+                  placeRow % 2 === 0
+                    ? 'bg-white dark:bg-gray-900'
+                    : 'bg-gray-50 dark:bg-gray-800/70'
+                "
               >
                 <td
                   v-for="column in columns"
@@ -75,7 +82,11 @@
               <tr
                 v-for="(row, index) in sortedRows"
                 :key="row.data?.id ?? index"
-                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+                :class="
+                  index % 2 === 0
+                    ? 'bg-white dark:bg-gray-900'
+                    : 'bg-gray-50 dark:bg-gray-800/70'
+                "
               >
                 <td
                   v-for="column in columns"
@@ -103,8 +114,8 @@
               justify-center
               w-full
               h-full
-              bg-white/60
-            "
+               bg-white/60 dark:bg-gray-950/70
+             "
           >
             <SpinnerIcon class="w-10 h-10 text-primary-500" />
           </div>
@@ -114,7 +125,7 @@
               !loading && !isLoading && sortedRows && sortedRows.length === 0
             "
             class="
-              text-center text-gray-500
+               text-center text-gray-500 dark:text-gray-400
               pb-2
               flex
               h-[160px]
@@ -163,9 +174,9 @@ const props = defineProps({
   sortOrder: { type: String, default: '' },
   tableClass: {
     type: String,
-    default: 'min-w-full divide-y divide-gray-200',
+    default: 'min-w-full divide-y divide-gray-200 dark:divide-gray-800',
   },
-  theadClass: { type: String, default: 'bg-gray-50' },
+  theadClass: { type: String, default: 'bg-gray-50 dark:bg-gray-800/80' },
   tbodyClass: { type: String, default: '' },
   noResultsMessage: {
     type: String,
@@ -236,7 +247,7 @@ function getColumn(columnName) {
 
 function getThClass(column) {
   let classes =
-    'whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+    'whitespace-nowrap px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300'
 
   if (column.defaultThClass) {
     classes = column.defaultThClass
@@ -256,7 +267,7 @@ function getThClass(column) {
 }
 
 function getTdClass(column) {
-  let classes = 'px-6 py-4 text-sm text-gray-500 whitespace-nowrap'
+  let classes = 'px-6 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-300'
 
   if (column.defaultTdClass) {
     classes = column.defaultTdClass

@@ -24,15 +24,15 @@ export default {
     const badgeColorClasses = computed(() => {
       switch (props.status) {
         case 'PAID':
-          return 'bg-primary-300/25 text-primary-800 uppercase font-normal text-center'
+          return 'rounded-full bg-primary-300/25 text-primary-800 uppercase font-medium text-center dark:bg-primary-500/20 dark:text-primary-200'
         case 'UNPAID':
-          return ' bg-yellow-500/25 text-yellow-900 uppercase font-normal text-center '
+          return 'rounded-full bg-yellow-500/25 text-yellow-900 uppercase font-medium text-center dark:bg-yellow-500/20 dark:text-yellow-200'
         case 'PARTIALLY_PAID':
-          return 'bg-blue-400/25 text-blue-900 uppercase font-normal text-center'
+          return 'rounded-full bg-blue-400/25 text-blue-900 uppercase font-medium text-center dark:bg-blue-500/20 dark:text-blue-200'
         case 'OVERDUE':
-          return 'bg-red-300/50 px-2  py-1 text-sm  text-red-900 uppercase font-normal text-center'
+          return 'rounded-full bg-red-300/50 px-2 py-1 text-sm text-red-900 uppercase font-medium text-center dark:bg-red-500/20 dark:text-red-200'
         default:
-          return 'bg-gray-500/25 text-gray-900 uppercase font-normal text-center'
+          return 'rounded-full bg-gray-500/25 text-gray-900 uppercase font-medium text-center dark:bg-gray-700 dark:text-gray-100'
       }
     })
     return { badgeColorClasses }
