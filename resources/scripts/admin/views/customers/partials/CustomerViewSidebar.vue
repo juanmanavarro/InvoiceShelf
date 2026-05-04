@@ -10,6 +10,9 @@
       pb-[6.6rem]
       ml-56
       bg-white
+      text-gray-900
+      transition-colors
+      dark:bg-gray-900 dark:text-gray-100
       xl:ml-64
       w-88
       xl:block
@@ -23,7 +26,7 @@
         px-4
         pt-8
         pb-2
-        border border-gray-200 border-solid
+        border border-gray-200 border-solid dark:border-gray-800
         height-full
       "
     >
@@ -58,7 +61,7 @@
               pb-2
               mb-2
               text-sm
-              border-b border-gray-200 border-solid
+              border-b border-gray-200 border-solid dark:border-gray-800 dark:text-gray-200
             "
           >
             {{ $t('general.sort_by') }}
@@ -111,7 +114,7 @@
       class="
         h-full
         overflow-y-scroll
-        border-l border-gray-200 border-solid
+        border-l border-gray-200 border-solid dark:border-gray-800
         sidebar
         base-scroll
       "
@@ -122,9 +125,9 @@
           :id="'customer-' + customer.id"
           :to="`/admin/customers/${customer.id}/view`"
           :class="[
-            'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-l-transparent',
+            'flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 border-l-4 border-l-transparent',
             {
-              'bg-gray-100 border-l-4 border-l-primary-500 border-solid':
+              'bg-gray-100 dark:bg-gray-800 border-l-4 border-l-primary-500 border-solid':
                 hasActiveUrl(customer.id),
             },
           ]"
@@ -139,7 +142,7 @@
                 not-italic
                 font-normal
                 leading-5
-                text-black
+                text-black dark:text-gray-100
                 capitalize
                 truncate
               "
@@ -154,11 +157,11 @@
                 not-italic
                 font-medium
                 leading-5
-                text-gray-600
+                text-gray-600 dark:text-gray-400
               "
             />
           </div>
-          <div class="flex-1 font-bold text-right whitespace-nowrap">
+          <div class="flex-1 font-bold text-right whitespace-nowrap dark:text-gray-100">
             <BaseFormatMoney
               :amount="customer.due_amount!==null ? customer.due_amount : 0"
               :currency="customer.currency"
@@ -173,7 +176,7 @@
       </div>
       <p
         v-if="!customerList?.length && !isFetching"
-        class="flex justify-center px-4 mt-5 text-sm text-gray-600"
+        class="flex justify-center px-4 mt-5 text-sm text-gray-600 dark:text-gray-400"
       >
         {{ $t('customers.no_matching_customers') }}
       </p>

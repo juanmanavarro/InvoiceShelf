@@ -7,20 +7,14 @@
     leave-from-class="opacity-100"
     leave-to-class="opacity-0"
   >
-    <div v-show="show" class="relative z-10 p-4 md:p-8 bg-gray-200 rounded">
+    <div
+      v-show="show"
+      class="relative z-10 rounded border border-gray-200 bg-gray-100 p-4 text-gray-900 transition-colors md:p-8 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+    >
       <slot name="filter-header" />
 
       <label
-        class="
-          absolute
-          text-sm
-          leading-snug
-          text-gray-900
-          cursor-pointer
-          hover:text-gray-700
-          top-2.5
-          right-3.5
-        "
+        class="absolute top-2.5 right-3.5 cursor-pointer text-sm leading-snug text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
         @click="$emit('clear')"
       >
         {{ $t('general.clear_all') }}

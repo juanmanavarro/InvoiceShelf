@@ -5,7 +5,7 @@
     <div v-else class="grid grid-cols-12">
       <div class="col-span-12 xl:col-span-9 xxl:col-span-10">
         <div class="flex justify-between mt-1 mb-6">
-          <h6 class="flex items-center">
+          <h6 class="flex items-center text-gray-900 dark:text-gray-100">
             <BaseIcon name="ChartBarSquareIcon" class="h-5 text-primary-400" />
             {{ $t('dashboard.monthly_chart.title') }}
           </h6>
@@ -47,7 +47,7 @@
         "
       >
         <div class="px-6 py-2">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-600 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.total_sales') }}
           </span>
           <br />
@@ -63,7 +63,7 @@
         </div>
 
         <div class="px-6 py-2">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-600 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.total_receipts') }}
           </span>
           <br />
@@ -81,7 +81,7 @@
         </div>
 
         <div class="px-6 py-2">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-600 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.total_expense') }}
           </span>
           <br />
@@ -98,7 +98,7 @@
         </div>
 
         <div class="px-6 py-2">
-          <span class="text-xs leading-5 lg:text-sm">
+          <span class="text-xs leading-5 text-gray-600 dark:text-gray-400 lg:text-sm">
             {{ $t('dashboard.chart_info.net_income') }}
           </span>
           <br />
