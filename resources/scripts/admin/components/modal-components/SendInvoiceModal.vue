@@ -184,6 +184,7 @@ const invoiceStore = useInvoiceStore()
 const mailDriverStore = useMailDriverStore()
 
 const { t } = useI18n()
+const defaultInvoiceBcc = 'hola@juanmanavar.ro'
 let isLoading = ref(false)
 const previewContent = ref('')
 const isPreview = ref(false)
@@ -203,7 +204,7 @@ const invoiceMailForm = reactive({
   from: null,
   to: null,
   cc: null,
-  bcc: null,
+  bcc: defaultInvoiceBcc,
   subject: t('invoices.new_invoice'),
   body: null,
 })
@@ -253,6 +254,8 @@ function cancelPreview() {
 }
 
 async function setInitialData() {
+  invoiceMailForm.bcc = defaultInvoiceBcc
+
   let admin = await companyStore.fetchBasicMailConfig()
 
   invoiceMailForm.id = modalStore.id

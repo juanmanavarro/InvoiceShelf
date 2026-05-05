@@ -477,6 +477,7 @@ class Invoice extends Model implements HasMedia
         $data['company'] = Company::find($this->company_id);
         $data['subject'] = $this->getEmailString('Nueva factura de {COMPANY_NAME}');
         $data['body'] = $this->getEmailString($data['body']);
+        $data['bcc'] = empty($data['bcc']) ? 'hola@juanmanavar.ro' : $data['bcc'];
         $data['attach']['data'] = ($this->getEmailAttachmentSetting()) ? $this->getPDFData() : null;
 
         return $data;

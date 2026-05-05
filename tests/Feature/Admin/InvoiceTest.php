@@ -276,7 +276,8 @@ test('send invoice to customer', function () {
 
     $this->assertEquals($invoice2->status, Invoice::STATUS_SENT);
     Mail::assertSent(SendInvoiceMail::class, function (SendInvoiceMail $mail) use ($invoice2) {
-        return $mail->data['subject'] === 'Nueva factura de '.$invoice2->company->name;
+        return $mail->data['subject'] === 'Nueva factura de '.$invoice2->company->name
+            && $mail->hasBcc('hola@juanmanavar.ro');
     });
 });
 
