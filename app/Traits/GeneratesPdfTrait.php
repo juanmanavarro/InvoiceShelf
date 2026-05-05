@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\App;
 
 trait GeneratesPdfTrait
 {
-    public function getGeneratedPDFOrStream($collection_name)
+    public function getGeneratedPDFOrStream($collection_name, bool $download = false)
     {
+        $disposition = $download ? 'attachment' : 'inline';
         $pdf = $this->getGeneratedPDF($collection_name);
         if ($pdf && file_exists($pdf['path'])) {
             return response()->make(file_get_contents($pdf['path']), 200, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="'.$this->getPdfDownloadFileName($collection_name, $pdf['file_name']).'"',
+                'Content-Disposition' => $disposition.'; filename="'.$this->getPdfDownloadFileName($collection_name, $pdf['file_name']).'"',
             ]);
         }
 
@@ -29,7 +30,7 @@ trait GeneratesPdfTrait
 
         return response()->make($pdf->stream(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$this->getPdfDownloadFileName($collection_name).'"',
+            'Content-Disposition' => $disposition.'; filename="'.$this->getPdfDownloadFileName($collection_name).'"',
         ]);
     }
 

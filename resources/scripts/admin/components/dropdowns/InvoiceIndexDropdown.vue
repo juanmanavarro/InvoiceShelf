@@ -30,6 +30,15 @@
       {{ $t('general.copy_pdf_url') }}
     </BaseDropdownItem>
 
+    <!-- Download PDF -->
+    <BaseDropdownItem v-if="row.unique_hash" @click="downloadPdf">
+      <BaseIcon
+        name="ArrowDownTrayIcon"
+        class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
+      />
+      {{ $t('general.download_pdf') }}
+    </BaseDropdownItem>
+
     <!-- View Invoice  -->
     <router-link
       v-if="
@@ -257,5 +266,9 @@ function copyPdfUrl() {
     type: 'success',
     message: t('general.copied_pdf_url_clipboard'),
   })
+}
+
+function downloadPdf() {
+  window.location.href = `/invoices/pdf/${props.row.unique_hash}?download=1`
 }
 </script>

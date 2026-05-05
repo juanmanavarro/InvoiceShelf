@@ -20,6 +20,6 @@ class InvoicePdfController extends Controller
             return $invoice->getPDFData();
         }
 
-        return $invoice->getGeneratedPDFOrStream('invoice');
+        return $invoice->getGeneratedPDFOrStream('invoice', $request->boolean('download'));
     }
 }
