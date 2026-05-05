@@ -120,7 +120,7 @@
       </div>
     </form>
     <div v-else>
-      <div class="my-6 mx-4 border border-gray-200 relative">
+      <div class="my-6 mx-4 border border-gray-200 relative dark:border-gray-700">
         <BaseButton
           class="absolute top-4 right-4"
           :disabled="isLoading"
@@ -132,7 +132,7 @@
         </BaseButton>
 
         <pre
-          class="w-full min-h-[500px] whitespace-pre-wrap break-words p-6 text-sm leading-6 text-gray-900"
+          class="w-full min-h-[500px] whitespace-pre-wrap break-words p-6 text-sm leading-6 text-gray-900 dark:bg-gray-900 dark:text-gray-100"
         >{{ previewContent }}</pre>
       </div>
       <div
