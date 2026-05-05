@@ -298,11 +298,12 @@ class Invoice extends Model implements HasMedia
         })->when($filters['customer_id'] ?? null, function ($query, $customerId) {
             $query->where('customer_id', $customerId);
         })->when($filters['orderByField'] ?? null, function ($query, $orderByField) use ($filters) {
-            $orderBy = $filters['orderBy'] ?? 'desc';
+            $orderBy = strtolower($filters['orderBy'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
 
             if ($orderByField === 'invoice_date') {
                 $query->orderByRaw('case when status = ? then 1 else 0 end asc', [self::STATUS_DRAFT])
-                    ->orderBy($orderByField, $orderBy);
+                    ->orderByRaw("date(invoice_date) {$orderBy}")
+                    ->orderByRaw("case when instr(invoice_number, '/') > 0 then substr(invoice_number, 1, instr(invoice_number, '/') - 1) + 0 else sequence_number end desc");
 
                 return;
             }
@@ -310,7 +311,8 @@ class Invoice extends Model implements HasMedia
             $query->orderBy($orderByField, $orderBy);
         }, function ($query) {
             $query->orderByRaw('case when status = ? then 1 else 0 end asc', [self::STATUS_DRAFT])
-                ->orderBy('invoice_date', 'desc');
+                ->orderByRaw('date(invoice_date) desc')
+                ->orderByRaw("case when instr(invoice_number, '/') > 0 then substr(invoice_number, 1, instr(invoice_number, '/') - 1) + 0 else sequence_number end desc");
         });
     }
 

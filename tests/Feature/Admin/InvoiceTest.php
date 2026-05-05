@@ -63,29 +63,37 @@ test('invoice index includes project custom field', function () {
         ->assertJsonPath('data.0.fields.0.default_answer', 'Proyecto Alpha');
 });
 
-test('get invoices orders by invoice date descending by default and puts drafts last', function () {
-    $recentInvoice = Invoice::factory()->create([
-        'invoice_number' => 'INV-DATE-RECENT',
+test('get invoices orders by invoice date descending and invoice number by default and puts drafts last', function () {
+    $recentHigherNumberInvoice = Invoice::factory()->create([
+        'invoice_number' => '39/2026',
+        'sequence_number' => 1,
         'status' => Invoice::STATUS_SENT,
-        'invoice_date' => '2024-02-01',
+        'invoice_date' => '2099-05-05 09:00:00',
+    ]);
+
+    $recentLowerNumberInvoice = Invoice::factory()->create([
+        'invoice_number' => '38/2026',
+        'sequence_number' => 999,
+        'status' => Invoice::STATUS_SENT,
+        'invoice_date' => '2099-05-05 18:00:00',
     ]);
 
     $olderInvoice = Invoice::factory()->create([
         'invoice_number' => 'INV-DATE-OLDER',
         'status' => Invoice::STATUS_SENT,
-        'invoice_date' => '2024-01-01',
+        'invoice_date' => '2099-05-04',
     ]);
 
     $draftInvoice = Invoice::factory()->create([
         'invoice_number' => 'INV-DATE-DRAFT',
         'status' => Invoice::STATUS_DRAFT,
-        'invoice_date' => '2024-12-01',
+        'invoice_date' => '2099-12-01',
     ]);
 
     $response = getJson('api/v1/invoices?page=1&limit=20');
 
-    expect(collect($response->json('data'))->pluck('id')->take(3)->all())
-        ->toBe([$recentInvoice->id, $olderInvoice->id, $draftInvoice->id]);
+    expect(collect($response->json('data'))->pluck('id')->take(4)->all())
+        ->toBe([$recentHigherNumberInvoice->id, $recentLowerNumberInvoice->id, $olderInvoice->id, $draftInvoice->id]);
 });
 
 test('create invoice', function () {
