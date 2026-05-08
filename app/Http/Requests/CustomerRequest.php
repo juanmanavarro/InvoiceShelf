@@ -46,6 +46,11 @@ class CustomerRequest extends FormRequest
             'website' => [
                 'nullable',
             ],
+            'hourly_rate' => [
+                'nullable',
+                'integer',
+                'min:0',
+            ],
             'prefix' => [
                 'nullable',
             ],
@@ -136,6 +141,7 @@ class CustomerRequest extends FormRequest
                 'phone',
                 'prefix',
                 'tax_id',
+                'hourly_rate',
                 'company_name',
                 'contact_name',
                 'website',
