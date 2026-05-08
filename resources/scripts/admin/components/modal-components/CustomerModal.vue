@@ -103,6 +103,10 @@
                   />
                 </BaseInputGroup>
 
+                <BaseInputGroup :label="$t('customers.hourly_rate')">
+                  <BaseMoney v-model="hourlyRate" />
+                </BaseInputGroup>
+
                 <BaseInputGroup
                   :label="$t('customers.website')"
                   :error="v$.website.$error && v$.website.$errors[0].$message"
@@ -586,6 +590,24 @@ const v$ = useVuelidate(
 
 const getCustomerPortalUrl = computed(() => {
   return `${window.location.origin}/${companyStore.selectedCompany.slug}/customer/login`
+})
+
+const hourlyRate = computed({
+  get: () => {
+    if (customerStore.currentCustomer.hourly_rate === null) {
+      return null
+    }
+
+    return customerStore.currentCustomer.hourly_rate / 100
+  },
+  set: (value) => {
+    if (value === null || value === '') {
+      customerStore.currentCustomer.hourly_rate = null
+      return
+    }
+
+    customerStore.currentCustomer.hourly_rate = Math.round(value * 100)
+  },
 })
 
 function copyAddress() {

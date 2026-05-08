@@ -140,6 +140,16 @@
             </BaseInputGroup>
 
             <BaseInputGroup
+              :label="$t('customers.hourly_rate')"
+              :content-loading="isFetchingInitialData"
+            >
+              <BaseMoney
+                v-model="hourlyRate"
+                :content-loading="isFetchingInitialData"
+              />
+            </BaseInputGroup>
+
+            <BaseInputGroup
               :label="$t('customers.prefix')"
               :error="
                 v$.currentCustomer.prefix.$error &&
@@ -717,6 +727,24 @@ const rules = computed(() => {
 
 const getCustomerPortalUrl = computed(() => {
   return `${window.location.origin}/${companyStore.selectedCompany.slug}/customer/login`
+})
+
+const hourlyRate = computed({
+  get: () => {
+    if (customerStore.currentCustomer.hourly_rate === null) {
+      return null
+    }
+
+    return customerStore.currentCustomer.hourly_rate / 100
+  },
+  set: (value) => {
+    if (value === null || value === '') {
+      customerStore.currentCustomer.hourly_rate = null
+      return
+    }
+
+    customerStore.currentCustomer.hourly_rate = Math.round(value * 100)
+  },
 })
 
 const v$ = useVuelidate(rules, customerStore, {

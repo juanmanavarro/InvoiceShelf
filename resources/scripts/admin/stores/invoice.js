@@ -19,6 +19,29 @@ import { useNotesStore } from './note'
 
 const defaultInvoiceTaxNames = ['iva', 'retencion']
 
+const isBlankDocumentItem = (item) => {
+  return (
+    !item.item_id &&
+    !item.name &&
+    !item.description &&
+    Number(item.quantity) === 1 &&
+    Number(item.price) === 0 &&
+    Number(item.discount) === 0 &&
+    Number(item.discount_val) === 0
+  )
+}
+
+const buildHourlyRateItem = (hourlyRate, label) => {
+  return {
+    ...invoiceItemStub,
+    id: Guid.raw(),
+    name: label,
+    quantity: 1,
+    price: hourlyRate,
+    taxes: [{ ...taxStub, id: Guid.raw() }],
+  }
+}
+
 export const useInvoiceStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
@@ -476,6 +499,7 @@ export const useInvoiceStore = (useWindow = false) => {
             .then((response) => {
               this.newInvoice.customer = response.data.data
               this.newInvoice.customer_id = response.data.data.id
+              this.applyCustomerHourlyRate()
               resolve(response)
             })
             .catch((err) => {
@@ -542,6 +566,26 @@ export const useInvoiceStore = (useWindow = false) => {
         this.newInvoice.selectedNote = null
       },
 
+      applyCustomerHourlyRate() {
+        const hourlyRate = this.newInvoice.customer?.hourly_rate
+
+        if (!hourlyRate) {
+          return
+        }
+
+        const firstItem = this.newInvoice.items[0]
+
+        if (!firstItem || !isBlankDocumentItem(firstItem)) {
+          return
+        }
+
+        this.newInvoice.items.splice(
+          0,
+          1,
+          buildHourlyRateItem(hourlyRate, global.t('customers.hourly_rate_item_label'))
+        )
+      },
+
       // On Load actions
       async fetchInvoiceInitialSettings(isEdit) {
         const companyStore = useCompanyStore()
@@ -560,6 +604,7 @@ export const useInvoiceStore = (useWindow = false) => {
           let response = await customerStore.fetchCustomer(route.query.customer)
           this.newInvoice.customer = response.data.data
           this.newInvoice.customer_id = response.data.data.id
+          this.applyCustomerHourlyRate()
         }
 
         let editActions = []

@@ -16,6 +16,29 @@ import taxStub from '../stub/tax'
 import { useUserStore } from './user'
 import { useNotesStore } from './note'
 
+const isBlankDocumentItem = (item) => {
+  return (
+    !item.item_id &&
+    !item.name &&
+    !item.description &&
+    Number(item.quantity) === 1 &&
+    Number(item.price) === 0 &&
+    Number(item.discount) === 0 &&
+    Number(item.discount_val) === 0
+  )
+}
+
+const buildHourlyRateItem = (hourlyRate, label) => {
+  return {
+    ...estimateItemStub,
+    id: Guid.raw(),
+    name: label,
+    quantity: 1,
+    price: hourlyRate,
+    taxes: [{ ...taxStub, id: Guid.raw() }],
+  }
+}
+
 export const useEstimateStore = (useWindow = false) => {
   const defineStoreFunc = useWindow ? window.pinia.defineStore : defineStore
   const { global } = window.i18n
@@ -490,6 +513,7 @@ export const useEstimateStore = (useWindow = false) => {
             .then((response) => {
               this.newEstimate.customer = response.data.data
               this.newEstimate.customer_id = response.data.data.id
+              this.applyCustomerHourlyRate()
               resolve(response)
             })
             .catch((err) => {
@@ -555,6 +579,26 @@ export const useEstimateStore = (useWindow = false) => {
         }
       },
 
+      applyCustomerHourlyRate() {
+        const hourlyRate = this.newEstimate.customer?.hourly_rate
+
+        if (!hourlyRate) {
+          return
+        }
+
+        const firstItem = this.newEstimate.items[0]
+
+        if (!firstItem || !isBlankDocumentItem(firstItem)) {
+          return
+        }
+
+        this.newEstimate.items.splice(
+          0,
+          1,
+          buildHourlyRateItem(hourlyRate, global.t('customers.hourly_rate_item_label'))
+        )
+      },
+
       async fetchEstimateInitialSettings(isEdit) {
         const companyStore = useCompanyStore()
         const customerStore = useCustomerStore()
@@ -571,6 +615,7 @@ export const useEstimateStore = (useWindow = false) => {
           let response = await customerStore.fetchCustomer(route.query.customer)
           this.newEstimate.customer = response.data.data
           this.newEstimate.customer_id = response.data.data.id
+          this.applyCustomerHourlyRate()
         }
 
         let editActions = []

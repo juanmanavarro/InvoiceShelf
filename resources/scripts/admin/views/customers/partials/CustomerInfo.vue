@@ -52,6 +52,12 @@
         :label="$t('customers.website')"
         :value="selectedViewCustomer?.website"
       />
+      <BaseDescriptionListItem
+        v-if="selectedViewCustomer.hourly_rate != null && selectedViewCustomer.currency"
+        :content-loading="contentLoading"
+        :label="$t('customers.hourly_rate')"
+        :value="formatHourlyRate(selectedViewCustomer)"
+      />
     </BaseDescriptionList>
 
     <!-- Address -->
@@ -113,6 +119,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useCustomerStore } from '@/scripts/admin/stores/customer'
+import utilities from '@/scripts/helpers/utilities'
 
 const customerStore = useCustomerStore()
 
@@ -126,4 +133,8 @@ const customerCustomFields = computed(() => {
   }
   return []
 })
+
+function formatHourlyRate(customer) {
+  return utilities.formatMoney(customer.hourly_rate, customer.currency)
+}
 </script>

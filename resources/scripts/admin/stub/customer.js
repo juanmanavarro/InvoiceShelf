@@ -10,6 +10,7 @@ export default function () {
     confirm_password:'',
     currency_id: null,
     website: null,
+    hourly_rate: null,
     billing: { ...addressStub },
     shipping: { ...addressStub },
     customFields: [],

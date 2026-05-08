@@ -210,6 +210,7 @@
     "address": "Address",
     "phone": "Phone",
     "website": "Website",
+    "hourly_rate": "Hourly Rate",
     "overview": "Overview",
     "invoice_prefix": "Invoice Prefix",
     "estimate_prefix": "Estimate Prefix",
@@ -258,7 +259,8 @@
     "updated_message": "Customer updated successfully",
     "address_updated_message": "Address Information Updated succesfully",
     "deleted_message": "Customer deleted successfully | Customers deleted successfully",
-    "edit_currency_not_allowed": "Cannot change currency once transactions created."
+    "edit_currency_not_allowed": "Cannot change currency once transactions created.",
+    "hourly_rate_item_label": "Hourly Rate"
   },
   "items": {
     "title": "Items",
