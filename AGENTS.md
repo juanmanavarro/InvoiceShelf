@@ -151,8 +151,8 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 # Test Enforcement
 
-- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
+- Only write or run tests when the user explicitly requests it.
+- When tests are requested, run the minimum number needed. Use `php artisan test --compact` with a specific filename or filter.
 
 === laravel/core rules ===
 
@@ -201,6 +201,7 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## Testing
 
+- Only write tests when the user explicitly requests it.
 - When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
 - Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
 - When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
