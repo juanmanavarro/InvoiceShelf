@@ -57,7 +57,7 @@
               :calendar-button="true"
               calendar-button-icon="calendar"
               :invalid="v$.currentPayment.payment_date.$error"
-              @update:modelValue="v$.currentPayment.payment_date.$touch()"
+              @update:model-value="v$.currentPayment.payment_date.$touch()"
             />
           </BaseInputGroup>
 
@@ -82,13 +82,13 @@
             required
           >
             <BaseCustomerSelectInput
+              v-if="!isLoadingContent"
               v-model="paymentStore.currentPayment.customer_id"
               :content-loading="isLoadingContent"
-              v-if="!isLoadingContent"
               :invalid="v$.currentPayment.customer_id.$error"
               :placeholder="$t('customers.select_a_customer')"
               show-action
-              @update:modelValue="
+              @update:model-value="
                 selectNewCustomer(paymentStore.currentPayment.customer_id)
               "
             />
@@ -148,7 +148,7 @@
                 :currency="paymentStore.currentPayment.currency"
                 :content-loading="isLoadingContent"
                 :invalid="v$.currentPayment.amount.$error"
-                @update:modelValue="v$.currentPayment.amount.$touch()"
+                @update:model-value="v$.currentPayment.amount.$touch()"
               />
             </div>
           </BaseInputGroup>
@@ -286,6 +286,10 @@ import SelectNotePopup from '@/scripts/admin/components/SelectNotePopup.vue'
 import PaymentCustomFields from '@/scripts/admin/components/custom-fields/CreateCustomFields.vue'
 import PaymentModeModal from '@/scripts/admin/components/modal-components/PaymentModeModal.vue'
 
+defineOptions({
+  name: 'PaymentCreate',
+})
+
 const route = useRoute()
 const router = useRouter()
 
@@ -305,6 +309,7 @@ let isSaving = ref(false)
 let isLoadingInvoices = ref(false)
 let invoiceList = ref([])
 const selectedInvoice = ref(null)
+const invoiceFromUrl = ref(null)
 
 const paymentValidationScope = 'newEstimate'
 
@@ -404,6 +409,9 @@ function onSelectNote(data) {
 
 async function setInvoiceFromUrl() {
   let res = await invoiceStore.fetchInvoice(route?.params?.id)
+  invoiceFromUrl.value = res.data.data
+  customerStore.editCustomer = res.data.data.customer
+  selectedInvoice.value = res.data.data
 
   paymentStore.currentPayment.customer_id = res.data.data.customer.id
   paymentStore.currentPayment.invoice_id = res.data.data.id
@@ -452,16 +460,27 @@ function onCustomerChange(customer_id) {
         }
 
         if (paymentStore.currentPayment.invoice_id) {
+          if (
+            invoiceFromUrl.value &&
+            !invoiceList.value.some(
+              (inv) => inv.id === paymentStore.currentPayment.invoice_id
+            )
+          ) {
+            invoiceList.value.unshift(invoiceFromUrl.value)
+          }
+
           selectedInvoice.value = invoiceList.value.find(
             (inv) => inv.id === paymentStore.currentPayment.invoice_id
           )
 
-          paymentStore.currentPayment.maxPayableAmount =
-            selectedInvoice.value.due_amount +
-            paymentStore.currentPayment.amount
+          if (selectedInvoice.value) {
+            paymentStore.currentPayment.maxPayableAmount =
+              selectedInvoice.value.due_amount +
+              paymentStore.currentPayment.amount
 
-          if (amount.value === 0) {
-            amount.value = selectedInvoice.value.due_amount / 100
+            if (amount.value === 0) {
+              amount.value = selectedInvoice.value.due_amount / 100
+            }
           }
         }
 
@@ -517,6 +536,10 @@ async function submitPaymentData() {
 }
 
 function selectNewCustomer(id) {
+  if (Number(selectedInvoice.value?.customer_id) === Number(id)) {
+    return
+  }
+
   let params = {
     userId: id,
   }
