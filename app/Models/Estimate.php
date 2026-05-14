@@ -197,13 +197,6 @@ class Estimate extends Model implements HasMedia
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
-        if ($orderByField === 'estimate_date') {
-            $query->orderByRaw('case when status = ? then 1 else 0 end asc', [self::STATUS_DRAFT])
-                ->orderBy($orderByField, $orderBy);
-
-            return;
-        }
-
         $query->orderBy($orderByField, $orderBy);
     }
 
