@@ -122,12 +122,9 @@
           <BaseIcon name="PencilIcon" class="h-5 mr-2" />
           {{ $t('general.edit') }}
         </BaseButton>
-        <iframe
-          :src="templateUrl"
-          frameborder="0"
-          class="w-full"
-          style="min-height: 500px"
-        ></iframe>
+        <pre
+          class="w-full min-h-[500px] whitespace-pre-wrap break-words p-6 text-sm leading-6 text-gray-900 dark:bg-gray-900 dark:text-gray-100"
+        >{{ previewContent }}</pre>
       </div>
 
       <div
@@ -175,7 +172,7 @@ const mailDriverStore = useMailDriverStore()
 
 const { t } = useI18n()
 const isLoading = ref(false)
-const templateUrl = ref('')
+const previewContent = ref('')
 const isPreview = ref(false)
 
 const estimateMailFields = ref([
@@ -272,8 +269,7 @@ async function submitForm() {
       isLoading.value = false
 
       isPreview.value = true
-      var blob = new Blob([previewResponse.data], { type: 'text/html' })
-      templateUrl.value = URL.createObjectURL(blob)
+      previewContent.value = previewResponse.data
 
       return
     }
@@ -303,7 +299,7 @@ function closeSendEstimateModal() {
   setTimeout(() => {
     v$.value.$reset()
     isPreview.value = false
-    templateUrl.value = null
+    previewContent.value = ''
   }, 300)
 }
 </script>

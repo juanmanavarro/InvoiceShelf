@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SendEstimatesRequest;
 use App\Models\Estimate;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Mail\Markdown;
 
 class SendEstimatePreviewController extends Controller
 {
@@ -19,11 +18,13 @@ class SendEstimatePreviewController extends Controller
     {
         $this->authorize('send estimate', $estimate);
 
-        $markdown = new Markdown(view(), config('mail.markdown'));
-
         $data = $estimate->sendEstimateData($request->all());
         $data['url'] = $estimate->estimatePdfUrl;
 
-        return $markdown->render('emails.send.estimate', ['data' => $data]);
+        return response(
+            view('emails.send.estimate-text', ['data' => $data])->render(),
+            200,
+            ['Content-Type' => 'text/plain; charset=UTF-8']
+        );
     }
 }
