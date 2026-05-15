@@ -167,6 +167,24 @@
         </BaseDropdown>
       </div>
 
+      <div class="flex items-center justify-end mt-4 space-x-2">
+        <label
+          class="text-sm text-gray-600 dark:text-gray-300"
+          for="invoices-per-page"
+        >
+          Per page
+        </label>
+        <select
+          id="invoices-per-page"
+          v-model.number="perPage"
+          class="block py-2 pl-3 pr-8 text-sm bg-white border border-gray-200 rounded-md shadow-xs focus:border-primary-500 focus:outline-hidden focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+        >
+          <option v-for="option in perPageOptions" :key="option" :value="option">
+            {{ option }}
+          </option>
+        </select>
+      </div>
+
       <BaseTable
         ref="table"
         :data="fetchData"
@@ -295,6 +313,8 @@ const utils = inject('$utils')
 const table = ref(null)
 const tableKey = ref(0)
 const showFilters = ref(false)
+const perPage = ref(50)
+const perPageOptions = [25, 50, 100]
 
 const status = ref([
   {
@@ -428,15 +448,13 @@ async function fetchData({ page, filter, sort }) {
     invoice_number: filters.invoice_number,
     orderByField: sort.fieldName || 'invoice_date',
     orderBy: sort.order || 'desc',
+    limit: perPage.value,
     page,
   }
-
-  console.log(data)
 
   isRequestOngoing.value = true
 
   let response = await invoiceStore.fetchInvoices(data)
-  console.log('API response:', response.data.data)
 
   isRequestOngoing.value = false
 
@@ -446,10 +464,14 @@ async function fetchData({ page, filter, sort }) {
       totalPages: response.data.meta.last_page,
       currentPage: page,
       totalCount: response.data.meta.total,
-      limit: 10,
+      limit: perPage.value,
     },
   }
 }
+
+watch(perPage, () => {
+  refreshTable()
+})
 
 function setStatusFilter(val) {
   if (activeTab.value == val.title) {

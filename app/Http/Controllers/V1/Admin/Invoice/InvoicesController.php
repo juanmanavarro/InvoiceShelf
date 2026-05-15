@@ -22,7 +22,7 @@ class InvoicesController extends Controller
     {
         $this->authorize('viewAny', Invoice::class);
 
-        $limit = $request->input('limit', 10);
+        $limit = $request->input('limit', 50);
 
         $invoices = Invoice::whereCompany()
             ->applyFilters($request->all())
