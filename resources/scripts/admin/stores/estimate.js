@@ -667,7 +667,7 @@ export const useEstimateStore = (useWindow = false) => {
                 this.newEstimate.estimate_number = res4.data.nextNumber
               }
 
-              this.setTemplate(this.templates[0].name)
+              this.setTemplate('estimate1')
               this.newEstimate.template_name = userStore.currentUserSettings
                 .default_estimate_template
                 ? userStore.currentUserSettings.default_estimate_template

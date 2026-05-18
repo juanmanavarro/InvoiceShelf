@@ -6,7 +6,7 @@ export default function () {
   return {
     id: null,
     customer: null,
-    template_name: '',
+    template_name: 'estimate1',
     tax_per_item: null,
     tax_included: false,
     sales_tax_type: null,
